@@ -256,26 +256,6 @@
               </ul>
           </li>
           <li>
-            <a href="#building-gunrock" class="toc-h1 toc-link" data-title="Building Gunrock">BUILDING GUNROCK</a>
-              <ul class="toc-list-h2">
-                  <li>
-                    <a href="#installation" class="toc-h2 toc-link" data-title="Installation">Installation</a>
-                  </li>
-                  <li>
-                    <a href="#prerequisites" class="toc-h2 toc-link" data-title="Prerequisites">Prerequisites</a>
-                  </li>
-                  <li>
-                    <a href="#compilation" class="toc-h2 toc-link" data-title="Compilation">Compilation</a>
-                  </li>
-                  <li>
-                    <a href="#generating-datasets" class="toc-h2 toc-link" data-title="Generating Datasets">Generating Datasets</a>
-                  </li>
-                  <li>
-                    <a href="#hardware" class="toc-h2 toc-link" data-title="Hardware">Hardware</a>
-                  </li>
-              </ul>
-          </li>
-          <li>
             <a href="#overview" class="toc-h1 toc-link" data-title="Overview">OVERVIEW</a>
               <ul class="toc-list-h2">
                   <li>
@@ -298,6 +278,29 @@
               </ul>
           </li>
           <li>
+            <a href="#gunrock-39-s-application-cases" class="toc-h1 toc-link" data-title="Gunrock's Application Cases">GUNROCK'S APPLICATION CASES</a>
+          </li>
+          <li>
+            <a href="#building-gunrock" class="toc-h1 toc-link" data-title="Building Gunrock">BUILDING GUNROCK</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#installation" class="toc-h2 toc-link" data-title="Installation">Installation</a>
+                  </li>
+                  <li>
+                    <a href="#prerequisites" class="toc-h2 toc-link" data-title="Prerequisites">Prerequisites</a>
+                  </li>
+                  <li>
+                    <a href="#compilation" class="toc-h2 toc-link" data-title="Compilation">Compilation</a>
+                  </li>
+                  <li>
+                    <a href="#generating-datasets" class="toc-h2 toc-link" data-title="Generating Datasets">Generating Datasets</a>
+                  </li>
+                  <li>
+                    <a href="#hardware" class="toc-h2 toc-link" data-title="Hardware">Hardware</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
             <a href="#methodology-for-graph-analytics-performance" class="toc-h1 toc-link" data-title="Methodology for Graph Analytics Performance">METHODOLOGY FOR GRAPH ANALYTICS PERFORMANCE</a>
               <ul class="toc-list-h2">
                   <li>
@@ -315,7 +318,10 @@
               </ul>
           </li>
           <li>
-            <a href="#why-gunrock" class="toc-h1 toc-link" data-title="Why Gunrock?">WHY GUNROCK?</a>
+            <a href="#publications" class="toc-h1 toc-link" data-title="Publications">PUBLICATIONS</a>
+          </li>
+          <li>
+            <a href="#presentations" class="toc-h1 toc-link" data-title="Presentations">PRESENTATIONS</a>
           </li>
           <li>
             <a href="#git-forking-workflow" class="toc-h1 toc-link" data-title="Git Forking Workflow">GIT FORKING WORKFLOW</a>
@@ -363,6 +369,12 @@
                     <a href="#known-issues" class="toc-h2 toc-link" data-title="Known Issues:">Known Issues:</a>
                   </li>
               </ul>
+          </li>
+          <li>
+            <a href="#gunrock-developers" class="toc-h1 toc-link" data-title="Gunrock Developers">GUNROCK DEVELOPERS</a>
+          </li>
+          <li>
+            <a href="#acknowledgments" class="toc-h1 toc-link" data-title="Acknowledgments">ACKNOWLEDGMENTS</a>
           </li>
           <li>
             <a href="#frequently-asked-questions" class="toc-h1 toc-link" data-title="Frequently Asked Questions">FREQUENTLY ASKED QUESTIONS</a>
@@ -420,7 +432,7 @@
       </div>
         <ul class="toc-footer">
             <li><a href='https://github.com/gunrock/gunrock'>Gunrock; GPU Graph Analytics</a></li>
-            <li>Gunrock © 2018 The Regents of the University of California.</li>
+            <li>Gunrock © 2019 The Regents of the University of California.</li>
         </ul>
     </div>
     <div class="page-wrapper">
@@ -485,6 +497,240 @@ make test</code></pre>
 </ul>
 <h2 id='copyright-and-license'>Copyright and License</h2>
 <p>Gunrock is copyright The Regents of the University of California, 2013&ndash;2019. The library, examples, and all source code are released under <a href="https://github.com/gunrock/gunrock/blob/master/LICENSE.TXT">Apache 2.0</a>.</p>
+<h1 id='overview'>Overview</h1><h2 id='what-is-gunrock'>What is <em>Gunrock</em>?</h2>
+<p>Gunrock is a stable, powerful, and forward-looking substrate for GPU-based graph-centric research and development. Like many graph frameworks, it leverages a bulk-synchronous programming model and targets iterative convergent graph computations. We believe that today Gunrock offers both the best performance on GPU graph analytics as well as the widest range of primitives.</p>
+<h2 id='who-may-use-gunrock'>Who may use <em>Gunrock</em>?</h2>
+<p>// TODO:
++ <strong>External Interface Users:</strong>
++ <strong>Application Developers:</strong>
++ <strong>Graph Analytics Library Developers:</strong> (CUDA and/or other languages -- for more backends, etc.)</p>
+<h2 id='why-use-gunrock'>Why use <em>Gunrock</em>?</h2>
+<ul>
+<li><p><strong>Gunrock has the best performance of any programmable GPU+graph library.</strong> Gunrock primitives are an order of magnitude faster than  (CPU-based) Boost, outperform any other programmable GPU-based system, and are comparable in performance to hardwired GPU graph primitive implementations. When  compared to <a href="https://github.com/jshun/ligra">Ligra</a>, a best-of-breed CPU system, Gunrock currently  matches or exceeds Ligra's 2-CPU performance with only one GPU.</p>
+
+<p>Gunrock's abstraction separates its programming model from the  low-level implementation details required to make a GPU  implementation run fast. Most importantly, Gunrock features very powerful load-balancing capabilities that effectively address the   inherent irregularity in graphs, which is a problem we must address   in all graph analytics. We have spent significant effort developing   and optimizing these features---when we beat hardwired analytics,   the reason is load balancing---and because they are beneath the   level of the programming model, improving them makes all graph   analytics run faster without needing to expose them to programmers.</p></li>
+<li><p><strong>Gunrock's data-centric programming model is targeted at GPUs and offers advantages over other programming models.</strong> Gunrock is written in a higher-level abstraction than hardwired implementations, leveraging reuse of its fundamental operations across different graph primitives. Gunrock has a bulk-synchronous programming model that operates on a frontier of vertices or edges; unlike other GPU-based graph analytic programming models, Gunrock focuses not on sequencing <em>computation</em> but instead on sequencing <em>operations on frontier data structures</em>. This model has two main operations: <em>compute</em>, which performs a computation on every element in the current frontier, and <em>traversal</em>, which generates a new frontier from the current frontier. Traversal operations include <em>advance</em> (the new frontier is based on the neighbors of the current frontier) and <em>filter</em> (the new frontier is a programmable subset of the current frontier). We are also developing new Gunrock operations on frontier data structures, including neighbor, gather-reduce, and global operations.</p>
+
+<p>This programming model is a better fit to high-performance GPU implementations than traditional programming models adapted from CPUs. Specifically, traditional models like gather-apply-scatter (GAS) map to a suboptimal set of GPU kernels that do a poor job of capturing producer-consumer locality. With Gunrock, we can easily integrate compute steps within the same kernels as traversal steps. As well, Gunrock's frontier-centric programming model is a better match for key optimizations such as push-pull direction-optimal search or priority queues, which to date have not been implemented in other GPU frameworks, where they fit poorly into the abstraction.</p></li>
+<li><p><strong>Gunrock supports more primitives than any other programmable GPU+graph library.</strong> We currently support a wide variety of graph primitives, including traversal-based (breadth-first search, single-source shortest path); node-ranking (HITS, SALSA, PageRank); and global (connected component, minimum spanning tree). Many more algorithms are under active development, see <a href="https://gunrock.github.io/docs/#gunrock_applications">Gunrock Applications</a>.</p></li>
+<li><p><strong>Gunrock has better scalability with multiple GPUs on a node than any other graph library.</strong> We not only show <a href="http://arxiv.org/abs/1504.04804">better BFS performance on a single node than any other GPU framework</a> but also outperform other frameworks, even those customized to BFS, with up to four times as many GPUs. More importantly, our framework supports all Gunrock graph primitives rather than being customized to only one primitive.</p></li>
+<li><p><strong>Gunrock's programming model scales to multiple GPUs while still using the same code as a single-GPU primitive.</strong> Other frameworks require rewriting their primitives when moving from one to many GPUs. Gunrock's multi-GPU programming model uses single-node Gunrock code at its core so that single-GPU and multi-GPU operations can share the same codebase.</p></li>
+</ul>
+<h1 id='programming-model'>Programming Model</h1>
+<p>This page describes the programming model we use in Gunrock.</p>
+
+<p>Gunrock targets graph computations that are generally expressed as "iterative convergent processes". By "iterative," we mean operations that may require running a series of steps repeatedly; by "convergent," we mean that these iterations allow us to approach the correct answer and terminate when that answer is reached. Many graph-computation programming models target a similar goal.</p>
+
+<p>Many of these programming models focus on sequencing steps of <em>computation</em>.  Gunrock differs from these programming models in its focus on <em>manipulating a data structure</em>. We call this data structure a <em>frontier</em> of vertices or edges. <strong>The frontier represents the subset of vertices or edges that is actively participating in the computation.</strong> Gunrock operators input one or more frontiers and output one or more frontiers.</p>
+
+<p>Generically, graph operations can often be expressed via a <em>push</em> abstraction (graph elements "push" local private updates into a shared state) or a <em>pull</em> abstraction (graph elements "pull" updates into their local private state) (<a href="https://htor.inf.ethz.ch/publications/index.php?pub=281">Besta et al. publication on push-vs.-pull, HPDC '17</a>). Gunrock's programming model supports both of these abstractions. (For instance, Gunrock's direction-optimized Breadth-First Search (BFS) and PageRank (PR) supports both push and pull BFS phases. <a href="https://github.com/gunrock/mini">Mini-Gunrock</a> supports pull-based BFS and PR.) Push-based approaches may or may not require synchronization (such as atomics) for correct operation; this depends on the primitive. Gunrock's idempotence optimization (within its BFS implementation) is an example of a push-based primitive that does not require atomics.</p>
+<h2 id='operators'>Operators</h2>
+<p>In the current Gunrock release, we support <strong>five</strong> operators.</p>
+
+<ul>
+<li><strong>Advance</strong>: An <em>advance</em> operator generates a new frontier from the current frontier by visiting the neighbors of the current frontier. A frontier can consist of either vertices or edges, and an advance step can input and output either kind of frontier. Advance is an irregularly-parallel operation for  two reasons: 1)~different vertices in a graph have different numbers of neighbors and 2)~vertices share neighbors. Thus a vertex in an input frontier map to multiple output items. An efficient advance is the most significant challenge of a GPU implementation.</li>
+</ul>
+
+<p><img src="images/advance.png" alt="Advance" /></p>
+
+<ul>
+<li><strong>Filter</strong>:  A <em>filter</em> operator generates a new frontier from the current frontier by choosing a subset of the current frontier based on programmer-specified criteria. Each input item maps to zero or one output items.</li>
+</ul>
+
+<p><img src="images/filter.png" alt="Filter" />  </p>
+
+<ul>
+<li><strong>Compute</strong>: A <em>compute</em> operator defines an operation on all elements (vertices or edges) in its input frontier. Gunrock implements a compute operator using <code>ForAll()</code> and <code>ForEach()</code> parallel loops. However, a programmer-specified operation can also be implemented using C++ lambda functions within the traversal operators such as advance or filter. Gunrock performs these operation in parallel across all elements without regard to order.</li>
+</ul>
+
+<p><img src="images/compute.png" alt="Compute" /></p>
+
+<ul>
+<li><p><strong>Segmented intersection</strong>: A <em>segmented intersection</em> operator takes two input node frontiers with the same length, or an input edge frontier, and generates both the number of total intersections and the intersected node IDs as the new frontier.</p></li>
+<li><p><strong>Neighbor-Reduce</strong>: A <em>neighbor-reduce</em> operator uses the advance operator to visit the neighbor list of each item in the input frontier and performs a segmented reduction over the neighborhood (neighbor list) generated via the advance.</p></li>
+</ul>
+<h1 id='gunrock-39-s-application-cases'>Gunrock's Application Cases</h1>
+<p>The following is are a wide variety of graph primitives, including traversal-based (breadth-first search, single-source shortest path); node-ranking (HITS, SALSA, PageRank); and global (connected component, minimum spanning tree) implemented within Gunrock.</p>
+
+<p>The "Directory" column in the table below shows, which subdirectory within <code>gunrock/app</code> and <code>examples</code> these applications' implementations are. The version number in the "Single GPU" and "Multi-GPU" columns show which API abstraction of gunrock supports the respective application. If you are interested in helping us port an application in the older abstraction (<code>v0.5.x</code>) to a newer, much cleaner abstraction (<code>v1.x.x</code>), please see our <a href="https://gunrock.github.io/docs/#porting_guide">Porting Guide</a>.</p>
+
+<table><thead>
+<tr>
+<th>Application</th>
+<th>Directory</th>
+<th>Single GPU</th>
+<th>Multi-GPU</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>A* Search</td>
+<td>astar</td>
+<td>v0.5.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Betweenness Centrality</td>
+<td>bc</td>
+<td>v1.x.x</td>
+<td>v0.5.x</td>
+</tr>
+<tr>
+<td>Breadth-First Search</td>
+<td>bfs</td>
+<td>v1.x.x</td>
+<td>v1.x.x</td>
+</tr>
+<tr>
+<td>Connected Components</td>
+<td>cc</td>
+<td>v1.x.x</td>
+<td>v0.5.x</td>
+</tr>
+<tr>
+<td>Graph Coloring</td>
+<td>color</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Geolocation</td>
+<td>geo</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>RMAT Graph Generator</td>
+<td>grmat</td>
+<td>v0.5.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Graph Trend Filtering</td>
+<td>gtf</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Hyperlink-Induced Topic Search</td>
+<td>hits</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>K-Nearest Neighbors</td>
+<td>knn</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Louvain Modularity</td>
+<td>louvain</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Label Propagation</td>
+<td>lp</td>
+<td>v0.5.x</td>
+<td></td>
+</tr>
+<tr>
+<td>MaxFlow</td>
+<td>mf</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Minimum Spanning Tree</td>
+<td>mst</td>
+<td>v0.5.x</td>
+<td></td>
+</tr>
+<tr>
+<td>PageRank</td>
+<td>pr</td>
+<td>v1.x.x</td>
+<td>v0.5.x</td>
+</tr>
+<tr>
+<td>Local Graph Clustering</td>
+<td>pr_nibble</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Graph Projections</td>
+<td>proj</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Random Walk</td>
+<td>rw</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>GraphSAGE</td>
+<td>sage</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Stochastic Approach for Link-Structure Analysis</td>
+<td>salsa</td>
+<td>v0.5.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Subgraph Matching</td>
+<td>sm</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Shared Nearest Neighbors</td>
+<td>snn</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Scan Statistics</td>
+<td>ss</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Single Source Shortest Path</td>
+<td>sssp</td>
+<td>v1.x.x</td>
+<td>v0.5.x</td>
+</tr>
+<tr>
+<td>Triangle Counting</td>
+<td>tc</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Top K</td>
+<td>topk</td>
+<td>v0.5.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Vertex Nomination</td>
+<td>vn</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Who To Follow</td>
+<td>wtf</td>
+<td>v0.5.x</td>
+<td></td>
+</tr>
+</tbody></table>
 <h1 id='building-gunrock'>Building Gunrock</h1>
 <p>Gunrock's current release has been tested on Ubuntu 16.04 and 18.04 with CUDA 9+, compute architecture 3.0+ and g++ 4.8+. We expect Gunrock to build and run correctly on other 64-bit and 32-bit Linux distributions, and Mac OSX. We have an active issue investigating problems related to building Gunrock on <a href="https://github.com/gunrock/gunrock/issues/213">Windows</a>.</p>
 <h2 id='installation'>Installation</h2>
@@ -593,58 +839,6 @@ make
 * You can also choose to only download one specific dataset to your local machine by stepping into the subdirectory of that dataset and typing make inside that subdirectory.</p>
 <h2 id='hardware'>Hardware</h2>
 <p><strong>Laboratory Tested Hardware:</strong> Gunrock with GTX 970, Tesla K40s, GTX 1080, Tesla P100, RTX 2070, Tesla V100 and other NVIDIA cards. We have not encountered any trouble in-house with devices with CUDA capability >= 3.0.</p>
-<h1 id='overview'>Overview</h1><h2 id='what-is-gunrock'>What is <em>Gunrock</em>?</h2>
-<p>Gunrock is a stable, powerful, and forward-looking substrate for GPU-based graph-centric research and development. Like many graph frameworks, it leverages a bulk-synchronous programming model and targets iterative convergent graph computations. We believe that today Gunrock offers both the best performance on GPU graph analytics as well as the widest range of primitives.</p>
-<h2 id='who-may-use-gunrock'>Who may use <em>Gunrock</em>?</h2>
-<p>// TODO:
-+ <strong>External Interface Users:</strong>
-+ <strong>Application Developers:</strong>
-+ <strong>Graph Analytics Library Developers:</strong> (CUDA and/or other languages -- for more backends, etc.)</p>
-<h2 id='why-use-gunrock'>Why use <em>Gunrock</em>?</h2>
-<ul>
-<li><p><strong>Gunrock has the best performance of any programmable GPU+graph library.</strong> Gunrock primitives are an order of magnitude faster than  (CPU-based) Boost, outperform any other programmable GPU-based system, and are comparable in performance to hardwired GPU graph primitive implementations. When  compared to <a href="https://github.com/jshun/ligra">Ligra</a>, a best-of-breed CPU system, Gunrock currently  matches or exceeds Ligra's 2-CPU performance with only one GPU.</p>
-
-<p>Gunrock's abstraction separates its programming model from the  low-level implementation details required to make a GPU  implementation run fast. Most importantly, Gunrock features very powerful load-balancing capabilities that effectively address the   inherent irregularity in graphs, which is a problem we must address   in all graph analytics. We have spent significant effort developing   and optimizing these features---when we beat hardwired analytics,   the reason is load balancing---and because they are beneath the   level of the programming model, improving them makes all graph   analytics run faster without needing to expose them to programmers.</p></li>
-<li><p><strong>Gunrock's data-centric programming model is targeted at GPUs and offers advantages over other programming models.</strong> Gunrock is written in a higher-level abstraction than hardwired implementations, leveraging reuse of its fundamental operations across different graph primitives. Gunrock has a bulk-synchronous programming model that operates on a frontier of vertices or edges; unlike other GPU-based graph analytic programming models, Gunrock focuses not on sequencing <em>computation</em> but instead on sequencing <em>operations on frontier data structures</em>. This model has two main operations: <em>compute</em>, which performs a computation on every element in the current frontier, and <em>traversal</em>, which generates a new frontier from the current frontier. Traversal operations include <em>advance</em> (the new frontier is based on the neighbors of the current frontier) and <em>filter</em> (the new frontier is a programmable subset of the current frontier). We are also developing new Gunrock operations on frontier data structures, including neighbor, gather-reduce, and global operations.</p>
-
-<p>This programming model is a better fit to high-performance GPU implementations than traditional programming models adapted from CPUs. Specifically, traditional models like gather-apply-scatter (GAS) map to a suboptimal set of GPU kernels that do a poor job of capturing producer-consumer locality. With Gunrock, we can easily integrate compute steps within the same kernels as traversal steps. As well, Gunrock's frontier-centric programming model is a better match for key optimizations such as push-pull direction-optimal search or priority queues, which to date have not been implemented in other GPU frameworks, where they fit poorly into the abstraction.</p></li>
-<li><p><strong>Gunrock supports more primitives than any other programmable GPU+graph library.</strong> We currently support a wide variety of graph primitives, including traversal-based (breadth-first search, single-source shortest path); node-ranking (HITS, SALSA, PageRank); and global (connected component, minimum spanning tree). Many more algorithms are under active development, see <a href="https://gunrock.github.io/docs/#gunrock_applications">Gunrock Applications</a>.</p></li>
-<li><p><strong>Gunrock has better scalability with multiple GPUs on a node than any other graph library.</strong> We not only show <a href="http://arxiv.org/abs/1504.04804">better BFS performance on a single node than any other GPU framework</a> but also outperform other frameworks, even those customized to BFS, with up to four times as many GPUs. More importantly, our framework supports all Gunrock graph primitives rather than being customized to only one primitive.</p></li>
-<li><p><strong>Gunrock's programming model scales to multiple GPUs while still using the same code as a single-GPU primitive.</strong> Other frameworks require rewriting their primitives when moving from one to many GPUs. Gunrock's multi-GPU programming model uses single-node Gunrock code at its core so that single-GPU and multi-GPU operations can share the same codebase.</p></li>
-</ul>
-<h1 id='programming-model'>Programming Model</h1>
-<p>This page describes the programming model we use in Gunrock.</p>
-
-<p>Gunrock targets graph computations that are generally expressed as "iterative convergent processes". By "iterative," we mean operations that may require running a series of steps repeatedly; by "convergent," we mean that these iterations allow us to approach the correct answer and terminate when that answer is reached. Many graph-computation programming models target a similar goal.</p>
-
-<p>Many of these programming models focus on sequencing steps of <em>computation</em>.  Gunrock differs from these programming models in its focus on <em>manipulating a data structure</em>. We call this data structure a <em>frontier</em> of vertices or edges. <strong>The frontier represents the subset of vertices or edges that is actively participating in the computation.</strong> Gunrock operators input one or more frontiers and output one or more frontiers.</p>
-
-<p>Generically, graph operations can often be expressed via a <em>push</em> abstraction (graph elements "push" local private updates into a shared state) or a <em>pull</em> abstraction (graph elements "pull" updates into their local private state) (<a href="https://htor.inf.ethz.ch/publications/index.php?pub=281">Besta et al. publication on push-vs.-pull, HPDC '17</a>). Gunrock's programming model supports both of these abstractions. (For instance, Gunrock's direction-optimized Breadth-First Search (BFS) and PageRank (PR) supports both push and pull BFS phases. <a href="https://github.com/gunrock/mini">Mini-Gunrock</a> supports pull-based BFS and PR.) Push-based approaches may or may not require synchronization (such as atomics) for correct operation; this depends on the primitive. Gunrock's idempotence optimization (within its BFS implementation) is an example of a push-based primitive that does not require atomics.</p>
-<h2 id='operators'>Operators</h2>
-<p>In the current Gunrock release, we support <strong>five</strong> operators.</p>
-
-<ul>
-<li><strong>Advance</strong>: An <em>advance</em> operator generates a new frontier from the current frontier by visiting the neighbors of the current frontier. A frontier can consist of either vertices or edges, and an advance step can input and output either kind of frontier. Advance is an irregularly-parallel operation for  two reasons: 1)~different vertices in a graph have different numbers of neighbors and 2)~vertices share neighbors. Thus a vertex in an input frontier map to multiple output items. An efficient advance is the most significant challenge of a GPU implementation.</li>
-</ul>
-
-<p><img src="images/advance.png" alt="Advance" /></p>
-
-<ul>
-<li><strong>Filter</strong>:  A <em>filter</em> operator generates a new frontier from the current frontier by choosing a subset of the current frontier based on programmer-specified criteria. Each input item maps to zero or one output items.</li>
-</ul>
-
-<p><img src="images/filter.png" alt="Filter" />  </p>
-
-<ul>
-<li><strong>Compute</strong>: A <em>compute</em> operator defines an operation on all elements (vertices or edges) in its input frontier. Gunrock implements a compute operator using <code>ForAll()</code> and <code>ForEach()</code> parallel loops. However, a programmer-specified operation can also be implemented using C++ lambda functions within the traversal operators such as advance or filter. Gunrock performs these operation in parallel across all elements without regard to order.</li>
-</ul>
-
-<p><img src="images/compute.png" alt="Compute" /></p>
-
-<ul>
-<li><p><strong>Segmented intersection</strong>: A <em>segmented intersection</em> operator takes two input node frontiers with the same length, or an input edge frontier, and generates both the number of total intersections and the intersected node IDs as the new frontier.</p></li>
-<li><p><strong>Neighbor-Reduce</strong>: A <em>neighbor-reduce</em> operator uses the advance operator to visit the neighbor list of each item in the input frontier and performs a segmented reduction over the neighborhood (neighbor list) generated via the advance.</p></li>
-</ul>
 <h1 id='methodology-for-graph-analytics-performance'>Methodology for Graph Analytics Performance</h1>
 <p>We welcome comments from others on the methodology that we use for measuring Gunrock's performance.</p>
 
@@ -678,20 +872,53 @@ make
 <p>If a comparison library does not measure MTEPS for BC, we compute it by twice the number of edges visited in the forward phase divided by runtime (the same computation we use for Gunrock).</p>
 <h2 id='pagerank'>PageRank</h2>
 <p>We measure PageRank elapsed time on one iteration of PageRank. (Many other engines measure results this way and it is difficult to extrapolate from this measurement to runtime of the entire algorithm.)</p>
-<h1 id='why-gunrock'>Why Gunrock?</h1>
-<p>Gunrock is a stable, powerful, and forward-looking substrate for GPU-based graph-centric research and development. Like many graph frameworks, it leverages a bulk-synchronous programming model and targets iterative convergent graph computations. We believe that today Gunrock offers both the best performance on GPU graph analytics as well as the widest range of primitives.</p>
+<h1 id='publications'>Publications</h1>
+<p>Yuechao Pan, Roger Pearce, and John D. Owens. <strong>Scalable Breadth-First Search on a GPU Cluster</strong>. In Proceedings of the 31st IEEE International Parallel and Distributed Processing Symposium, IPDPS 2018, May 2018. [<a href="https://escholarship.org/uc/item/9bd842z6">http</a>]</p>
 
-<ul>
-<li><p><strong>Gunrock has the best performance of any programmable GPU+graph library.</strong> Gunrock primitives are an order of magnitude faster than  (CPU-based) Boost, outperform any other programmable GPU-based system, and are comparable in performance to hardwired GPU graph primitive implementations. When  compared to <a href="https://github.com/jshun/ligra">Ligra</a>, a best-of-breed CPU system, Gunrock currently  matches or exceeds Ligra's 2-CPU performance with only one GPU.</p>
+<p>Yangzihao Wang, Yuechao Pan, Andrew Davidson, Yuduo Wu, Carl Yang, Leyuan Wang, Muhammad Osama, Chenshan Yuan, Weitang Liu, Andy T. Riffel, and John D. Owens. <strong>Gunrock: GPU Graph Analytics</strong>. ACM Transactions on Parallel Computing, 4(1):3:1&ndash;3:49, August 2017. [<a href="http://dx.doi.org/10.1145/3108140">DOI</a> | <a href="http://escholarship.org/uc/item/9gj6r1dj">http</a>]</p>
 
-<p>Gunrock's abstraction separates its programming model from the  low-level implementation details required to make a GPU  implementation run fast. Most importantly, Gunrock features very   powerful load-balancing capabilities that effectively address the   inherent irregularity in graphs, which is a problem we must address   in all graph analytics. We have spent significant effort developing   and optimizing these features---when we beat hardwired analytics,   the reason is load balancing---and because they are beneath the   level of the programming model, improving them makes all graph   analytics run faster without needing to expose them to programmers.</p></li>
-<li><p><strong>Gunrock's data-centric programming model is targeted at GPUs and offers advantages over other programming models.</strong> Gunrock is written in a higher-level abstraction than hardwired implementations, leveraging reuse of its fundamental operations across different graph primitives. Gunrock has a bulk-synchronous programming model that operates on a frontier of vertices or edges; unlike other GPU-based graph analytic programming models, Gunrock focuses not on sequencing <em>computation</em> but instead on sequencing <em>operations on frontier data structures</em>. This model has two main operations: <em>compute</em>, which performs a computation on every element in the current frontier, and <em>traversal</em>, which generates a new frontier from the current frontier. Traversal operations include <em>advance</em> (the new frontier is based on the neighbors of the current frontier) and <em>filter</em> (the new frontier is a programmable subset of the current frontier). We are also developing new Gunrock operations on frontier data structures, including neighbor, gather-reduce, and global operations.</p>
+<p>Yuechao Pan, Yangzihao Wang, Yuduo Wu, Carl Yang, and John D. Owens.
+<strong>Multi-GPU Graph Analytics</strong>.  In Proceedings of the 31st IEEE International Parallel and Distributed Processing Symposium, IPDPS 2017, pages 479&ndash;490, May/June 2017.
+[<a href="http://dx.doi.org/10.1109/IPDPS.2017.117">DOI</a> |
+<a href="http://escholarship.org/uc/item/39r145g1">http</a>]</p>
 
-<p>This programming model is a better fit to high-performance GPU implementations than traditional programming models adapted from CPUs. Specifically, traditional models like gather-apply-scatter (GAS) map to a suboptimal set of GPU kernels that do a poor job of capturing producer-consumer locality. With Gunrock, we can easily integrate compute steps within the same kernels as traversal steps. As well, Gunrock's frontier-centric programming model is a better match for key optimizations such as push-pull direction-optimal search or priority queues, which to date have not been implemented in other GPU frameworks, where they fit poorly into the abstraction.</p></li>
-<li><p><strong>Gunrock supports more primitives than any other programmable GPU+graph library.</strong> We currently support a wide variety of graph primitives, including traversal-based (breadth-first search, single-source shortest path); node-ranking (HITS, SALSA, PageRank); and global (connected component, minimum spanning tree). Many more algorithms are under active development (including graph coloring, maximal independent set, community detection, and graph matching).</p></li>
-<li><p><strong>Gunrock has better scalability with multiple GPUs on a node than any other graph library.</strong> We not only show <a href="http://arxiv.org/abs/1504.04804">better BFS performance on a single node than any other GPU framework</a> but also outperform other frameworks, even those customized to BFS, with up to four times as many GPUs. More importantly, our framework supports all Gunrock graph primitives rather than being customized to only one primitive.</p></li>
-<li><p><strong>Gunrock's programming model scales to multiple GPUs while still using the same code as a single-GPU primitive.</strong> Other frameworks require rewriting their primitives when moving from one to many GPUs. Gunrock's multi-GPU programming model uses single-node Gunrock code at its core so that single-GPU and multi-GPU operations can share the same codebase.</p></li>
-</ul>
+<p>Yangzihao Wang, Sean Baxter, and John D. Owens. <strong>Mini-Gunrock: A Lightweight Graph Analytics Framework on the GPU</strong>. In Graph Algorithms Building Blocks, GABB 2017, pages 616&ndash;626, May 2017. [<a href="http://dx.doi.org/10.1109/IPDPSW.2017.116">DOI</a> | <a href="https://escholarship.org/uc/item/5wm061tr">http</a>]</p>
+
+<p>Leyuan Wang, Yangzihao Wang, Carl Yang, and John D. Owens. <strong>A Comparative Study on Exact Triangle Counting Algorithms on the GPU</strong>. In Proceedings of the 1st High Performance Graph Processing Workshop, HPGP '16, pages 1&ndash;8, May 2016.
+[<a href="http://dx.doi.org/10.1145/2915516.2915521">DOI</a> |
+<a href="http://www.escholarship.org/uc/item/9hf0m6w3">http</a>]</p>
+
+<p>Yangzihao Wang, Andrew Davidson, Yuechao Pan, Yuduo Wu, Andy Riffel, and John D. Owens.
+<strong>Gunrock: A High-Performance Graph Processing Library on the GPU</strong>.
+In Proceedings of the 21st ACM SIGPLAN Symposium on Principles and Practice of Parallel Programming, <a href="http://conf.researchr.org/home/ppopp-2016">PPoPP '16</a>, pages 11:1&ndash;11:12, March 2016. Distinguished Paper. [<a href="http://dx.doi.org/10.1145/2851141.2851145">DOI</a> | <a href="http://escholarship.org/uc/item/6xz7z9k0">http</a>]</p>
+
+<p>Yuduo Wu, Yangzihao Wang, Yuechao Pan, Carl Yang, and John D. Owens.
+<strong>Performance Characterization for High-Level Programming Models for GPU Graph
+Analytics</strong>. In IEEE International Symposium on Workload Characterization,
+IISWC-2015, pages 66&ndash;75, October 2015. Best Paper finalist. [<a href="http://dx.doi.org/10.1109/IISWC.2015.13">DOI</a> | <a href="http://escholarship.org/uc/item/2t69m5ht">http</a>]</p>
+
+<p>Carl Yang, Yangzihao Wang, and John D. Owens.
+<strong>Fast Sparse Matrix and Sparse Vector Multiplication Algorithm on the GPU</strong>.
+In Graph Algorithms Building Blocks, GABB 2015, pages 841&ndash;847, May 2015.
+[<a href="http://dx.doi.org/10.1109/IPDPSW.2015.77">DOI</a> | <a href="http://www.escholarship.org/uc/item/1rq9t3j3">http</a>]</p>
+
+<p>Afton Geil, Yangzihao Wang, and John D. Owens.
+<strong>WTF, GPU! Computing Twitter's Who-To-Follow on the GPU</strong>.
+In Proceedings of the Second ACM Conference on Online Social Networks,
+COSN '14, pages 63&ndash;68, October 2014.
+[<a href="http://dx.doi.org/10.1145/2660460.2660481">DOI</a> | <a href="http://escholarship.org/uc/item/5xq3q8k0">http</a>]</p>
+<h1 id='presentations'>Presentations</h1>
+<p>GTC 2018, <strong>Latest Development of the Gunrock Graph Processing Library on GPUs</strong>, March 2018. [<a href="http://on-demand.gputechconf.com/gtc/2018/presentation/s8594-latest-development-of-the-gunrock-graph-processing-library-on-gpus.pdf">slides</a> | <a href="http://on-demand.gputechconf.com/gtc/2018/video/S8594/">video</a>]</p>
+
+<p>GTC 2018, <strong>Writing Graph Primitives with Gunrock</strong>, March 2018. [<a href="https://github.com/gunrock/docs/blob/master/source/pdf/Writing-Gunrock-Primitives.pdf">slides</a> | <a href="http://on-demand.gputechconf.com/gtc/2018/video/S8586/">video</a>]</p>
+
+<p>GTC 2016, <strong>Gunrock: A Fast and Programmable Multi-GPU Graph Processing Library</strong>, April 2016. [<a href="http://on-demand.gputechconf.com/gtc/2016/presentation/s6374-yangzihao-wang-gunrock.pdf">slides</a>]</p>
+
+<p>NVIDIA <a href="http://info.nvidianews.com/gunrock-webinar-reg-0416.html">webinar</a>, April 2016. [<a href="http://tinyurl.com/owens-nv-webinar-160426">slides</a>]</p>
+
+<p>GPU Technology Theater at SC15, <strong>Gunrock: A Fast and Programmable Multi-GPU Graph processing Library</strong>, November 2015. [<a href="http://images.nvidia.com/events/sc15/pdfs/SC5139-gunrock-multi-gpu-processing-library.pdf">slides</a> | <a href="http://images.nvidia.com/events/sc15/SC5139-gunrock-multi-gpu-processing-library.html">video</a>]</p>
+
+<p>GTC 2014, <strong>High-Performance Graph Primitives on the GPU: design and Implementation of Gunrock</strong>, March 2014. [<a href="http://on-demand.gputechconf.com/gtc/2014/presentations/S4609-hi-perf-graph-primitives-on-gpus.pdf">slides</a> | <a href="http://on-demand.gputechconf.com/gtc/2014/video/S4609-hi-perf-graph-primitives-on-gpus.mp4">video</a>]</p>
 <h1 id='git-forking-workflow'>Git Forking Workflow</h1>
 <p>Transitioning over from <a href="http://nvie.com/posts/a-successful-git-branching-model/">Git Branching Workflow</a> suggested by Vincent Driessen at nvie to <a href="https://www.atlassian.com/git/tutorials/comparing-workflows#forking-workflow">Git Forking Workflow</a> for Gunrock.</p>
 <h2 id='how-forking-workflow-works'>How Forking Workflow Works?</h2>
@@ -929,6 +1156,31 @@ reduction and segmented intersection. Generally we want to find the right set of
 <li>Random Walk uses custom kernels within gunrock, this is resolved for future releases.</li>
 <li>CPU Reference code not implemented for SALSA, TC and LP (https://github.com/gunrock/gunrock/issues/232).</li>
 </ul>
+<h1 id='gunrock-developers'>Gunrock Developers</h1>
+<ul>
+<li><a href="http://www.idav.ucdavis.edu/~yzhwang/">Yangzihao Wang</a>,
+University of California, Davis</li>
+<li><a href="https://sites.google.com/site/panyuechao/home">Yuechao Pan</a>, University of California, Davis</li>
+<li><a href="http://www.yuduowu.com/">Yuduo Wu</a>,
+University of California, Davis</li>
+<li><a href="http://web.ece.ucdavis.edu/~ctcyang/">Carl Yang</a>,
+University of California, Davis</li>
+<li><a href="http://www.ece.ucdavis.edu/~laurawly/">Leyuan Wang</a>,
+University of California, Davis</li>
+<li>Weitang Liu, University of California, Davis</li>
+<li><a href="http://www.ece.ucdavis.edu/~mosama/">Muhammad Osama</a>,
+University of California, Davis</li>
+<li>Chenshan Shari Yuan, University of California, Davis</li>
+<li>Andy Riffel, University of California, Davis</li>
+<li><a href="http://www.huan-zhang.com/">Huan Zhang</a>,
+University of California, Davis</li>
+<li><a href="http://www.ece.ucdavis.edu/~jowens/">John Owens</a>,
+University of California, Davis</li>
+</ul>
+<h1 id='acknowledgments'>Acknowledgments</h1>
+<p>Thanks to the following developers who contributed code: The connected-component implementation was derived from code written by Jyothish Soman, Kothapalli Kishore, and P. J. Narayanan and described in their IPDPSW '10 paper <em>A Fast GPU Algorithm for Graph Connectivity</em> (<a href="http://dx.doi.org/10.1109/IPDPSW.2010.5470817">DOI</a>). The breadth-first search implementation and many of the utility functions in Gunrock are derived from the <a href="http://code.google.com/p/back40computing/">b40c</a> library of <a href="https://sites.google.com/site/duanemerrill/">Duane Merrill</a>. The algorithm is described in his PPoPP '12 paper <em>Scalable GPU Graph Traversal</em> (<a href="http://dx.doi.org/10.1145/2370036.2145832">DOI</a>). Thanks to Erich Elsen and Vishal Vaidyanathan from <a href="http://www.royal-caliber.com/">Royal Caliber</a> and the <a href="http://www.onu.io/">Onu</a> Team for their discussion on library development and the dataset auto-generating code. Thanks to Adam McLaughlin for his technical discussion. Thanks to Oded Green for his technical discussion and an optimization in the CC primitive. Thanks to the <a href="https://altair-viz.github.io/">Altair</a> and <a href="https://vega.github.io/vega-lite/">Vega-lite</a> teams in the <a href="http://idl.cs.washington.edu/">Interactive Data Lab</a> at the University of Washington for graphing help. We appreciate the technical assistance, advice, and machine access from many colleagues at NVIDIA: Chandra Cheij, Joe Eaton, Michael Garland, Mark Harris, Ujval Kapasi, David Luebke, Duane Merrill, Josh Patterson, Nikolai Sakharnykh, and Cliff Woolley.</p>
+
+<p>This work was funded by the DARPA HIVE program under AFRL Contract FA8650-18-2-7835, the DARPA XDATA program under AFRL Contract FA8750-13-C-0002, by NSF awards OAC-1740333, CCF-1629657, OCI-1032859, and CCF-1017399, by DARPA STTR award D14PC00023, and by DARPA SBIR award W911NF-16-C-0020. Our XDATA principal investigator was Eric Whyne of <a href="http://www.data-tactics.com/">Data Tactics Corporation</a> and our DARPA program manager is <a href="http://www.darpa.mil/staff/mr-wade-shen">Mr. Wade Shen</a> (since 2015), and before that Dr. Christopher White (2012&ndash;2014). Thanks to Chris, Wade, and DARPA business manager Gabriela Araujo for their support during the XDATA program.</p>
 <h1 id='frequently-asked-questions'>Frequently Asked Questions</h1>
 <p>Some of the most common questions we have come across during the life of Gunrock project. If your question isn't already answered below, feel free to create an <a href="https://github.com/gunrock/gunrock/issues">issue</a> on GitHub.</p>
 <h2 id='what-does-it-do'>What does it do?</h2>
