@@ -278,9 +278,9 @@
         <h1 id='vertex-nomination'>Vertex Nomination</h1>
 <p>The vertex nomination (VN) workflow is an implementation of the kind of algorithm discussed in <a href="https://arxiv.org/abs/1201.4118">Coppersmith and Priebe</a>.</p>
 
-<p>Often, we have an attributed graph where we know of some &quot;interesting&quot; nodes, and we want to rank the rest of the nodes by their likelihood of being interesting.  Coppersmith and Priebe propose a general framework for using both node attributes (&quot;content&quot;) and network features (&quot;context&quot;) to rank nodes. The specific content, context, and fusion functions can be arbitrary, user-defined functions.</p>
+<p>Often, we have an attributed graph where we know of some "interesting" nodes, and we want to rank the rest of the nodes by their likelihood of being interesting.  Coppersmith and Priebe propose a general framework for using both node attributes ("content") and network features ("context") to rank nodes. The specific content, context, and fusion functions can be arbitrary, user-defined functions.</p>
 <h2 id='summary-of-results'>Summary of Results</h2>
-<p>The term &quot;vertex nomination&quot; covers a variety of different node ranking schemes that fuse &quot;content&quot; and &quot;context&quot; information.  The HIVE reference code implements a &quot;multiple-source shortest path&quot; context scoring function, but uses a very suboptimal algorithm.  By using a more efficient algorithm, our serial CPU implementation achieves 1-2 orders of magnitude speedup over the HIVE implementation and our GPU implementation achieves another 1-2 orders of magnitude on top of that.  Implementation was straightforward, involving only a small modification to the existing Gunrock SSSP app.</p>
+<p>The term "vertex nomination" covers a variety of different node ranking schemes that fuse "content" and "context" information.  The HIVE reference code implements a "multiple-source shortest path" context scoring function, but uses a very suboptimal algorithm.  By using a more efficient algorithm, our serial CPU implementation achieves 1-2 orders of magnitude speedup over the HIVE implementation and our GPU implementation achieves another 1-2 orders of magnitude on top of that.  Implementation was straightforward, involving only a small modification to the existing Gunrock SSSP app.</p>
 <h2 id='summary-of-gunrock-implementation'>Summary of Gunrock Implementation</h2>
 <p>Since HIVE is focused on graph analytics, the content scoring function is not relevant, and we only implement the context scoring function.  Coppersmith and Priebe propose a number of possible network statistics that can be used for context scoring.  The <a href="https://gitlab.hiveprogram.com/ggillary/vertex_nomination_Enron/blob/master/snap_vertex_nomination.py">HIVE reference implementation</a> ranks each node <code>u</code> in a graph <code>G = (U, E)</code> by the minimum distance from <code>u</code> to a node in a set of seed nodes <code>S</code>.  This is the VN variant we have implemented in Gunrock.</p>
 
@@ -296,7 +296,7 @@
         <span class="n">old_distance</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">distances</span><span class="p">[</span><span class="n">dest</span><span class="p">]</span>
         <span class="n">problem</span><span class="o">.</span><span class="n">distances</span><span class="p">[</span><span class="n">dest</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">old_distance</span><span class="p">,</span> <span class="n">new_distance</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">new_distance</span> <span class="o">&lt;</span> <span class="n">old_distance</span>
+        <span class="k">return</span> <span class="n">new_distance</span> <span class="o"><</span> <span class="n">old_distance</span>
 
     <span class="k">def</span> <span class="nf">_filter_op</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span> <span class="n">problem</span><span class="p">,</span> <span class="n">enactor_stats</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">problem</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">dest</span><span class="p">]</span> <span class="o">==</span> <span class="n">enactor_stats</span><span class="p">[</span><span class="s">'iteration'</span><span class="p">]:</span>
@@ -312,7 +312,7 @@
 <li>adding an edge <code>(d, s)</code> between <code>d</code> and each node <code>s</code> in <code>S</code> with <code>weight(d, s) = 0</code></li>
 <li>running SSSP from <code>d</code></li>
 </ol>
-<h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA&#39;s DGX-1</h2><h3 id='prereqs-input'>Prereqs/input</h3><pre class="highlight mid-column-code shell"><code>git clone --recursive https://github.com/gunrock/gunrock -b dev-refactor
+<h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA's DGX-1</h2><h3 id='prereqs-input'>Prereqs/input</h3><pre class="highlight mid-column-code shell"><code>git clone --recursive https://github.com/gunrock/gunrock -b dev-refactor
 <span class="nb">cd </span>gunrock/tests/vn
 cp ../../gunrock/util/gitsha1.c.in ../../gunrock/util/gitsha1.c
 make clean
@@ -334,7 +334,7 @@ make
   Reading edge lists from ../../dataset/small/chesapeake.mtx.coo_edge_pairs
   Assigning 1 to all 170 edges
   Substracting 1 from node Ids...
-  Edge doubleing: 170 -&gt; 340 edges
+  Edge doubleing: 170 -> 340 edges
   graph loaded as COO in 0.090935s.
 Converting 39 vertices, 340 directed edges ( ordered tuples) to CSR format...Done (0s).
 Degree Histogram (39 vertices, 340 edges):
@@ -357,8 +357,8 @@ Run 1 elapsed: 0.021935 ms, srcs = 21,15,5,23,3,29,22,26,33,4
 Using advance mode LB
 Using filter mode CULL
 __________________________
-0  1   0   queue3    oversize :  234 -&gt;  246
-0  1   0   queue3    oversize :  234 -&gt;  246
+0  1   0   queue3    oversize :  234 ->  246
+0  1   0   queue3    oversize :  234 ->  246
 --------------------------
 Run 0 elapsed: 0.442028 ms, srcs = 21,19,3,28,20,25,23,26,13,38, #iterations = 3
 __________________________
@@ -388,7 +388,7 @@ First 40 distances of the reference CPU result.
 <h2 id='validation'>Validation</h2>
 <p>The Gunrock VN implementation was tested against the <a href="https://gitlab.hiveprogram.com/ggillary/vertex_nomination_Enron/blob/master/snap_vertex_nomination.py">HIVE reference implementation</a> to verify correctness.  We also implemented a CPU reference implementation inside of the Gunrock VN app, with results that match the HIVE reference implementation.</p>
 
-<p>Additionally, for ease of exposition, we implemented a <a href="https://github.com/gunrock/pygunrock/blob/master/apps/vn.py">pure Python version of the Gunrock algorithm</a> that lets people new to Gunrock see the relevant logic without all of the complexity of C++/CUDA data structures, memory management, etc.  In this case, we already knew how to implement VN using Gunrock primitives.  However, in other cases, where we&#39;re writing a Gunrock app from scratch, translation from some arbitrary serial implementation to <code>advance</code>/<code>filter</code>/<code>compute</code> can be complex and involve some trial and error to handle edge cases.  In those cases, <code>pygunrock</code> has proven to be a useful tool for rapid prototyping and debugging.</p>
+<p>Additionally, for ease of exposition, we implemented a <a href="https://github.com/gunrock/pygunrock/blob/master/apps/vn.py">pure Python version of the Gunrock algorithm</a> that lets people new to Gunrock see the relevant logic without all of the complexity of C++/CUDA data structures, memory management, etc.  In this case, we already knew how to implement VN using Gunrock primitives.  However, in other cases, where we're writing a Gunrock app from scratch, translation from some arbitrary serial implementation to <code>advance</code>/<code>filter</code>/<code>compute</code> can be complex and involve some trial and error to handle edge cases.  In those cases, <code>pygunrock</code> has proven to be a useful tool for rapid prototyping and debugging.</p>
 
 <p>Our implementation of VN is a deterministic algorithm, so all correct solutions have the same accuracy/quality.</p>
 <h2 id='performance-and-analysis'>Performance and Analysis</h2>
@@ -403,7 +403,7 @@ First 40 distances of the reference CPU result.
 <h4 id='performer-openmp-implementations'>Performer OpenMP implementations</h4>
 <p>We were unable to locate any C/OpenMP implementation of VN from TA1/TA2 performers at the time of writing. (2018-10-20)</p>
 <h4 id='gunrock-cpu-implementation'>Gunrock CPU implementation</h4>
-<p>For correctness checking, we implement VN in single-threaded C++ within the Gunrock testing framework.  This is a serial implementation of Djikstra&#39;s algorithm using a CSR graph representation and <code>std::priority_queue</code>.  We expect this to be substantially faster than the HIVE Python+SNAP reference implementation due to superior algorithmic complexity.</p>
+<p>For correctness checking, we implement VN in single-threaded C++ within the Gunrock testing framework.  This is a serial implementation of Djikstra's algorithm using a CSR graph representation and <code>std::priority_queue</code>.  We expect this to be substantially faster than the HIVE Python+SNAP reference implementation due to superior algorithmic complexity.</p>
 <h4 id='experiments'>Experiments</h4><h5 id='hive-enron-dataset-u-15056-e-57075'>HIVE Enron dataset (|U|=15056, |E|=57075)</h5>
 <p>The Enron graph is a graph of email communications between employees of Enron.</p>
 
@@ -490,7 +490,7 @@ mean time = 0.921
 </thead><tbody>
 <tr>
 <td>Python+SNAP</td>
-<td><em>&gt; 10 minutes</em></td>
+<td><em>> 10 minutes</em></td>
 </tr>
 <tr>
 <td>Gunrock CPU</td>
@@ -551,7 +551,7 @@ mean time = 13.793
 </thead><tbody>
 <tr>
 <td>Python+SNAP</td>
-<td><em>&gt; 10 minutes</em></td>
+<td><em>> 10 minutes</em></td>
 </tr>
 <tr>
 <td>Gunrock CPU</td>
@@ -609,10 +609,10 @@ mean time = 22.743
 <ul>
 <li>Like SSSP, VN is bound by device memory latency.</li>
 <li>Profiling indicates that 64% of time is spent in the Gunrock <code>advance</code> operator and 20% of time is spent in in the <code>filter</code> operator (pseudocode above).</li>
-<li>The device memory bandwidth is 271 GB/s -- within the expected range for Gunrock graph analytics.  Random memory access means that we don&#39;t expect to get close to the reported maximum memory bandwidth.</li>
+<li>The device memory bandwidth is 271 GB/s -- within the expected range for Gunrock graph analytics.  Random memory access means that we don't expect to get close to the reported maximum memory bandwidth.</li>
 </ul>
 <h2 id='next-steps'>Next Steps</h2><h3 id='alternate-approaches-further-work'>Alternate approaches/further work</h3>
-<p>Because of its similarity to SSSP, this implementation of VN is fairly hardened.  However, given more time, we could implement more variations on context similiarity as described in Coppersmith and Priebe&#39;s paper.  Given the range of potential context similarity functions, this could involve implementing a wide variety of Gunrock operators.</p>
+<p>Because of its similarity to SSSP, this implementation of VN is fairly hardened.  However, given more time, we could implement more variations on context similiarity as described in Coppersmith and Priebe's paper.  Given the range of potential context similarity functions, this could involve implementing a wide variety of Gunrock operators.</p>
 <h3 id='gunrock-implications'>Gunrock implications</h3>
 <p>This was a straightforward adapatation of an existing Gunrock app.  SSSP is also one of the simpler apps -- only one advance/filter operation without  complex logic -- so implementing VN was not very difficult.  All of the core logic in VN is identical to SSSP.</p>
 <h3 id='notes-on-multi-gpu-parallelization'>Notes on multi-GPU parallelization</h3>
@@ -620,9 +620,9 @@ mean time = 22.743
 <h3 id='notes-on-dynamic-graphs'>Notes on dynamic graphs</h3>
 <p>The reference implementation does not cover a dynamic graph version of this workflow, though one could imagine having a static set of seed nodes and a streaming graph on which one would like to compute context scores in real time.</p>
 <h3 id='notes-on-larger-datasets'>Notes on larger datasets</h3>
-<p>If the datasets are larger than a single or multi-GPU&#39;s aggregate memory, the straightforward solution would be to let Unified Virtual Memory (UVM) in CUDA automatically handle memory movement. Declaring the entire graph as managed memory for a single GPU implementation, will allow the users to simply oversubscribe for 1 GPU, and queue vertices and edges in from the host memory as needed (this will be very slow). Further optimizations can be done, where instead of utilizing host memory, we can leverage a multi-GPU implementation and move the entire graph over to device memory, using NVLink to move data between the devices&#39; global memory. This can be further optimized by using MemAdvise hints such as pinning the memory to GPU&#39;s local memory where it is likely to be used, or create a direct map to all other GPUs to avoid page faulting on first touch.</p>
+<p>If the datasets are larger than a single or multi-GPU's aggregate memory, the straightforward solution would be to let Unified Virtual Memory (UVM) in CUDA automatically handle memory movement. Declaring the entire graph as managed memory for a single GPU implementation, will allow the users to simply oversubscribe for 1 GPU, and queue vertices and edges in from the host memory as needed (this will be very slow). Further optimizations can be done, where instead of utilizing host memory, we can leverage a multi-GPU implementation and move the entire graph over to device memory, using NVLink to move data between the devices' global memory. This can be further optimized by using MemAdvise hints such as pinning the memory to GPU's local memory where it is likely to be used, or create a direct map to all other GPUs to avoid page faulting on first touch.</p>
 <h3 id='notes-on-other-pieces-of-this-workload'>Notes on other pieces of this workload</h3>
-<p>The context scoring component of vertex nomination is incredibly general, and could include versions ranging in complexity from simple Euclidean distance metrics to the output of complex deep learning pipelines.  If we were to integrate these kinds of components more closely w/ Gunrock, we&#39;d likely need to use other CUDA libraries (cuBLAS, cuDNN, etc.) as well as interface w/ higher-level machine learning libraries (TensorFlow, PyTorch, etc.).</p>
+<p>The context scoring component of vertex nomination is incredibly general, and could include versions ranging in complexity from simple Euclidean distance metrics to the output of complex deep learning pipelines.  If we were to integrate these kinds of components more closely w/ Gunrock, we'd likely need to use other CUDA libraries (cuBLAS, cuDNN, etc.) as well as interface w/ higher-level machine learning libraries (TensorFlow, PyTorch, etc.).</p>
 
       </div>
 

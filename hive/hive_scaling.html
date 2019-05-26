@@ -290,8 +290,8 @@ NVLink Topology" alt="DGX1-NVLink" /></p>
 
 <p>Each of the NVLink links runs at 20 GBps per direction, higher than
 PCIe 3.0 x16 (16 GBps for the whole GPU). But the topology is not
-all-to-all, and GPUs may not be able to access every other GPU&#39;s
-memory. For example, GPU0 can&#39;t use peer access on GPUs 5, 6 and 7.
+all-to-all, and GPUs may not be able to access every other GPU's
+memory. For example, GPU0 can't use peer access on GPUs 5, 6 and 7.
 This makes implementations using peer access more complex than a full
 all-to-all topology. DGX-1 with V100 GPUs increases the NVLink speed
 to 25 GBps per direction per lane, and increases the number of lanes
@@ -424,7 +424,7 @@ accesses across GPUs are particularly slow.</p>
 
 <p>All the regular throughputs are at least 80% of their theoretical
 upper bounds. The latencies when accessing local GPUs seem odd, but
-other latencies look reasonable. It&#39;s clear that local regular
+other latencies look reasonable. It's clear that local regular
 accesses have much higher throughput than inter-GPU connections, about
 20 to 30 times from this experiment. The ratio of random accesses are
 lower, but still at about 5 times. The implication on the
@@ -435,7 +435,7 @@ computation cost is counted by the number of elements accessed by the
 kernels; this means the computation to communication ratio should be
 at least 2.5 operations to 1 byte to exhibit scalable behavior.</p>
 
-<p>Unified virtual memory (UVM) doesn&#39;t work as expected for most cases,
+<p>Unified virtual memory (UVM) doesn't work as expected for most cases,
 instead only when the accesses are read only and the data can be
 duplicated on each GPU. Otherwise the throughputs are significantly
 lower, caused by memory migration and going over the PCIe interfaces.
@@ -654,11 +654,11 @@ This is a mix of <code>AllReduce</code> and peer-to-peer communications: for ver
 edges that touch a large number of GPUs, <code>AllReduce</code> is used; for other
 vertices or edges, direct peer-to-peer communications are used. This
 communication model is coupled with the high / low degree partitioning scheme.
-The paper &quot;Scalable Breadth-First Search on a GPU Cluster&quot;
+The paper "Scalable Breadth-First Search on a GPU Cluster"
 <a href="https://escholarship.org/uc/item/9bd842z6">https://escholarship.org/uc/item/9bd842z6</a> has more details on this model.</p></li>
 </ul>
 <h3 id='peer-accesses'>Peer accesses</h3>
-<p>If a pair of GPUs is peer-accessible, they can directly dereference each other&#39;s
+<p>If a pair of GPUs is peer-accessible, they can directly dereference each other's
 memory pointers within CUDA kernels. This provides a more asynchronous way for
 inter-GPU communication: there is no need to wait for the iteration boundary.
 Atomic operations are also supported if the GPUs are connected by NVLink. The
@@ -675,12 +675,12 @@ larger.</p>
 <h3 id='unified-virtual-memory-uvm'>Unified virtual memory (UVM)</h3>
 <p>UVM is similar to peer accesses, as it also enables multiple GPUs to access the
 same memory space. However, the target memory space is allocated in the CPU
-memory. When needed on a GPU, a memory page will be moved to the GPU&#39;s memory
+memory. When needed on a GPU, a memory page will be moved to the GPU's memory
 via the page fault mechanism. Updates to the data are cached in GPU memory
 first, and will eventually be written to the CPU memory. UVM provides a
 transparent view of the CPU memory on GPU, and significantly reduces the coding
 complexity if running time is not a concern. It also enables the GPU to process
-datasets that can&#39;t fit in combined GPU memory without explicitly streaming
+datasets that can't fit in combined GPU memory without explicitly streaming
 the data from CPU to GPU.</p>
 
 <p>But there are some caveats. The actual placement of a memory
@@ -693,8 +693,8 @@ cases, the data can be moved back to CPU, and any further access will
 need to go through the slow PCIe bridge again. The performance of UVM
 is not as good as explicit data movement or peer accesses; in the
 worst cases, it can be a few orders of magnitude slower. When data is
-larger than the GPU memory, UVM&#39;s throughput drops significantly; as a
-result, it&#39;s easier to code, but it will be slower than streaming the
+larger than the GPU memory, UVM's throughput drops significantly; as a
+result, it's easier to code, but it will be slower than streaming the
 graph for datasets larger than GPU memory.</p>
 <h2 id='graph-partitioning-scheme'>Graph partitioning scheme</h2>
 <p>Graphs may be cut into smaller pieces to put them onto multiple GPUs.
@@ -715,9 +715,9 @@ graph is partitioned in 1 dimension, 2 dimensions, or differently for
 low and high degree vertices.</p>
 <h3 id='1d-partitioning'>1D partitioning</h3>
 <p>1D partitioning distributes the edges in a graph either by the source vertices
-or the destination vertices. It&#39;s simple to work with, and scales well when the
+or the destination vertices. It's simple to work with, and scales well when the
 number of GPUs are small. It should still work on the DGX-1 with 8 GPUs for a
-large number of graph applications. But that may approach 1D partitioning&#39;s
+large number of graph applications. But that may approach 1D partitioning's
 scalability limit.</p>
 <h3 id='2d-partitioning'>2D partitioning</h3>
 <p>2D partitioning distributes the edges by both the source and the destination
@@ -733,7 +733,7 @@ on their source vertices; for vertices with high out-degrees and their
 outgoing edges, distribute edges based on the destination vertices;
 if both vertices have high out-degrees, distribute the edge based on
 the one with lower degree. The result is that low degree vertices are
-only adjacent to very few GPUs, while high degree vertices&#39; edges are
+only adjacent to very few GPUs, while high degree vertices' edges are
 scattered among all GPUs. Graph applications scale very well when
 using the p2p communication model for low degree vertices, and the
 <code>AllReduce</code> model for high degree vertices.</p>
@@ -786,7 +786,7 @@ While iterations stop condition not met
 with a large constant hidden by the $O()$ notation. From experiments,
 the constant factor is about 10, considering the cost of sort or the
 random memory access penalty of hash table. The community assignment
-broadcast has a cost of |V| x 4 bytes, and the &#39;AllReduce&#39; costs $2|V|
+broadcast has a cost of |V| x 4 bytes, and the 'AllReduce' costs $2|V|
 \times 8$ bytes. These communication costs are the upper bound,
 assuming there are $|V|$ communities, and all vertices update their
 community assignments. In practice, the communication cost can be much
@@ -794,15 +794,15 @@ lower, depending on the dataset.</p>
 
 <p>The graph contraction can be done as below on multiple GPUs:</p>
 <pre class="highlight mid-column-code plaintext"><code>temp_graph := Contract the local sub-graph based on community assignments;
-Send edges &lt;v, u, w&gt; in temp_graph to host_GPU(v);
+Send edges <v, u, w> in temp_graph to host_GPU(v);
 Merge received edges and form the new local sub-graph;
 </code></pre>
 <p>In the worst case, assuming the number of edges in the contracted
-graph is $|E&#39;|$, the communication cost could be $|E&#39;| \times 8$
-bytes, with the computation cost at about $5|E|/p + |E&#39;|$. For most
+graph is $|E'|$, the communication cost could be $|E'| \times 8$
+bytes, with the computation cost at about $5|E|/p + |E'|$. For most
 datasets, the size reduction of graph from the contraction step is
 significant, so the memory needed to receive edges from the peer GPUs
-is manageable; however, if $|E&#39;|$ is large, it can be significant and
+is manageable; however, if $|E'|$ is large, it can be significant and
 may run out of GPU memory.</p>
 
 <p><em>Summary of Louvain multi-GPU scaling</em></p>
@@ -831,11 +831,11 @@ is dominant.</p>
 </tr>
 <tr>
 <td>Graph contraction</td>
-<td>$5E / p + E&#39;$</td>
-<td>$8E&#39;$ bytes</td>
-<td>$5E/p + E&#39; : 8E&#39;$</td>
+<td>$5E / p + E'$</td>
+<td>$8E'$ bytes</td>
+<td>$5E/p + E' : 8E'$</td>
 <td>Hard</td>
-<td>$16E&#39;$</td>
+<td>$16E'$</td>
 </tr>
 <tr>
 <td>Louvain</td>
@@ -843,7 +843,7 @@ is dominant.</p>
 <td>$20V$ bytes</td>
 <td>$E/p : 2V$</td>
 <td>Okay</td>
-<td>$88E/p + 12V + 16E&#39;$</td>
+<td>$88E/p + 12V + 16E'$</td>
 </tr>
 </tbody></table>
 
@@ -863,17 +863,17 @@ connectivity, a more scalable way is to duplicate the feature data of
 neighboring vertices. Depending on the graph size and the size of
 features, not all of the above data distribution schemes are
 applicable. The following analysis focuses on the feature duplication
-scheme, with other schemes&#39; results in the summary table.</p>
+scheme, with other schemes' results in the summary table.</p>
 
 <p>SAGE can be separated into three parts, depending on whether the computation
 and data access is source-centric or child-centric.</p>
 <pre class="highlight mid-column-code plaintext"><code>// Part1: Select the children
 For each source in local batch:
     Select num_children_per_source children form source's neighbors;
-    Send &lt;source, child&gt; pairs to host_GPU(child);
+    Send <source, child> pairs to host_GPU(child);
 
 // Part2: Child-centric computation
-For each received &lt;source, child&gt; pair:
+For each received <source, child> pair:
     child_feature = feature[child];
     send child_feature to host_GPU(source);
 
@@ -907,7 +907,7 @@ Part 3, computation  : B x (C x (F + Wf1.y + Wa1.y) + F x (Wf1.y + Wa1.y) +
                        (Wf1.y + Wa1.y) x (Wf2.y + Wa2.y)).
 Part 3, communication: 0.
 </code></pre>
-<p>For Part 2&#39;s communication, if C is larger than about 2p, using <code>AllReduce</code> to
+<p>For Part 2's communication, if C is larger than about 2p, using <code>AllReduce</code> to
 sum up <code>child_feature</code> and <code>child_temp</code> for each source will cost less, at $B \times (F + \textrm{Wf1}.y + \textrm{Wa1}.y) \times 2p \times 4$ bytes.</p>
 
 <p><em>Summary of Graph SAGE multi-GPU scaling</em></p>
@@ -1028,7 +1028,7 @@ scalability will be perfect, as there is no communication involved at all.</p>
 
 <p>A more interesting multi-GPU implementation would be when the graph is
 distributed across the GPUs. In this case, each step of a walk not only needs
-to send the <code>&lt;walk#, step#, v&gt;</code> information to <code>host_GPU(v)</code>, but also to the GPU that
+to send the <code><walk#, step#, v></code> information to <code>host_GPU(v)</code>, but also to the GPU that
 stores the result for such walk.</p>
 <pre class="highlight mid-column-code plaintext"><code>For each walk starting from local vertex v:
     Store v for ;
@@ -1068,7 +1068,7 @@ Repeat until all steps of walks finished:
 <p>Graph search is very similar to random walk, except that instead of
 randomly selecting any neighbor, it selects the neighbor with the
 highest score (when using the <code>greedy</code> strategy), or with probabilities
-proportional to the neighbors&#39; scores (when using the <code>stochastic_greedy</code>
+proportional to the neighbors' scores (when using the <code>stochastic_greedy</code>
 strategy). For the <code>greedy</code> strategy, a straightforward implementation, when
 reaching a vertex, goes through the whole neighbor list of thatsuch
 vertex and finds the one with maximum score. A more optimized implementation
@@ -1080,7 +1080,7 @@ through the neighbor list.</p>
 <p>For the <code>stochastic_greedy</code> strategy, the straightforward implementation would
 also go through all the neighbors, selecting one based on their scores and a
 random number. Preprocessing can also help: perform a scan on the scores of
-each vertex&#39;s neighbor list, with a cost of $E/p$; during the random walk, a binary search would be
+each vertex's neighbor list, with a cost of $E/p$; during the random walk, a binary search would be
 sufficient to select a neighbor, with weighted probabilities.</p>
 
 <p>The cost analysis, depending on the walk strategy and optimization,
@@ -1138,8 +1138,8 @@ degree of vertices in the graph. As a result, the computation-to-communication
 ratio will increase to d:24; for most graphs, this is still not high enough to
 have good scalability.</p>
 <h3 id='geolocation'>Geolocation</h3>
-<p>In each iteration, Geolocation updates a vertex&#39;s location based on
-its neighbors. For multiple GPUs, neighboring vertices&#39;s location
+<p>In each iteration, Geolocation updates a vertex's location based on
+its neighbors. For multiple GPUs, neighboring vertices's location
 information needs to be available, either by direct access, UVM, or
 explicit data movement. The following shows how explicit data movement
 can be implemented.</p>
@@ -1153,7 +1153,7 @@ all vertices are looking for possible location updates from neighbors.
 Because the spatial median function has a lot of mathematical
 computation inside, particularly a haversine() for each edge, the
 constant factor hidden by O() is large; for simplicity, 100 is used as
-the constant factor here. Assuming that we broadcast every vertex&#39;s
+the constant factor here. Assuming that we broadcast every vertex's
 location gives the upper bound of communication, but in reality, the
 communication should be much less, because 1) not every vertex updates
 its location every iteration and 2) vertices may not have neighbors on
@@ -1192,13 +1192,13 @@ a single source. One possible multi-GPU implementation is:</p>
 <pre class="highlight mid-column-code plaintext"><code>Set the starting vertex / vertices;
 While has new distance updates
     For each local vertex v with distance update:
-        For each edge &lt;v, u, w&gt; of vertex v:
+        For each edge <v, u, w> of vertex v:
             new_distance := distance[v] + w;
-            if (distance[u] &gt; new_distance)
+            if (distance[u] > new_distance)
                 distance[u] = new_distance;
 
     For each u with distance update:
-        Send &lt;u, distance[u]&gt; to host_GPU(u);
+        Send <u, distance[u]> to host_GPU(u);
 </code></pre>
 <p>Assuming on average, each vertex has its distance updated <code>a</code> times, and the
 average degree of vertices is <code>d</code>, the computation and the communication costs are:</p>
@@ -1229,15 +1229,15 @@ capped by $p \times 8$ bytes.</p>
 <h3 id='scan-statistics'>Scan Statistics</h3>
 <p>Scan statistics is essentially triangle counting (TC) for each vertex
 plus a simple post-processing step. The current Gunrock TC
-implementation is intersection-based: for an edge <code>&lt;v, u&gt;</code>,
+implementation is intersection-based: for an edge <code><v, u></code>,
 intersecting <code>neighbors[u]</code> and <code>neighbors[v]</code> gives the number of
-triangles including <code>edge &lt;v, u&gt;</code>. This
+triangles including <code>edge <v, u></code>. This
 neighborhood-intersection-based algorithm only works if the
 neighborhood of end points of all edges for which we need to count
 triangles can reside in the memory of a single GPU. For graphs with
 low connectivities, such as road networks and meshes, it is still
 possible to partition the graph; for graphs with high connectivity,
-such as social networks or some web graphs, it&#39;s almost impossible to
+such as social networks or some web graphs, it's almost impossible to
 partition the graph, and any sizable partition of the graph may touch
 a large portion of vertices of the graph. As a result, for general
 graphs, the intersection-based algorithm requires the graph can be
@@ -1247,24 +1247,24 @@ on each GPU, and no communication is involved.</p>
 
 <p>A more distributed-friendly TC algorithm is wedge-checking-based
 (<a href="https://e-reports-ext.llnl.gov/pdf/890544.pdf">https://e-reports-ext.llnl.gov/pdf/890544.pdf</a>). The main idea is
-this: for each triangle A-B-C, where <code>degree(A) &gt;= degree(B) &gt;=
-degree(C)</code>, both A and B are in C&#39;s neighborhood, and A is in B&#39;s
+this: for each triangle A-B-C, where <code>degree(A) >= degree(B) >=
+degree(C)</code>, both A and B are in C's neighborhood, and A is in B's
 neighborhood; when testing for possible triangle D-E-F, with
-<code>degree(D) &gt;= degree(E) &gt;= degree(F)</code>, the wedge (two edges that share
+<code>degree(D) >= degree(E) >= degree(F)</code>, the wedge (two edges that share
 the same end point) that needs to be checked is D-E, and the checking
-can be simply done by verifying whether D is in E&#39;s neighborhood. As
+can be simply done by verifying whether D is in E's neighborhood. As
 this algorithm is designed for distributed systems, it should be
 well-suited for multi-GPU system. The ordering requirements are
 imposed to reduce the number of wedge checks and to balance the
 workload. The multi-GPU pseudo code is:</p>
-<pre class="highlight mid-column-code plaintext"><code>For each local edge &lt; v, u &gt;:
-    If (degree(v) &gt; degree(u)) continue;
+<pre class="highlight mid-column-code plaintext"><code>For each local edge < v, u >:
+    If (degree(v) > degree(u)) continue;
     For each neighbor w of v:
-        If (degree(v) &gt; degree(w)) continue;
-        If (degree(u) &gt; degree(w)) continue;
-        Send tuple &lt;u, w, v&gt; to host_GPU(u) for checking;
+        If (degree(v) > degree(w)) continue;
+        If (degree(u) > degree(w)) continue;
+        Send tuple <u, w, v> to host_GPU(u) for checking;
 
-For each received tuple &lt; u, w, v &gt;:
+For each received tuple < u, w, v >:
     If (w in u's neighbor list):
         triangles[u] ++;
         triangles[w] ++;
@@ -1275,7 +1275,7 @@ AllReduce(triangles, sum);
 // For Scan statistics only
 For each vertex v in the graph:
     scan_stat[v] := triangles[v] + degree(v);
-    if (scan_stat[v] &gt; max_scan_stat):
+    if (scan_stat[v] > max_scan_stat):
         max_scan_stat := scan_stat[v];
         max_ss_node := v;
 </code></pre>
@@ -1356,38 +1356,38 @@ of vertices, the cost analysis is:</p>
 per-vertex calculation to update the capacities in the graph. The reference and
 most non-parallel implementations of MF are augmenting-path-based; but finding
 the argumenting path and subsequent residual updates are both serial. The
-push-relabel algorithm is more parallelizable, and used by Gunrock&#39;s MF
+push-relabel algorithm is more parallelizable, and used by Gunrock's MF
 implementation. Each time the push operation updates the flow on an edge, it
 also needs to update the flow on the reverse edge; but the reverse edge may be
 hosted by another GPU, and that creates a large amount of inter-GPU traffic. The
 pseudocode for one iteration of MF with inter-GPU communication is:</p>
 <pre class="highlight mid-column-code plaintext"><code>// Push phase
 For each local vertex v:
-    If (excess[v] &lt;= 0) continue;
+    If (excess[v] <= 0) continue;
     If (v == source || v == sink) continue;
-    For each edge e&lt;v, u&gt; of v:
-        If (capacity[e] &lt;= flow[e]) continue;
-        If (height[v] &lt;= height[u]) continue;
+    For each edge e<v, u> of v:
+        If (capacity[e] <= flow[e]) continue;
+        If (height[v] <= height[u]) continue;
         move := min(capacity[e] - flow[e], excess[v]);
         excess[v] -= move;
         flow[e] += move;
-        Send &lt;reverse[e], move&gt; to host_GPU(u);
-        If (excess[v] &lt;= 0)
+        Send <reverse[e], move> to host_GPU(u);
+        If (excess[v] <= 0)
             break for each e loop;
 
-For each received &lt;e, move&gt; pair:
+For each received <e, move> pair:
     flow[e] -= move;
     excess[Dest(e)] += move;
 
 // Relabel phase
 For each local vertex v:
-    If (excess[v] &lt;= 0) continue;
+    If (excess[v] <= 0) continue;
     min_height := infinity;
-    For each e&lt;v, u&gt; of v:
-        If (capacity[e] &lt;= flow[e]) continue;
-        If (min_height &gt; height[u])
+    For each e<v, u> of v:
+        If (capacity[e] <= flow[e]) continue;
+        If (min_height > height[u])
             min_height = height[u];
-    If (height[v] &lt;= min_height)
+    If (height[v] <= min_height)
         height[v] := min_height + 1;
 
 Broadcast height[v] for all local vertex;
@@ -1431,7 +1431,7 @@ are known.</p>
 <p>The GTF-specific parts are more complicated than MF in terms of
 communication: the implementation must keep some data, such as weights
 and sizes, for each community of vertices, and multiple GPUs could be
-updating such data simultaneously. It&#39;s almost impossible to do
+updating such data simultaneously. It's almost impossible to do
 explicit data movement for this part, and the best option is to use
 direct access or UVM; each vertex may update its community once, so
 the communication cost is still manageable. One iteration of GTF is:</p>
@@ -1495,7 +1495,7 @@ Updates source-vertex and vertex-destination capacities;
 </tr>
 </tbody></table>
 
-<p>It&#39;s unsurprising that GTF may not scale: the compute- and
+<p>It's unsurprising that GTF may not scale: the compute- and
 communicate-heavy part of GTF is the MF, and in MF, each push needs
 communication to update its reverse edge. A more distributed-friendly
 MF algorithm is needed to overcome this problem.</p>
@@ -1508,35 +1508,35 @@ may create a very dense graph, which may be much larger than the
 original graph. One possible solution is to process the results in
 batches:</p>
 <pre class="highlight mid-column-code plaintext"><code>vertex_start := 0;
-While (vertex_start &lt; num_vertices)
+While (vertex_start < num_vertices)
     markers := {0};
     current_range := [vertex_start, vertex_start + batch_size);
-    For each local edge e&lt;v, u&gt; with u in current_range:
+    For each local edge e<v, u> with u in current_range:
         For each neighbor t of v:
             If (u == t) continue;
             markers[(u - vertex_start) * ceil(num_vertices / 32) + t / 32] |=
-                1 &lt;&lt; (t % 32);
+                1 << (t % 32);
 
     For each vertex u in current_range:
         Form the neighbor list of u in the new graph by markers;
 
-    For each local edge e&lt;v, u&gt; with u in current_range:
+    For each local edge e<v, u> with u in current_range:
         For each neighbor t of v:
             If (u == t) continue;
-            e' := edge_id of &lt;u, t&gt; in the new graph,
+            e' := edge_id of <u, t> in the new graph,
                 by searching u's neighbor list;
             edge_values[e'] += 1;
 
-    For each edge e'&lt;u, t, w&gt; in the new graph:
-        send &lt;u, t, w&gt; to host_GPU(u);
+    For each edge e'<u, t, w> in the new graph:
+        send <u, t, w> to host_GPU(u);
 
-    Merge all received &lt;u, t, w&gt; to form projection
+    Merge all received <u, t, w> to form projection
         for local vertices u in current_range;
     Move the result from GPU to CPU;
 
     vertex_start += batch_size;
 </code></pre>
-<p>Using $E&#39;$ to denote the number of edges in the projected graph, and
+<p>Using $E'$ to denote the number of edges in the projected graph, and
 $d$ to denote the average degree of vertices, the costs are:</p>
 
 <table style="font-size: 12px;font-size: 12px;"><thead>
@@ -1557,7 +1557,7 @@ $d$ to denote the average degree of vertices, the costs are:</p>
 </tr>
 <tr>
 <td>Forming edge lists</td>
-<td>$E&#39;$</td>
+<td>$E'$</td>
 <td>$0$ bytes</td>
 <td></td>
 <td></td>
@@ -1571,16 +1571,16 @@ $d$ to denote the average degree of vertices, the costs are:</p>
 </tr>
 <tr>
 <td>Merging</td>
-<td>$E&#39;$</td>
-<td>$E&#39; \cdot 12$ bytes</td>
+<td>$E'$</td>
+<td>$E' \cdot 12$ bytes</td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td>Graph Projection</td>
-<td>$2dE/p + 2E&#39;$</td>
-<td>$12E&#39;$ bytes</td>
-<td>$dE/p + E&#39; : 6E&#39;$</td>
+<td>$2dE/p + 2E'$</td>
+<td>$12E'$ bytes</td>
+<td>$dE/p + E' : 6E'$</td>
 <td>Okay</td>
 </tr>
 </tbody></table>
@@ -1589,10 +1589,10 @@ $d$ to denote the average degree of vertices, the costs are:</p>
 distributed edges, each GPU can process only <code>u</code> vertices that are
 hosted on that GPU. This eliminates the merging step; as a result,
 there is no communication needed, and the computation cost reduces to
-2dE/p + E&#39;.</p>
+2dE/p + E'.</p>
 <h3 id='local-graph-clustering'>Local Graph Clustering</h3>
 <p>The Gunrock implementation of Local Graph Clustering (LGC) uses
-PageRank-Nibble, a variant of the PageRank algorithm. PR-Nibble&#39;s
+PageRank-Nibble, a variant of the PageRank algorithm. PR-Nibble's
 communication pattern is the same as standard PR: accumulate changes
 for each vertex to its host GPU. As a result, PR-Nibble should be
 scalable, just as standard PR. PR-Nibble with communication can be
@@ -1600,16 +1600,16 @@ done as:</p>
 <pre class="highlight mid-column-code plaintext"><code>// Per-vertex updates
 For each active local vertex v:
     If (iteration == 0 &amp;&amp; v == src\_neighbor) continue;
-    If (iteration &gt; 0 &amp;&amp; v == src)
+    If (iteration > 0 &amp;&amp; v == src)
         gradient[v] -= alpha / #reference_vertices / sqrt(degree(v));
     z[v] := y[v] - gradient[v];
     If (z[v] == 0) continue;
 
     q_old := q[v];
     threshold := rho * alpha * sqrt(degree(v));
-    If (z[v] &gt;= threshold)
+    If (z[v] >= threshold)
         q[v] := z[v] - threshold;
-    Else if (z[v] &lt;= -threshold)
+    Else if (z[v] <= -threshold)
         q[v] := z[v] + threshold;
     Else
         q[v] := 0;
@@ -1623,14 +1623,14 @@ For each active local vertex v:
     gradient[v] := y[v] * (1 + alpha) / 2;
 
 // Ranking propagation
-For each edge e&lt;v, u&gt; of active local vertex v:
+For each edge e<v, u> of active local vertex v:
     change := y[v] * (1 - alpha) / 2 / sqrt(degree(v)) / sqrt(degree(u));
     gradient_update[u] -= change;
 
 For each u that has gradient updates:
-    send &lt; u, gradient_update[u]&gt; to host_GPU(u);
+    send < u, gradient_update[u]> to host_GPU(u);
 
-For each received gradient update &lt; u, gradient_update&gt;:
+For each received gradient update < u, gradient_update>:
     gradient[u] += gradient_update;
 
 // Gradient updates
@@ -1642,9 +1642,9 @@ For each local vertex u with gradient updated:
     If (u == src)
         val -= (alpha / #reference_vertices) / sqrt(degree(u));
     val := abs(val / sqrt(degree(u)));
-    if (gradient_scale_value &lt; val)
+    if (gradient_scale_value < val)
         gradient_scale_value = val;
-    if (val &gt; gradient_threshold)
+    if (val > gradient_threshold)
         gradient_scale := 1;
 </code></pre>
 <p>The cost analysis is:</p>
@@ -1772,7 +1772,7 @@ applications.</p>
 </tr>
 <tr>
 <td>Graph projection</td>
-<td>Duplicated graph : infinity <br> Distributed graph : $dE/p + E&#39; : 6E&#39;$</td>
+<td>Duplicated graph : infinity <br> Distributed graph : $dE/p + E' : 6E'$</td>
 <td>Perfect <br> Okay</td>
 <td>Easy <br> Easy</td>
 </tr>

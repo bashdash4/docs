@@ -273,16 +273,16 @@
 
       <div class="content">
         <h1 id='sparse-fused-lasso'>Sparse Fused Lasso</h1>
-<p>Given a graph where each vertex on the graph has a weight, <em>sparse fused lasso (SFL)</em>, also named <em>sparse graph trend filter (GTF)</em>, tries to learn a new weight for each vertex that is (1) sparse (most vertices have weight 0), (2) close to the original weight in the l2 norm, and (3) close to its neighbors&#39; weight(s) in the l1 norm. This algorithm is usually used in main trend filtering (denoising). For example, an image (grid graph) with noisy pixels can be filtered with this algorithm to get a new image without the noisy pixels, which are &quot;smoothed out&quot; by its neighbors.
+<p>Given a graph where each vertex on the graph has a weight, <em>sparse fused lasso (SFL)</em>, also named <em>sparse graph trend filter (GTF)</em>, tries to learn a new weight for each vertex that is (1) sparse (most vertices have weight 0), (2) close to the original weight in the l2 norm, and (3) close to its neighbors' weight(s) in the l1 norm. This algorithm is usually used in main trend filtering (denoising). For example, an image (grid graph) with noisy pixels can be filtered with this algorithm to get a new image without the noisy pixels, which are "smoothed out" by its neighbors.
 <a href="https://arxiv.org/abs/1410.7690">https://arxiv.org/abs/1410.7690</a></p>
 <h2 id='summary-of-results'>Summary of Results</h2>
 <p>The SFL problem is mainly divided into two parts, computing residual graphs from maxflow and renormalizing the weights of the vertices. Maxflow is performed with the parallelizable lock-free push-relabel algorithm. For renormalization: each vertex has to compute which communities it belongs to, and normalize the weights with other vertices in the same community. SFL iterates on maxflow and renormalization kernels with a global synchronization in between them until convergence. Current analysis show that maxflow is the bottleneck of the whole workflow, with over 90% of the runtime being spent on the maxflow kernels.</p>
 
-<p>GPU SFL runs ~2 times slower than the CPU benchmark on the largest dataset provided. On smaller datasets, GPU SFL is much slower because there just isn&#39;t enough work to fill up a GPU and leverage the compute we have available. Analyzing the runs on the larger datasets, show that the parametric maxflow on the CPU converges much faster than our parallel push-relabel max flow algorithm on the GPU. Investigating the parallelization of parametric maxflow is an interesting research challenge.</p>
+<p>GPU SFL runs ~2 times slower than the CPU benchmark on the largest dataset provided. On smaller datasets, GPU SFL is much slower because there just isn't enough work to fill up a GPU and leverage the compute we have available. Analyzing the runs on the larger datasets, show that the parametric maxflow on the CPU converges much faster than our parallel push-relabel max flow algorithm on the GPU. Investigating the parallelization of parametric maxflow is an interesting research challenge.</p>
 <h2 id='summary-of-gunrock-implementation'>Summary of Gunrock Implementation</h2>
-<p>The loss function is $0.5 \cdot \sum((y&#39; - y)^2) + \lambda_1 \cdot \sum(|y_i&#39; - y_j&#39;|) + \lambda_2 \cdot \sum(|y_i&#39;|)$, where $y$ is the input weight (observation) for each vertex and $y&#39;$ (fitted weight) is the new weight for each vertex. $\lambda_1$ and $\lambda_2$ are required parameters to process the graph in SFL.</p>
+<p>The loss function is $0.5 \cdot \sum((y' - y)^2) + \lambda_1 \cdot \sum(|y_i' - y_j'|) + \lambda_2 \cdot \sum(|y_i'|)$, where $y$ is the input weight (observation) for each vertex and $y'$ (fitted weight) is the new weight for each vertex. $\lambda_1$ and $\lambda_2$ are required parameters to process the graph in SFL.</p>
 
-<p>The input graph is specified in two files. The first file contains the original vertices&#39; weights and the second file contains the directed graph connectivity without weights (edge pairs only). These two files and a edge_regularization_strength ($\lambda_1$) of the directed graph edge weights are the input to preprocessing. Two extra vertices, source and sink, are added to the original graph as well. They serve as two &quot;labels&quot; of different segments on the graph. This results in a graph where edges that connect to the source or sink have edge-weights as in the <code>vertices&#39; weights</code> file, and the other edges are assigned an edge weight of $\lambda_1$.</p>
+<p>The input graph is specified in two files. The first file contains the original vertices' weights and the second file contains the directed graph connectivity without weights (edge pairs only). These two files and a edge_regularization_strength ($\lambda_1$) of the directed graph edge weights are the input to preprocessing. Two extra vertices, source and sink, are added to the original graph as well. They serve as two "labels" of different segments on the graph. This results in a graph where edges that connect to the source or sink have edge-weights as in the <code>vertices' weights</code> file, and the other edges are assigned an edge weight of $\lambda_1$.</p>
 
 <p>The Gunrock implementation of this application has two parts. The first part is the maxflow algorithm. We choose a lock-free push-relabel maxflow formulation, which is well-suited for parallelization on a GPU with Gunrock. Computing a valid maxflow also implies a solution to the mincut problem, which is a segmentation of a graph into two pieces where the division is across a set of edges with the minimum possible weights. The output of this maxflow algorithm is (1) a residual graph where each edge weight is computed as <code>residual_capacity</code> equals <code>capacity - edge_flow</code>, and (2) a Boolean array that marks which vertices are reachable from the source after the mincut.</p>
 
@@ -307,9 +307,9 @@
     <span class="k">def</span> <span class="nf">lockfree_op</span> <span class="p">(</span><span class="n">num</span><span class="o">-</span><span class="n">repeats</span><span class="p">,</span> <span class="n">V</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">i</span> <span class="k">from</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">num</span><span class="o">-</span><span class="n">repeats</span> <span class="n">do</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">each</span> <span class="n">vertex</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">V</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">excess</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">excess</span> <span class="o">></span> <span class="mi">0</span><span class="p">:</span>
                     <span class="n">u</span> <span class="p">:</span><span class="o">=</span> <span class="n">lowest_neighbor_in_residual_network</span> <span class="p">(</span><span class="n">v</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">u</span><span class="o">.</span><span class="n">height</span> <span class="o">&lt;</span> <span class="n">v</span><span class="o">.</span><span class="n">height</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">u</span><span class="o">.</span><span class="n">height</span> <span class="o"><</span> <span class="n">v</span><span class="o">.</span><span class="n">height</span><span class="p">:</span>
                         <span class="n">Push</span> <span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">Relabel</span> <span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
@@ -318,16 +318,16 @@
     <span class="k">def</span> <span class="nf">lowest_neighbor_in_residual_network</span> <span class="p">(</span><span class="n">v</span><span class="p">):</span>
         <span class="n">min_height</span> <span class="p">:</span><span class="o">=</span> <span class="n">infinity</span>
         <span class="n">min_u</span> <span class="p">:</span><span class="o">=</span> <span class="n">undefined</span>
-        <span class="k">for</span> <span class="n">each</span> <span class="n">e</span><span class="o">&lt;</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="o">&gt;</span> <span class="n">of</span> <span class="n">v</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">residual_capacity</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">each</span> <span class="n">e</span><span class="o"><</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="o">></span> <span class="n">of</span> <span class="n">v</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">residual_capacity</span> <span class="o"><=</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="k">continue</span><span class="p">;</span>
-            <span class="k">if</span> <span class="n">min_height</span> <span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">height</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">min_height</span> <span class="o">></span> <span class="n">u</span><span class="o">.</span><span class="n">height</span><span class="p">:</span>
                     <span class="n">min_height</span> <span class="p">:</span><span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">height</span>
                     <span class="n">min_u</span> <span class="p">:</span><span class="o">=</span> <span class="n">u</span>
         <span class="k">return</span> <span class="n">min_u</span>
 
     <span class="c"># Push phase</span>
-    <span class="k">def</span> <span class="nf">Push</span> <span class="p">(</span><span class="n">e</span><span class="o">&lt;</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="o">&gt;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">Push</span> <span class="p">(</span><span class="n">e</span><span class="o"><</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="o">></span><span class="p">):</span>
         <span class="n">move</span> <span class="p">:</span><span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">residual_capacity</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">excess</span><span class="p">)</span>
         <span class="n">v</span><span class="o">.</span><span class="n">excess</span> <span class="o">-=</span> <span class="n">move</span>
         <span class="n">e</span><span class="o">.</span><span class="n">flow</span> <span class="o">+=</span> <span class="n">move</span>
@@ -335,7 +335,7 @@
         <span class="n">e</span><span class="o">.</span><span class="n">reverse</span><span class="o">.</span><span class="n">flow</span> <span class="o">-=</span> <span class="n">move</span>
 
     <span class="c"># Relabel phase</span>
-    <span class="k">def</span> <span class="nf">Relabel</span> <span class="p">(</span><span class="n">e</span><span class="o">&lt;</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="o">&gt;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">Relabel</span> <span class="p">(</span><span class="n">e</span><span class="o"><</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="o">></span><span class="p">):</span>
         <span class="n">v</span><span class="o">.</span><span class="n">height</span> <span class="p">:</span><span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">height</span> <span class="o">+</span> <span class="mi">1</span>
 
     <span class="c"># Min-cut</span>
@@ -355,9 +355,9 @@
             <span class="n">comm</span> <span class="p">:</span><span class="o">=</span> <span class="n">next_communities</span><span class="p">[</span><span class="n">curr_communities</span><span class="p">[</span><span class="n">v</span><span class="p">]];</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">comm</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="n">update</span> <span class="n">comm</span>
             <span class="n">community_sizes</span><span class="p">[</span><span class="n">comm</span><span class="p">]</span><span class="o">++</span>
-            <span class="n">community_weights</span><span class="p">[</span><span class="n">comm</span><span class="p">]</span> <span class="o">+=</span> <span class="n">weight</span><span class="p">[</span><span class="n">source</span> <span class="o">-&gt;</span> <span class="n">v</span><span class="p">]</span>
+            <span class="n">community_weights</span><span class="p">[</span><span class="n">comm</span><span class="p">]</span> <span class="o">+=</span> <span class="n">weight</span><span class="p">[</span><span class="n">source</span> <span class="o">-></span> <span class="n">v</span><span class="p">]</span>
         <span class="k">else</span>
-            <span class="n">community_weights</span><span class="p">[</span><span class="n">comm</span><span class="p">]</span> <span class="o">-=</span> <span class="n">weight</span><span class="p">[</span><span class="n">v</span> <span class="o">-&gt;</span> <span class="n">sink</span><span class="p">]</span>
+            <span class="n">community_weights</span><span class="p">[</span><span class="n">comm</span><span class="p">]</span> <span class="o">-=</span> <span class="n">weight</span><span class="p">[</span><span class="n">v</span> <span class="o">-></span> <span class="n">sink</span><span class="p">]</span>
             <span class="n">community_sizes</span> <span class="p">[</span><span class="n">comm</span><span class="p">]</span> <span class="o">++</span>
 
     <span class="c"># Normalize community</span>
@@ -369,34 +369,34 @@
     <span class="k">for</span> <span class="n">each</span> <span class="n">vertex</span> <span class="n">v</span><span class="p">:</span>
         <span class="n">comm</span> <span class="o">=</span> <span class="n">curr_communities</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">v</span> <span class="ow">is</span> <span class="n">accessible</span> <span class="k">from</span> <span class="n">the</span> <span class="n">source</span><span class="p">):</span>
-            <span class="n">weight</span><span class="p">[</span><span class="n">source</span><span class="o">-&gt;</span><span class="n">v</span><span class="p">]</span> <span class="o">-=</span> <span class="n">community_weights</span><span class="p">[</span><span class="n">comm</span><span class="p">]</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">weight</span><span class="p">[</span><span class="n">source</span><span class="o">-&gt;</span><span class="n">v</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
-                <span class="n">Swap</span><span class="p">(</span><span class="o">-</span><span class="n">weight</span><span class="p">[</span><span class="n">source</span><span class="o">-&gt;</span><span class="n">v</span><span class="p">],</span> <span class="n">weight</span><span class="p">[</span><span class="n">v</span><span class="o">-&gt;</span><span class="n">sink</span><span class="p">])</span>
+            <span class="n">weight</span><span class="p">[</span><span class="n">source</span><span class="o">-></span><span class="n">v</span><span class="p">]</span> <span class="o">-=</span> <span class="n">community_weights</span><span class="p">[</span><span class="n">comm</span><span class="p">]</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">weight</span><span class="p">[</span><span class="n">source</span><span class="o">-></span><span class="n">v</span><span class="p">]</span> <span class="o"><</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="n">Swap</span><span class="p">(</span><span class="o">-</span><span class="n">weight</span><span class="p">[</span><span class="n">source</span><span class="o">-></span><span class="n">v</span><span class="p">],</span> <span class="n">weight</span><span class="p">[</span><span class="n">v</span><span class="o">-></span><span class="n">sink</span><span class="p">])</span>
         <span class="k">else</span>
-            <span class="n">weight</span><span class="p">[</span><span class="n">v</span><span class="o">-&gt;</span><span class="n">sink</span><span class="p">]</span> <span class="o">+=</span> <span class="n">community_weights</span><span class="p">[</span><span class="n">comm</span><span class="p">]</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">weight</span><span class="p">[</span><span class="n">v</span><span class="o">-&gt;</span><span class="n">sink</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
-                <span class="n">Swap</span><span class="p">(</span><span class="n">weight</span><span class="p">[</span><span class="n">source</span><span class="o">-&gt;</span><span class="n">v</span><span class="p">],</span> <span class="o">-</span><span class="n">weight</span><span class="p">[</span><span class="n">v</span><span class="o">-&gt;</span><span class="n">sink</span><span class="p">])</span>
+            <span class="n">weight</span><span class="p">[</span><span class="n">v</span><span class="o">-></span><span class="n">sink</span><span class="p">]</span> <span class="o">+=</span> <span class="n">community_weights</span><span class="p">[</span><span class="n">comm</span><span class="p">]</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">weight</span><span class="p">[</span><span class="n">v</span><span class="o">-></span><span class="n">sink</span><span class="p">]</span> <span class="o"><</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="n">Swap</span><span class="p">(</span><span class="n">weight</span><span class="p">[</span><span class="n">source</span><span class="o">-></span><span class="n">v</span><span class="p">],</span> <span class="o">-</span><span class="n">weight</span><span class="p">[</span><span class="n">v</span><span class="o">-></span><span class="n">sink</span><span class="p">])</span>
 
     <span class="c"># End of Repeats</span>
 
 <span class="c"># Part 3 Sparsify community_accus by \lambda_2</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">len</span><span class="p">(</span><span class="n">each</span> <span class="n">community_accus</span><span class="p">):</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">community_accus</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">community_accus</span> <span class="o"><</span> <span class="mi">0</span><span class="p">):</span>
         <span class="n">community_accus</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">:</span><span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">community_accus</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> \<span class="n">lambda_2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">community_accus</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">:</span><span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">community_accus</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> \<span class="n">lambda_2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
 <span class="k">return</span> <span class="n">community_accus</span>
-</code></pre><h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA&#39;s DGX-1</h2><h3 id='prereqs-input'>Prereqs/input</h3>
+</code></pre><h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA's DGX-1</h2><h3 id='prereqs-input'>Prereqs/input</h3>
 <p>CUDA should have been installed; <code>$PATH</code> and <code>$LD_LIBRARY_PATH</code> should have been
 set correctly to use CUDA. The current Gunrock configuration assumes boost
 (1.58.0 or 1.59.0) and Metis are installed; if not, changes need to be made in
-the Makefiles. DARPA&#39;s DGX-1 has both installed when the tests are performed.</p>
+the Makefiles. DARPA's DGX-1 has both installed when the tests are performed.</p>
 <pre class="highlight mid-column-code shell tab-shell"><code>git clone --recursive https://github.com/gunrock/gunrock -b dev-refactor
 <span class="nb">cd </span>gunrock/tests/gtf
 make clean <span class="o">&amp;&amp;</span> make
 </code></pre>
-<p>At this point, there should be an executable <code>gtf_main_&lt;CUDA version&gt;_x86_64</code>
+<p>At this point, there should be an executable <code>gtf_main_<CUDA version>_x86_64</code>
 in <code>tests/gtf/bin</code>.</p>
 
 <p>The testing is done with <a href="https://github.com/wetliu/gunrock/tree/master">https://github.com/wetliu/gunrock/tree/master</a> using <code>stable</code> branch at commit <code>a2159ce060d4dbc89a88f8d5fb0fd0d571ba907b</code>
@@ -406,7 +406,7 @@ in <code>tests/gtf/bin</code>.</p>
 
 <p>Refer to <code>parse_args()</code> in <code>taxi_tsv_file_preprocessing.py</code> for dataset preprocessing options.</p>
 
-<p>If you don&#39;t have the <code>e</code> or <code>n</code> files:</p>
+<p>If you don't have the <code>e</code> or <code>n</code> files:</p>
 <pre class="highlight mid-column-code shell tab-shell"><code><span class="nb">cd </span>gunrock/tests/gtf/_data
 
 <span class="nb">export </span><span class="nv">TOKEN</span><span class="o">=</span> <span class="c"># get this Authentication TOKEN from https://api-token.hiveprogram.com/#!/user</span>
@@ -441,8 +441,8 @@ python generate_graph.py
 Please also note that we have set the number of MF iterations to 10000 as a default. In larger graphs, a larger number may be required.</p>
 <h3 id='output'>Output</h3>
 <p>The code will output two files in the current directory. One is called <code>output_pr.txt</code> (for CPU reference) and the other is called <code>output_pr_GPU.txt</code> (for GPU SFL with push-relabel backend).
-Each vertex&#39;s new weight will be stored in each line of the two files. These outputs could be further processed into the resulting heatmap.
-The printout after running <code>gtf_main_&lt;CUDA version&gt;_x86_64</code> includes the timing of the application.</p>
+Each vertex's new weight will be stored in each line of the two files. These outputs could be further processed into the resulting heatmap.
+The printout after running <code>gtf_main_<CUDA version>_x86_64</code> includes the timing of the application.</p>
 
 <p>Sample <code>txt</code> output:</p>
 <pre class="highlight mid-column-code plaintext"><code>0
@@ -489,7 +489,7 @@ transfering to host!!!: 8924
  total time: 3845.412016 ms
 
 </code></pre><h2 id='performance-and-analysis'>Performance and Analysis</h2>
-<p>We measure the runtime and loss function $0.5 \cdot \sum((y&#39; - y)^2) + \lambda_1 \cdot \sum(|y_i&#39; - y_j&#39;|) + \lambda_2 \cdot \sum(|y_i&#39;|)$, where $y$ is the input weight (observation) for each vertex and $y&#39;$ (fitted weight) is the new weight for each vertex.</p>
+<p>We measure the runtime and loss function $0.5 \cdot \sum((y' - y)^2) + \lambda_1 \cdot \sum(|y_i' - y_j'|) + \lambda_2 \cdot \sum(|y_i'|)$, where $y$ is the input weight (observation) for each vertex and $y'$ (fitted weight) is the new weight for each vertex.</p>
 <h3 id='implementation-limitations'>Implementation limitations</h3>
 <ul>
 <li><p><strong>Memory usage</strong> Each edge in the graph needs at least 28 bytes of GPU device memory: 64 bits for the residual_capacity value, 64 bits for the capacity value, 64 bits for the flow value, 16 bits for the index of the reverse edge. Each node in the graph needs at least 16 bytes of GPU device memory: 64 bits for the excess value, 16 bits for the height value and 16 bits for the index of the lowest neighbor.</p></li>
@@ -580,12 +580,12 @@ transfering to host!!!: 8924
 </tr>
 </tbody></table>
 <h3 id='performance-limitations'>Performance limitations</h3>
-<p>We observe a slowdown when we compare Graphtv and Gunrock&#39;s current SFL implementation on the three datasets provided. On the smaller datasets there just isn&#39;t enough work to fill up a GPU and leverage the compute we have available. Even on the larger dataset we do not see a speed-up because of superior serial algorithm within the CPU implementation of maxflow that converges much earlier than our parallel push-relabel max flow algorithm on the GPU.</p>
+<p>We observe a slowdown when we compare Graphtv and Gunrock's current SFL implementation on the three datasets provided. On the smaller datasets there just isn't enough work to fill up a GPU and leverage the compute we have available. Even on the larger dataset we do not see a speed-up because of superior serial algorithm within the CPU implementation of maxflow that converges much earlier than our parallel push-relabel max flow algorithm on the GPU.</p>
 
 <p>We make a detailed performance analysis on the <code>NY Taxi</code> dataset with time from <code>2011-06-19 00:00:00</code> to <code>2011-06-27 00:00:00</code>:</p>
 
 <ul>
-<li><p>The maxflow algorithm uses serial global relabeling and gap heuristics performed in device memory by one CUDA thread. The profiling shows this heuristics computation takes about 42% of MF&#39;s whole computation time, while the rest (58%) is push relabel (precisely: Gunrock <code>RepeatFor</code> operator running the lock-free push-relabel operator). Since maxflow takes up about 96% of SFL&#39;s computation time, this makes the SFL kernel launch-overhead-bound. Further optimization of the maxflow algorithm is discussed below in the &quot;maxflow optimization opportunities&quot; paragraph.</p></li>
+<li><p>The maxflow algorithm uses serial global relabeling and gap heuristics performed in device memory by one CUDA thread. The profiling shows this heuristics computation takes about 42% of MF's whole computation time, while the rest (58%) is push relabel (precisely: Gunrock <code>RepeatFor</code> operator running the lock-free push-relabel operator). Since maxflow takes up about 96% of SFL's computation time, this makes the SFL kernel launch-overhead-bound. Further optimization of the maxflow algorithm is discussed below in the "maxflow optimization opportunities" paragraph.</p></li>
 <li><p>This dataset, with $\sim 213k$ vertices and $\sim 588k$ edges, is still too small to fill up the GPU. It makes the kernel launching overhead issue much worse than it would with larger graphs.</p></li>
 <li><p>There are some engineering limitations in our current implementation:</p></li>
 </ul>
@@ -599,7 +599,7 @@ transfering to host!!!: 8924
 <h3 id='maxflow-lessons-learned'>Maxflow lessons learned</h3>
 <ul>
 <li><p>Our first approach to the maxflow problem was the push-relabel algorithm in its simplest form. This implementation used 3 operators with 2 synchronizations between them. Because we had a large number of iterations of this algorithm, our computation was dominated by kernel-launch overhead.</p></li>
-<li><p>To reduced the number of kernels and synchronizations, we implemented push-relabel with a lock-free approach proposed by Bo Hong in &quot;A Lock-free Multi-threaded Algorithm for the Maximum Flow Problem&quot;
+<li><p>To reduced the number of kernels and synchronizations, we implemented push-relabel with a lock-free approach proposed by Bo Hong in "A Lock-free Multi-threaded Algorithm for the Maximum Flow Problem"
 <a href="http://people.cs.ksu.edu/%7Ewls77/weston/projects/cis598/hong.pdf">http://people.cs.ksu.edu/~wls77/weston/projects/cis598/hong.pdf</a>. This modification allowed us
 to reduce the operators down to only one lock-free push-relabel operator and one
 synchronization call.</p></li>
@@ -611,8 +611,8 @@ synchronization call.</p></li>
 It is currently performed in the Device memory by one thread. This algorithm is based on BFS, which could be parallelized as well.</p></li>
 <li><p>We would like to explore the parallelization of another approach, the
 Boykov Kolmogorov algorithm proposed by Yuri Boykov and Vladimir Kolmogorov in
-&quot;An Experimental Comparison of Min-Cut/Max-Flow Algorithms for Energy
-Minimization in Vision&quot; <a href="http://www.csd.uwo.ca/faculty/yuri/Papers/pami04.pdf">http://www.csd.uwo.ca/faculty/yuri/Papers/pami04.pdf</a>.
+"An Experimental Comparison of Min-Cut/Max-Flow Algorithms for Energy
+Minimization in Vision" <a href="http://www.csd.uwo.ca/faculty/yuri/Papers/pami04.pdf">http://www.csd.uwo.ca/faculty/yuri/Papers/pami04.pdf</a>.
 Instead of finding a new augmenting path or edge (push-relabel)
 on the graph in each iteration, the Boykov Kolmogorov algorithm keeps the
 already found items in two search trees. We would like to use this idea
@@ -621,7 +621,7 @@ in our push-relabel implementation as well.</p></li>
 <h3 id='gunrock-implications'>Gunrock implications</h3>
 <p>SFL is the first application in Gunrock that calls another application (maxflow). Some common data pre-processing on the CPU requires better designs of the APIs to facilitate this usage. For example, <code>gtf_enactor</code> needs to call <code>mf_problem.reset()</code>, but because the current maxflow code uses CPU to preprocess the graph, SFL has to transfer the data back and forth between CPU and GPU. Using GPU to preprocess the graph for maxflow would be preferable.</p>
 <h3 id='notes-on-multi-gpu-parallelization'>Notes on multi-GPU parallelization</h3>
-<p>To parallelize the push-relabel algorithm across multiple GPUs, all arrays related to the graph have to be stored on each GPU. Moreover, the GPUs have to update their adjacent neighbors&#39; data. Because the push-relabel algorithm needs to store at least three arrays of size $O(|E|)$ and three arrays of size $O(|V|)$, communicating so much data efficiently between GPUs is challenging.</p>
+<p>To parallelize the push-relabel algorithm across multiple GPUs, all arrays related to the graph have to be stored on each GPU. Moreover, the GPUs have to update their adjacent neighbors' data. Because the push-relabel algorithm needs to store at least three arrays of size $O(|E|)$ and three arrays of size $O(|V|)$, communicating so much data efficiently between GPUs is challenging.</p>
 
 <p>The SFL renormalization should be able to be easily parallelized across different GPUs, because it is array operations only. However, extra data transfer is necessary if the graph is not copied across multiple GPUs.</p>
 <h3 id='notes-on-dynamic-graphs'>Notes on dynamic graphs</h3>
@@ -629,7 +629,7 @@ in our push-relabel implementation as well.</p></li>
 
 <p>However, SFL would be a significant challenge with dynamic graphs (the topology of the graph would change). The residual graph includes a swapping edge value (see pseudocode above) and we need to know characteristics of the new graph in order to allocate enough memory space for the new edges and vertices.</p>
 <h3 id='notes-on-larger-datasets'>Notes on larger datasets</h3>
-<p>SFL renormalization can be done without having its temporary arrays on the same GPU, but extra communication costs are necessary if these arrays are in different GPUs&#39; global memories. Unified memory can also be used to handle larger datasets by oversubscribing and paying the cost of CPU to GPU transfer. Gunrock needs no specific new support to support SFL renormalization on larger datasets.</p>
+<p>SFL renormalization can be done without having its temporary arrays on the same GPU, but extra communication costs are necessary if these arrays are in different GPUs' global memories. Unified memory can also be used to handle larger datasets by oversubscribing and paying the cost of CPU to GPU transfer. Gunrock needs no specific new support to support SFL renormalization on larger datasets.</p>
 <h3 id='research-opportunities'>Research opportunities</h3>
 <p>Prof. Sharpnack indicates that this implementation could be generalized to multi-graph fused lasso. The idea is to set multiple edge values for the edges connecting to source/sink, while keeping the graph topology and edge values $(\lambda_1)$ for the edges in the original graph (excluding source and sink) the same.</p>
 

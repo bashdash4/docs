@@ -281,7 +281,7 @@
 
 <p>A common algorithm for local graph clustering is called PageRank-Nibble (PRNibble), which solves the L1 regularized PageRank problem. We implement a coordinate descent variant of this algorithm found in <a href="https://arxiv.org/pdf/1602.01886.pdf">Fountoulakis et al.</a>, which uses the fast iterative shrinkage-thresholding algorithm (FISTA).</p>
 <h2 id='summary-of-results'>Summary of Results</h2>
-<p>This variant of local graph clustering (L1 regularized PageRank via FISTA) is a natural fit for Gunrock&#39;s frontier-based programming paradigm.  We observe speedups of 2-3 orders of magnitude over the HIVE reference implementation.</p>
+<p>This variant of local graph clustering (L1 regularized PageRank via FISTA) is a natural fit for Gunrock's frontier-based programming paradigm.  We observe speedups of 2-3 orders of magnitude over the HIVE reference implementation.</p>
 
 <p>The reference implementation of the algorithm was not explicitly written as <code>advance</code>/<code>filter</code>/<code>compute</code> operations, but we were able to quickly determine how to map the operations by using <a href="https://github.com/gunrock/pygunrock/blob/master/apps/pr_nibble.py">a lightweight Python implementation of the Gunrock programming API</a> as a development environment.  Thus, LGC was a good exercise in implementing a non-trivial end-to-end application in Gunrock from scratch.</p>
 <h2 id='summary-of-gunrock-implementation'>Summary of Gunrock Implementation</h2>
@@ -293,18 +293,18 @@ s: teleportation distribution, a distribution over nodes of graph
 d_i: degree of node i
 p_0: PageRank vector at iteration 0
 q_0:  D^(-1/2) x p term that coordinate descent optimizes over
-f(q): 1/2&lt;q, Qq&gt; - alpha x &lt;s, D^(-1/2) x q&gt;
+f(q): 1/2<q, Qq> - alpha x <s, D^(-1/2) x q>
 grad_f_i(q_0): i'th term of the gradient of f(q_0) using q at iteration 0
 rho: constant used to ensure convergence
 alpha: teleportation constant in (0, 1)
 
-Initialize: rho &gt; 0
+Initialize: rho > 0
 Initialize: q_0 = [0 ... 0]
 Initialize: grad_f(q_0) = -alpha x D^(-1/2) x s
 
 For k = 0, 1, ..., inf
     // Implemented using Gunrock ForAll operator
-    Choose an i such that grad_f_i(q_k) &lt; - alpha x rho x d_i^(1/2)
+    Choose an i such that grad_f_i(q_k) < - alpha x rho x d_i^(1/2)
     q_k+1(i) = q_k(i) - grad_f_i(q_k)
     grad_f_i(q_k+1) = (1 - alpha)/2 x grad_f_i(q_k)
 
@@ -318,12 +318,12 @@ For k = 0, 1, ..., inf
 
     // Implemented using Gunrock ForEach operator
     // Note: ||y||_inf is the infinity norm
-    if (||D^(-1/2) x grad_f(q_k)||_inf &gt; rho x alpha)
+    if (||D^(-1/2) x grad_f(q_k)||_inf > rho x alpha)
             break
 EndFor
 
 return p_k = D^(1/2) x q_k
-</code></pre><h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA&#39;s DGX-1</h2><h3 id='prereqs-input'>Prereqs/input</h3><pre class="highlight mid-column-code shell"><code><span class="c"># clone gunrock</span>
+</code></pre><h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA's DGX-1</h2><h3 id='prereqs-input'>Prereqs/input</h3><pre class="highlight mid-column-code shell"><code><span class="c"># clone gunrock</span>
 git clone --recursive https://github.com/gunrock/gunrock.git <span class="se">\</span>
         -b dev-refactor
 
@@ -340,7 +340,7 @@ make
   Reading meta data from ../../dataset/small/chesapeake.mtx.meta
   Reading edge lists from ../../dataset/small/chesapeake.mtx.coo_edge_pairs
   Substracting 1 from node Ids...
-  Edge doubleing: 170 -&gt; 340 edges
+  Edge doubleing: 170 -> 340 edges
   graph loaded as COO in 0.084587s.
 Converting 39 vertices, 340 directed edges ( ordered tuples) to CSR format...Done (0s).
 Degree Histogram (39 vertices, 340 edges):
@@ -361,8 +361,8 @@ pr_nibble::CPU_Reference: reached max iterations. breaking at it=10
 Using advance mode LB
 Using filter mode CULL
 __________________________
-0    2   0   queue3      oversize :  234 -&gt;  342
-0    2   0   queue3      oversize :  234 -&gt;  342
+0    2   0   queue3      oversize :  234 ->  342
+0    2   0   queue3      oversize :  234 ->  342
 pr_nibble::Stop_Condition: reached max iterations. breaking at it=10
 --------------------------
 Run 0 elapsed: 1.738071, #iterations = 10
@@ -563,13 +563,13 @@ Run 0 elapsed: 1.738071, #iterations = 10
 </tr>
 </tbody></table>
 
-<p><strong>Note:</strong> &quot;Other&quot; includes HtoD and DtoH memcpy, smaller kernels such as scan, reduce, etc.</p>
+<p><strong>Note:</strong> "Other" includes HtoD and DtoH memcpy, smaller kernels such as scan, reduce, etc.</p>
 
 <p>By profiling the LB Advance kernel, we find that the performance of <code>advance</code> is bottlenecked by random memory accesses. In the first part of the computation -- getting row pointers and column indices -- memory accesses can be coalesced and the profilers says we perform 4.9 memory transactions per access, which is close to the ideal of 4. However, once we start processing these neighbors, the memory access becomes random and we perform 31.2 memory transactions per access.</p>
 <h2 id='next-steps'>Next Steps</h2><h3 id='alternate-approaches'>Alternate approaches</h3>
 <p>PRNibble can also be implemented in terms of matrix operations using our GPU <a href="https://github.com/owensgroup/GraphBLAS/">GraphBLAS</a> library -- this implementation is currently in progress.</p>
 
-<p>In theory, local graph clustering is appealing because you don&#39;t have to &quot;touch&quot; the entire graph.  However, all LGC implementations that we are aware of first load the entire graph into CPU/GPU memory, which limits the size of the graph that can be analyzed.  Implementations that load data from disk &quot;lazily&quot; as computation happens would be interesting and practically useful.</p>
+<p>In theory, local graph clustering is appealing because you don't have to "touch" the entire graph.  However, all LGC implementations that we are aware of first load the entire graph into CPU/GPU memory, which limits the size of the graph that can be analyzed.  Implementations that load data from disk "lazily" as computation happens would be interesting and practically useful.</p>
 
 <p><a href="https://github.com/jshun/ligra">Ligra</a> includes some high performance implementations of similar algorithms.  In the future, it would be informative to benchmark our GPU implementation against those performance optimized multi-threaded CPU implementations.  </p>
 <h3 id='gunrock-implications'>Gunrock implications</h3>
@@ -583,7 +583,7 @@ Run 0 elapsed: 1.738071, #iterations = 10
 <h3 id='notes-on-larger-datasets'>Notes on larger datasets</h3>
 <p>If the data were too big to fit into the aggregate GPU memory of multiple GPUs on a single node, then we would need to look at multiple-node solutions. Getting the application to work on multiple nodes would not be challenging, because it is very similar to BFS. However, optimizing it to achieve good scalability may require asynchronous communication, an area where we have some experience (<a href="https://arxiv.org/pdf/1803.03922.pdf">Pan et al.</a>). Asynchronous communication may be necessary in order to reach better scalability in multi-node, because this application which can be formulated as sparse-matrix vector multiplication has limited computational intensity (low computation-to-communication).</p>
 <h3 id='notes-on-other-pieces-of-this-workload'>Notes on other pieces of this workload</h3>
-<p>As mentioned previously, we do not implement the sweep-cut portion of the workflow where the PageRank values are discretized to produce hard cluster assignments.  Though it&#39;s not fundamentally a graph problem, parallelization of this step is a research question addressed in <a href="https://arxiv.org/abs/1604.07515">Shun et al</a>.</p>
+<p>As mentioned previously, we do not implement the sweep-cut portion of the workflow where the PageRank values are discretized to produce hard cluster assignments.  Though it's not fundamentally a graph problem, parallelization of this step is a research question addressed in <a href="https://arxiv.org/abs/1604.07515">Shun et al</a>.</p>
 <h3 id='potential-future-academic-work'>Potential future academic work</h3>
 <p>The coordinate descent implementation (developed by Ben Johnson) shows that Gunrock can be used as a coordinate descent solver. There has been more interest in coordinate descent recently, because coordinate descent can be used in ML as an alternative to stochastic gradient descent for SVM training.</p>
 <h6 id='references'>References</h6>
