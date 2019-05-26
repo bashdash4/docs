@@ -330,7 +330,7 @@ easier understanding of the code, we use <code>sources</code>, <code>children</c
 these three groups of vertices instead. To manage the memory usage of
 intermediate data, batches of source vertices are processed one by one, with each
 of size B.</p>
-<pre class="highlight plaintext"><code>source_start := 0;
+<pre class="highlight mid-column-code plaintext"><code>source_start := 0;
 While (source_source &lt; V)
     num_sources := (source_start + B &gt; V) ? V - source_start : B;
 
@@ -376,7 +376,7 @@ While (source_source &lt; V)
 set correctly to use CUDA. The current Gunrock configuration assumes boost
 (1.58.0 or 1.59.0) and Metis are installed; if not, changes need to be made in
 the Makefiles. DARPA&#39;s DGX-1 has both installed when the tests are performed.</p>
-<pre class="highlight plaintext"><code>git clone --recursive https://github.com/gunrock/gunrock/ \
+<pre class="highlight mid-column-code plaintext"><code>git clone --recursive https://github.com/gunrock/gunrock/ \
   -b dev-refactor
 cd gunrock
 git submodule init
@@ -410,7 +410,7 @@ the training part at the moment, we use some given datasets or randomly generate
 them if not available. The array input files are floating-point values in plain
 text format; examples can be found in the <code>gunrock/app/sage</code> directory of the
 gunrock repo.</p>
-<pre class="highlight plaintext"><code>--Wa1 : std::string, default =
+<pre class="highlight mid-column-code plaintext"><code>--Wa1 : std::string, default =
         &lt;weight matrix for W^1 matrix in algorithm 2, aggregation part&gt;
          dimension 64 by 128 for pokec;
          It should be leaf feature length by a value you want for W2 layer
@@ -447,7 +447,7 @@ gunrock repo.</p>
         number of sampled leafs per child; default is the same as num-children-per-source
 --batch-size : std::vector&lt;int&gt;, default = 65536
         number of source vertex to process in one iteration
-</code></pre><h4 id='example-command'>Example Command</h4><pre class="highlight shell"><code>./bin/test_sage_9.2_x86_64 <span class="se">\</span>
+</code></pre><h4 id='example-command'>Example Command</h4><pre class="highlight mid-column-code shell"><code>./bin/test_sage_9.2_x86_64 <span class="se">\</span>
  market /raid/data/hive/pokec/pokec.mtx  --undirected <span class="se">\</span>
  --Wf1 ../../gunrock/app/sage/wf1.txt <span class="se">\</span>
  --Wa1 ../../gunrock/app/sage/wa1.txt <span class="se">\</span>
@@ -465,7 +465,7 @@ requiring the associative arrays.</p>
 <h3 id='output'>Output</h3>
 <p>The outputs are in the <code>sage</code> directory; look for the .txt files. An example is
 shown below for the <code>pokec</code> dataset:</p>
-<pre class="highlight plaintext"><code>Loading Matrix-market coordinate-formatted graph ...
+<pre class="highlight mid-column-code plaintext"><code>Loading Matrix-market coordinate-formatted graph ...
   ... Loading progress ...
 Converting 1632803 vertices, 44603928 directed edges ( ordered tuples) to CSR format...Done (0s).
 Degree Histogram (1632803 vertices, 44603928 edges):
@@ -544,7 +544,7 @@ additionally useful to validate the successful rate of the whole pipeline with t
 
 <p>The datasets used for experiments are:</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Dataset</th>
 <th style="text-align: right">V</th>
@@ -591,7 +591,7 @@ produces the shortest running time on GPU among {512, 1024, 2048, 4096, 8192,
 
 <p>The running time on DGX-1 with Tesla P100 GPU:</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Dataset</th>
 <th style="text-align: right">F</th>
@@ -903,7 +903,7 @@ produces the shortest running time on GPU among {512, 1024, 2048, 4096, 8192,
 
 <p>The running time on Bowser with a Tesla V100 GPU</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Dataset</th>
 <th style="text-align: right">F</th>
@@ -1309,7 +1309,7 @@ and Kernel3 takes 5.52 ms, or 31.1%.</p>
 <p>Further detail on the profile of Kernel2 on the Titan Xp shows the
 utilization of the memory system:</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Type</th>
 <th style="text-align: right">Transactions</th>
@@ -1418,7 +1418,7 @@ This is because the <code>W</code> arrays and the intermediate arrays are highly
 <p>Running the same experiment on the V100 shows a different picture within the memory
 system:</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Type</th>
 <th style="text-align: right">Transactions</th>

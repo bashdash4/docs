@@ -292,7 +292,7 @@
 <p>Apart from the last one, these kernels do not obviously map to Gunrock&#39;s advance/filter model.</p>
 
 <p>Pseudocode for the core belief propagation algorithm is as follows:</p>
-<pre class="highlight plaintext"><code>for iteration in range(num_iterations):
+<pre class="highlight mid-column-code plaintext"><code>for iteration in range(num_iterations):
 
     # Update edge messages
     edge_msg_f = diff_r[data_edges.srcs] - edge_distances # data.num_edges x pattern.num_edges
@@ -324,18 +324,18 @@
 <p>where <code>normprob</code> is the column-wise log-softmax function.  That is, since <code>belief</code> is <code>data.num_nodes x patt.num_nodes</code>, each node in the <code>pattern</code> graph gets assigned a probability distribution over nodes in the <code>data</code> graph.</p>
 
 <p>Our implementation is based on the <a href="https://gitlab.hiveprogram.com/pnnl/ApplicationClassification">PNNL implementation</a> rather than the <a href="https://gitlab.hiveprogram.com/jcromano/applicationClassification">distributed GraphX reference implementation</a>.  On all of the graphs we&#39;ve tested, the output of our implementation exactly matches the output of the PNNL code.  According to PNNL, their implementation may give different results than the HIVE reference implementation (due to e.g., different normalization schemes).</p>
-<h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA&#39;s DGX-1</h2><h3 id='prereqs-input'>Prereqs/input</h3><pre class="highlight shell"><code>git clone --recursive <span class="se">\</span>
+<h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA&#39;s DGX-1</h2><h3 id='prereqs-input'>Prereqs/input</h3><pre class="highlight mid-column-code shell"><code>git clone --recursive <span class="se">\</span>
         https://github.com/owensgroup/application_classification
 <span class="nb">cd </span>application_classification
 make clean
 make
-</code></pre><h3 id='running-the-application'>Running the application</h3><h4 id='example-command'>Example Command</h4><pre class="highlight shell"><code>mkdir -p results
+</code></pre><h3 id='running-the-application'>Running the application</h3><h4 id='example-command'>Example Command</h4><pre class="highlight mid-column-code shell"><code>mkdir -p results
 ./main <span class="se">\</span>
     ./data/georgiyData.Vertex.csv <span class="se">\</span>
     ./data/georgiyData.Edges.csv <span class="se">\</span>
     ./data/georgiyPattern.Vertex.csv <span class="se">\</span>
     ./data/georgiyPattern.Edges.csv &gt; results/georgiy
-</code></pre><h4 id='example-output'>Example output</h4><pre class="highlight shell"><code><span class="gp">$ </span>head -n 5 results/georgiy
+</code></pre><h4 id='example-output'>Example output</h4><pre class="highlight mid-column-code shell"><code><span class="gp">$ </span>head -n 5 results/georgiy
 -8.985810e+00
 -3.859019e+01
 -4.470994e+01
@@ -353,7 +353,7 @@ make
 <p>The output of the program is a <code>data.num_nodes x pattern.num_nodes</code> matrix, where each column represents a log-probability distribution of assignments of pattern node <code>j</code> to data node <code>i</code>.  This matrix is printed in row major order as a file with <code>data.num_nodes x pattern.num_nodes</code> lines.</p>
 
 <p>In python, you could inspect the output like:</p>
-<pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<pre class="highlight mid-column-code python tab-python"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
 
 <span class="c"># load results</span>
 <span class="n">x</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'./results/georgiy'</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
@@ -436,7 +436,7 @@ make
 
 <p>For the first two, we use the <code>georgiyPattern</code> pattern graph included in the PNNL repo.  For the latter, we generate a pattern graph using the neighborhood induction mentioned above.</p>
 <h4 id='georgiydata-2'>georgiyData</h4>
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>implementation</th>
 <th>threads</th>
@@ -487,7 +487,7 @@ make
 
 <p><strong>Takeaway:</strong> Our CUDA implementation is approximately 12.8x faster than the fastest OpenMP run (32 threads).  However, this problem is quite small and both implementations run in under 1 second.</p>
 <h4 id='rmat18-2'>rmat18</h4>
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>implementation</th>
 <th>threads</th>
@@ -538,7 +538,7 @@ make
 
 <p><strong>Takeaway:</strong> Our CUDA implementation is approximately 99x faster than the fastest PNNL run (64 threads).  The absolute magnitude of the differences is much more substantial here --  the CUDA implementation runs in &lt; 1 second while the OpenMP version runs in ~ 1.5 minutes.</p>
 <h4 id='johnshopkins_random-2'>JohnsHopkins_random</h4>
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>implementation</th>
 <th>threads</th>

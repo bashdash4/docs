@@ -284,7 +284,7 @@
 <ul>
 <li><strong>[Fewer Reads] Global Gather:</strong> uses two <code>compute</code> operators as <code>ForAll()</code>. The first <code>ForAll()</code> is a <code>gather</code> operation, gathering all the values of neighbors with known locations for an active vertex <code>v</code>, and the second <code>ForAll()</code> uses those values to compute the <code>spatial_center</code> where the spatial center of a list&#39;s points is the center of those points on the earth&#39;s surface.</li>
 </ul>
-<pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">gather_op</span><span class="p">(</span><span class="n">Vertex</span> <span class="n">v</span><span class="p">):</span>
+<pre class="highlight mid-column-code python tab-python"><code><span class="k">def</span> <span class="nf">gather_op</span><span class="p">(</span><span class="n">Vertex</span> <span class="n">v</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">isValid</span><span class="p">(</span><span class="n">neighbor</span><span class="o">.</span><span class="n">location</span><span class="p">):</span>
             <span class="n">locations_list</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">neighbor</span><span class="o">.</span><span class="n">location</span><span class="p">)</span>
@@ -296,14 +296,14 @@
 <ul>
 <li><strong>[Less Memory] Repeated Compute:</strong> skips the global gather and uses only one <code>compute</code> operator as a <code>ForAll()</code> to find the spatial center of every vertex. During the spatial center computation, instead of iterating over all valid neighbors (where valid neighbor is a neighbor with a known location), we iterate over all neighbors for each vertex, doing more random reads than the global gather approach, but using <code>3x</code> less memory.</li>
 </ul>
-<pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">spatial_center</span><span class="p">(</span><span class="n">Vertex</span> <span class="n">v</span><span class="p">):</span>
+<pre class="highlight mid-column-code python tab-python"><code><span class="k">def</span> <span class="nf">spatial_center</span><span class="p">(</span><span class="n">Vertex</span> <span class="n">v</span><span class="p">):</span>
     <span class="k">if</span> <span class="err">!</span><span class="n">isValid</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">location</span><span class="p">):</span>
         <span class="n">v</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">spatial_median</span><span class="p">(</span><span class="n">neighbors_list</span><span class="p">[</span><span class="n">v</span><span class="p">])</span>
 </code></pre>
 <ul>
 <li><strong>[Optimization] Early Exit:</strong> fuses the global gather approach with the repeated compute, by performing one local gather for every vertex within the spatial center operator (without a costly device barrier), and exiting early if a vertex <code>v</code> has only one or two valid neighbors:</li>
 </ul>
-<pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">spatial_center</span><span class="p">(</span><span class="n">Vertex</span> <span class="n">v</span><span class="p">):</span>
+<pre class="highlight mid-column-code python tab-python"><code><span class="k">def</span> <span class="nf">spatial_center</span><span class="p">(</span><span class="n">Vertex</span> <span class="n">v</span><span class="p">):</span>
     <span class="k">if</span> <span class="err">!</span><span class="n">isValid</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">location</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">valid_locations</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">v</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">valid_neighbor</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">.</span><span class="n">location</span><span class="p">:</span>
@@ -313,7 +313,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">v</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">spatial_median</span><span class="p">(</span><span class="n">neighbors_list</span><span class="p">[</span><span class="n">v</span><span class="p">])</span>
 </code></pre><h3 id='comparing-global-gather-vs-repeated-compute'>Comparing Global Gather vs. Repeated Compute</h3>
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Approach</th>
 <th>Memory Usage</th>
@@ -324,14 +324,14 @@
 </thead><tbody>
 <tr>
 <td>Global Gather</td>
-<td>$O(3 \cdot \cardinality{E})$</td>
+<td>$O(3 \cdot &vert;E&vert;)$</td>
 <td># of valid locations</td>
 <td>1</td>
 <td>~160M Edges</td>
 </tr>
 <tr>
 <td>Repeated Compute</td>
-<td>$O(\cardinality{E})$</td>
+<td>$O(&vert;E&vert;)$</td>
 <td>degree of vertex</td>
 <td>0</td>
 <td>~500M Edges</td>
@@ -339,12 +339,12 @@
 </tbody></table>
 
 <p><strong>Note:</strong> <code>spatial_median()</code> is defined as center of points on earth&#39;s surface -- given a set of points <code>Q</code>, the function computes the point <code>p</code> such that: <code>sum([haversine_distance(p, q) for q in Q])</code> is minimized. See <code>gunrock/app/geo/geo_spatial.cuh</code> for details on the spatial median implementation.</p>
-<h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA&#39;s DGX-1</h2><h3 id='prerequisites'>Prerequisites</h3><pre class="highlight shell tab-shell"><code>git clone --recursive https://github.com/gunrock/gunrock -b dev-refactor
+<h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA&#39;s DGX-1</h2><h3 id='prerequisites'>Prerequisites</h3><pre class="highlight mid-column-code shell tab-shell"><code>git clone --recursive https://github.com/gunrock/gunrock -b dev-refactor
 <span class="nb">cd </span>gunrock/tests/geo/
 make clean <span class="o">&amp;&amp;</span> make
 </code></pre><h3 id='hive-data-preparation'>HIVE Data Preparation</h3>
 <p>Prepare the data, skip this step if you are just running the sample dataset. Assuming we are in <code>tests/geo</code> directory:</p>
-<pre class="highlight shell tab-shell"><code><span class="nb">export </span><span class="nv">TOKEN</span><span class="o">=</span> <span class="c"># get this Authentication TOKEN from</span>
+<pre class="highlight mid-column-code shell tab-shell"><code><span class="nb">export </span><span class="nv">TOKEN</span><span class="o">=</span> <span class="c"># get this Authentication TOKEN from</span>
               <span class="c"># https://api-token.hiveprogram.com/#!/user</span>
 wget --header <span class="s2">"Authorization:</span><span class="nv">$TOKEN</span><span class="s2">"</span> <span class="se">\</span>
   https://hiveprogram.com/data/_v0/geotagging/instagram/instagram.tar.gz
@@ -356,7 +356,7 @@ python generate-data.py
 <p>This will generate two files, <code>instagram.mtx</code> and <code>instagram.labels</code>, which can be used as an input to the geolocation app.</p>
 <h3 id='running-the-application'>Running the application</h3>
 <p>Application specific parameters:</p>
-<pre class="highlight plaintext"><code>--labels-file
+<pre class="highlight mid-column-code plaintext"><code>--labels-file
     file name containing node ids and their locations.
 
 --geo-iter
@@ -378,12 +378,12 @@ python generate-data.py
     (default = false)
 </code></pre>
 <p>Example command-line:</p>
-<pre class="highlight shell tab-shell"><code><span class="c"># geolocation.mtx is a graph based on chesapeake.mtx dataset</span>
+<pre class="highlight mid-column-code shell tab-shell"><code><span class="c"># geolocation.mtx is a graph based on chesapeake.mtx dataset</span>
 ./bin/test_geo_10.0_x86_64 --graph-type<span class="o">=</span>market --graph-file<span class="o">=</span>./geolocation.mtx <span class="se">\</span>
   --labels-file<span class="o">=</span>./locations.labels --geo-iter<span class="o">=</span>2 --geo-complete<span class="o">=</span><span class="nb">false</span>
 </code></pre>
 <p>Sample input (labels):</p>
-<pre class="highlight plaintext"><code>% Nodes Latitude Longitude
+<pre class="highlight mid-column-code plaintext"><code>% Nodes Latitude Longitude
 39 2 2
 1 37.7449063493 -122.009432884
 2 37.8668048274 -122.257973253
@@ -398,7 +398,7 @@ python generate-data.py
 39 9.4276164485 -110.640705659
 </code></pre>
 <p>Sample output:</p>
-<pre class="highlight plaintext"><code>Loading Matrix-market coordinate-formatted graph ...
+<pre class="highlight mid-column-code plaintext"><code>Loading Matrix-market coordinate-formatted graph ...
 Reading from ./geolocation.mtx:
   Parsing MARKET COO format edge-value-seed = 1539674096
  (39 nodes, 340 directed edges)...
@@ -473,12 +473,12 @@ Node [ 38 ]: Predicted = &lt; 9.427616 , -110.640709 &gt; Reference = &lt; 9.427
 
 <p>One way to implement this will use the <code>ForAll()</code> operator for the parallel compute across the nodes, a simple while loop for the serial compute per node, and finally multiple <code>neighbor_reduce()</code> operators for the parallel work within the serial while loop. Currently, we do not have a way to support this within Gunrock, but moving forward we can potentially leverage kernel launch within a kernel (&quot;dynamic parallelism&quot;) to address this limitation.</p>
 <h3 id='comparison-against-existing-implementations'>Comparison against existing implementations</h3>
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>GPU</th>
 <th>Dataset</th>
-<th>$\cardinality{V}$</th>
-<th>$\cardinality{E}$</th>
+<th>$&vert;V&vert;$</th>
+<th>$&vert;E&vert;$</th>
 <th>Iters</th>
 <th>Spatial Iters</th>
 <th>GTUSC (16 threads)</th>
@@ -543,7 +543,7 @@ Node [ 38 ]: Predicted = &lt; 9.427616 , -110.640709 &gt; Reference = &lt; 9.427
 </ul>
 <h3 id='notes-on-multi-gpu-parallelization'>Notes on multi-GPU parallelization</h3>
 <p>The challenging part for a multi-GPU Geolocation would be to obtain the updated node location from a separate device if the two vertices on different devices share an edge. An interesting approach here would be leveraging the P2P memory bandwidth with the new NVLink connectors to exchange a small amount of updates across the NVLink&#39;s memory lane; other ways are simply using direct accesses or explicit data movement. This is detailed more in the scaling documentation, but the communication model for multi-GPU geolocation could be done in the following way:</p>
-<pre class="highlight plaintext"><code>do
+<pre class="highlight mid-column-code plaintext"><code>do
     Local geo location updates on local vertices;
     Broadcast local vertices' updates;
 while no more update.

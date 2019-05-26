@@ -314,7 +314,7 @@ accesses across GPUs are particularly slow.</p>
 
 <p>Throughput in GBps:</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Operation</th>
 <th style="text-align: right">Self</th>
@@ -369,7 +369,7 @@ accesses across GPUs are particularly slow.</p>
 
 <p>Latency in microseconds (us):</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Operation</th>
 <th style="text-align: right">Self</th>
@@ -461,7 +461,7 @@ inter-GPU communication would perform on the DGX-2.</p>
 
 <p>Throughput in GBps</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Operation</th>
 <th style="text-align: right">Self</th>
@@ -516,7 +516,7 @@ inter-GPU communication would perform on the DGX-2.</p>
 
 <p>Latency in microsecond (us)</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Operation</th>
 <th style="text-align: right">Self</th>
@@ -775,7 +775,7 @@ its new community when the assignment changes. The per-community
 outgoing edge weights can be computed by <code>AllReduce</code> across all GPUs.
 The modularity optimization with inter-GPU communication can be done
 as:</p>
-<pre class="highlight plaintext"><code>Do
+<pre class="highlight mid-column-code plaintext"><code>Do
     Local modularity optimization;
     Broadcast updated community assignments of local vertices;
     local_weights_community2any := sums(local edges from an community);
@@ -793,7 +793,7 @@ community assignments. In practice, the communication cost can be much
 lower, depending on the dataset.</p>
 
 <p>The graph contraction can be done as below on multiple GPUs:</p>
-<pre class="highlight plaintext"><code>temp_graph := Contract the local sub-graph based on community assignments;
+<pre class="highlight mid-column-code plaintext"><code>temp_graph := Contract the local sub-graph based on community assignments;
 Send edges &lt;v, u, w&gt; in temp_graph to host_GPU(v);
 Merge received edges and form the new local sub-graph;
 </code></pre>
@@ -811,7 +811,7 @@ may run out of GPU memory.</p>
 contraction phase, the computation and communication of modularity optimization
 is dominant.</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Parts</th>
 <th>Comp cost</th>
@@ -867,7 +867,7 @@ scheme, with other schemes&#39; results in the summary table.</p>
 
 <p>SAGE can be separated into three parts, depending on whether the computation
 and data access is source-centric or child-centric.</p>
-<pre class="highlight plaintext"><code>// Part1: Select the children
+<pre class="highlight mid-column-code plaintext"><code>// Part1: Select the children
 For each source in local batch:
     Select num_children_per_source children form source's neighbors;
     Send &lt;source, child&gt; pairs to host_GPU(child);
@@ -899,7 +899,7 @@ For each source in local batch:
 the number of leaves per child is L, and the feature length per vertex is F.
 Dimensions of 2D matrices are noted as (x, y). The
 computation and communication costs for each part are:</p>
-<pre class="highlight plaintext"><code>Part 1, computation  : B x C.
+<pre class="highlight mid-column-code plaintext"><code>Part 1, computation  : B x C.
 Part 1, communication: B x C x 8 bytes.
 Part 2, computation  : B x C x F + B x C x (F + L x F + F x (Wf1.y + Wa1.y)).
 Part 2, communication: B x C x (F + Wf1.y + Wa1.y) x 4 bytes.
@@ -912,7 +912,7 @@ sum up <code>child_feature</code> and <code>child_temp</code> for each source wi
 
 <p><em>Summary of Graph SAGE multi-GPU scaling</em></p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Parts</th>
 <th>Computation cost</th>
@@ -1030,7 +1030,7 @@ scalability will be perfect, as there is no communication involved at all.</p>
 distributed across the GPUs. In this case, each step of a walk not only needs
 to send the <code>&lt;walk#, step#, v&gt;</code> information to <code>host_GPU(v)</code>, but also to the GPU that
 stores the result for such walk.</p>
-<pre class="highlight plaintext"><code>For each walk starting from local vertex v:
+<pre class="highlight mid-column-code plaintext"><code>For each walk starting from local vertex v:
     Store v for ;
     Select a neighbor u of v;
     Store u for ;
@@ -1047,7 +1047,7 @@ Repeat until all steps of walks finished:
 </code></pre>
 <p>Using W as the number of walks, for each step, we have</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Parts</th>
 <th>Comp. cost</th>
@@ -1086,7 +1086,7 @@ sufficient to select a neighbor, with weighted probabilities.</p>
 <p>The cost analysis, depending on the walk strategy and optimization,
                           results in:</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Strategy</th>
 <th>Comp. cost</th>
@@ -1143,7 +1143,7 @@ its neighbors. For multiple GPUs, neighboring vertices&#39;s location
 information needs to be available, either by direct access, UVM, or
 explicit data movement. The following shows how explicit data movement
 can be implemented.</p>
-<pre class="highlight plaintext"><code>Do
+<pre class="highlight mid-column-code plaintext"><code>Do
     Local geo location updates on local vertices;
     Broadcast local vertices' updates;
 While no more update
@@ -1161,7 +1161,7 @@ each GPU, so instead of broadcast, p2p communication may be used to
 reduce the communication cost, especially when the graph connectivity
 is low.</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Comm. method</th>
 <th>Comp. cost</th>
@@ -1189,7 +1189,7 @@ is low.</p>
 <p>Vertex nomination is very similar to a single source shortest path
 (SSSP) problem, except it starts from a group of vertices, instead of
 a single source. One possible multi-GPU implementation is:</p>
-<pre class="highlight plaintext"><code>Set the starting vertex / vertices;
+<pre class="highlight mid-column-code plaintext"><code>Set the starting vertex / vertices;
 While has new distance updates
     For each local vertex v with distance update:
         For each edge &lt;v, u, w&gt; of vertex v:
@@ -1203,7 +1203,7 @@ While has new distance updates
 <p>Assuming on average, each vertex has its distance updated <code>a</code> times, and the
 average degree of vertices is <code>d</code>, the computation and the communication costs are:</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Parts</th>
 <th>Comp. cost</th>
@@ -1257,7 +1257,7 @@ this algorithm is designed for distributed systems, it should be
 well-suited for multi-GPU system. The ordering requirements are
 imposed to reduce the number of wedge checks and to balance the
 workload. The multi-GPU pseudo code is:</p>
-<pre class="highlight plaintext"><code>For each local edge &lt; v, u &gt;:
+<pre class="highlight mid-column-code plaintext"><code>For each local edge &lt; v, u &gt;:
     If (degree(v) &gt; degree(u)) continue;
     For each neighbor w of v:
         If (degree(v) &gt; degree(w)) continue;
@@ -1292,7 +1292,7 @@ checked.</p>
 can be done in log(#neighbors). As a result, using $d$ as the average outdegree
 of vertices, the cost analysis is:</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Parts</th>
 <th>Comp. cost</th>
@@ -1361,7 +1361,7 @@ implementation. Each time the push operation updates the flow on an edge, it
 also needs to update the flow on the reverse edge; but the reverse edge may be
 hosted by another GPU, and that creates a large amount of inter-GPU traffic. The
 pseudocode for one iteration of MF with inter-GPU communication is:</p>
-<pre class="highlight plaintext"><code>// Push phase
+<pre class="highlight mid-column-code plaintext"><code>// Push phase
 For each local vertex v:
     If (excess[v] &lt;= 0) continue;
     If (v == source || v == sink) continue;
@@ -1396,7 +1396,7 @@ Broadcast height[v] for all local vertex;
 push-relabel algorithm, as the bounds of the push and the relabel operations
 are known.</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Parts</th>
 <th>Comp. cost</th>
@@ -1435,14 +1435,14 @@ updating such data simultaneously. It&#39;s almost impossible to do
 explicit data movement for this part, and the best option is to use
 direct access or UVM; each vertex may update its community once, so
 the communication cost is still manageable. One iteration of GTF is:</p>
-<pre class="highlight plaintext"><code>MF;
+<pre class="highlight mid-column-code plaintext"><code>MF;
 BFS to find the min-cut;
 Vertex-Community updates;
 Updates source-vertex and vertex-destination capacities;
 </code></pre>
 <p>with scaling characteristics:</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Parts</th>
 <th>Comp. cost</th>
@@ -1507,7 +1507,7 @@ rather the memory requirement of the result: projecting all vertices
 may create a very dense graph, which may be much larger than the
 original graph. One possible solution is to process the results in
 batches:</p>
-<pre class="highlight plaintext"><code>vertex_start := 0;
+<pre class="highlight mid-column-code plaintext"><code>vertex_start := 0;
 While (vertex_start &lt; num_vertices)
     markers := {0};
     current_range := [vertex_start, vertex_start + batch_size);
@@ -1539,7 +1539,7 @@ While (vertex_start &lt; num_vertices)
 <p>Using $E&#39;$ to denote the number of edges in the projected graph, and
 $d$ to denote the average degree of vertices, the costs are:</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Parts</th>
 <th>Comp. cost</th>
@@ -1597,7 +1597,7 @@ communication pattern is the same as standard PR: accumulate changes
 for each vertex to its host GPU. As a result, PR-Nibble should be
 scalable, just as standard PR. PR-Nibble with communication can be
 done as:</p>
-<pre class="highlight plaintext"><code>// Per-vertex updates
+<pre class="highlight mid-column-code plaintext"><code>// Per-vertex updates
 For each active local vertex v:
     If (iteration == 0 &amp;&amp; v == src\_neighbor) continue;
     If (iteration &gt; 0 &amp;&amp; v == src)
@@ -1649,7 +1649,7 @@ For each local vertex u with gradient updated:
 </code></pre>
 <p>The cost analysis is:</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Parts</th>
 <th>Comp. cost</th>
@@ -1702,7 +1702,7 @@ applications.</p>
 <h2 id='summary-of-results'>Summary of Results</h2>
 <p>Scaling summary:</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Application</th>
 <th>Computation to communication ratio</th>
@@ -1724,9 +1724,9 @@ applications.</p>
 </tr>
 <tr>
 <td>Random walk</td>
-<td>Duplicated graph: infinity \linebreak Distributed graph: $1 : 24$</td>
-<td>Perfect \linebreak Very poor</td>
-<td>Trivial \linebreak Easy</td>
+<td>Duplicated graph: infinity <br> Distributed graph: $1 : 24$</td>
+<td>Perfect <br> Very poor</td>
+<td>Trivial <br> Easy</td>
 </tr>
 <tr>
 <td>Graph search: Uniform</td>
@@ -1736,21 +1736,21 @@ applications.</p>
 </tr>
 <tr>
 <td>Graph search: Greedy</td>
-<td>Straightforward: $d : 24$ \linebreak Pre-visit: $1:24$</td>
-<td>Poor \linebreak Very poor</td>
-<td>Easy \linebreak Easy</td>
+<td>Straightforward: $d : 24$ <br> Pre-visit: $1:24$</td>
+<td>Poor <br> Very poor</td>
+<td>Easy <br> Easy</td>
 </tr>
 <tr>
 <td>Graph search: Stochastic greedy</td>
-<td>Straightforward: $d : 24$ \linebreak Pre-visit: $\log(d) : 24$</td>
-<td>Poor \linebreak Very poor</td>
-<td>Easy \linebreak Easy</td>
+<td>Straightforward: $d : 24$ <br> Pre-visit: $\log(d) : 24$</td>
+<td>Poor <br> Very poor</td>
+<td>Easy <br> Easy</td>
 </tr>
 <tr>
 <td>Geolocation</td>
-<td>Explicit movement: $25E/p : 4V$ \linebreak UVM or peer access: $25 : 1$</td>
-<td>Okay \linebreak Good</td>
-<td>Easy \linebreak Easy</td>
+<td>Explicit movement: $25E/p : 4V$ <br> UVM or peer access: $25 : 1$</td>
+<td>Okay <br> Good</td>
+<td>Easy <br> Easy</td>
 </tr>
 <tr>
 <td>Vertex nomination</td>
@@ -1760,9 +1760,9 @@ applications.</p>
 </tr>
 <tr>
 <td>Scan statistics</td>
-<td>Duplicated graph: infinity \linebreak Distributed graph: $\sim (d+a \cdot \log(d)):12$</td>
-<td>Perfect \linebreak Okay</td>
-<td>Trivial \linebreak Easy</td>
+<td>Duplicated graph: infinity <br> Distributed graph: $\sim (d+a \cdot \log(d)):12$</td>
+<td>Perfect <br> Okay</td>
+<td>Trivial <br> Easy</td>
 </tr>
 <tr>
 <td>Sparse fused lasso</td>
@@ -1772,9 +1772,9 @@ applications.</p>
 </tr>
 <tr>
 <td>Graph projection</td>
-<td>Duplicated graph : infinity \linebreak Distributed graph : $dE/p + E&#39; : 6E&#39;$</td>
-<td>Perfect \linebreak Okay</td>
-<td>Easy \linebreak Easy</td>
+<td>Duplicated graph : infinity <br> Distributed graph : $dE/p + E&#39; : 6E&#39;$</td>
+<td>Perfect <br> Okay</td>
+<td>Easy <br> Easy</td>
 </tr>
 <tr>
 <td>Local graph clustering</td>

@@ -287,7 +287,7 @@
 <p>This choice of context scoring function ends up being nearly identical to a single source shortest paths (SSSP) problem.  The one difference is that we start from the set of seed nodes <code>S</code> instead of single node.</p>
 
 <p>Because of this similarity to SSSP, the <a href="https://github.com/gunrock/gunrock/tree/dev-refactor/tests/vn">Gunrock VN implementation</a> consists of making a minor modification to the <a href="https://github.com/gunrock/gunrock/tree/dev-refactor/tests/sssp">Gunrock SSSP implementation</a>, so that it can accept a list of source nodes instead of a single source node.  Thus, the core of the VN algorithm is a Gunrock advance operator implementing a parallel version of the Bellman-Ford algorithm.  Specifically, in <code>python</code>:</p>
-<pre class="highlight python tab-python"><code><span class="k">class</span> <span class="nc">IterationLoop</span><span class="p">(</span><span class="n">BaseIterationLoop</span><span class="p">):</span>
+<pre class="highlight mid-column-code python tab-python"><code><span class="k">class</span> <span class="nc">IterationLoop</span><span class="p">(</span><span class="n">BaseIterationLoop</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">_advance_op</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span> <span class="n">problem</span><span class="p">,</span> <span class="n">enactor_stats</span><span class="p">):</span>
         <span class="n">src_distance</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">distances</span><span class="p">[</span><span class="n">src</span><span class="p">]</span>
         <span class="n">edge_weight</span>  <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">edge_weights</span><span class="p">[(</span><span class="n">src</span><span class="p">,</span> <span class="n">dest</span><span class="p">)]</span>
@@ -312,24 +312,24 @@
 <li>adding an edge <code>(d, s)</code> between <code>d</code> and each node <code>s</code> in <code>S</code> with <code>weight(d, s) = 0</code></li>
 <li>running SSSP from <code>d</code></li>
 </ol>
-<h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA&#39;s DGX-1</h2><h3 id='prereqs-input'>Prereqs/input</h3><pre class="highlight shell"><code>git clone --recursive https://github.com/gunrock/gunrock -b dev-refactor
+<h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA&#39;s DGX-1</h2><h3 id='prereqs-input'>Prereqs/input</h3><pre class="highlight mid-column-code shell"><code>git clone --recursive https://github.com/gunrock/gunrock -b dev-refactor
 <span class="nb">cd </span>gunrock/tests/vn
 cp ../../gunrock/util/gitsha1.c.in ../../gunrock/util/gitsha1.c
 make clean
 make
-</code></pre><h3 id='application-specific-parameters'>Application specific parameters</h3><pre class="highlight plaintext"><code>--src
+</code></pre><h3 id='application-specific-parameters'>Application specific parameters</h3><pre class="highlight mid-column-code plaintext"><code>--src
   Comma separated list of seed nodes (eg, `0,1,2`) OR `random` (see below)
 --srcs-per-run
   If `src=random`, number of randomly chosen source nodes per run
 --num-runs
   Number of runs
-</code></pre><h3 id='example-command'>Example command</h3><pre class="highlight shell"><code>./bin/test_vn_9.1_x86_64 <span class="se">\</span>
+</code></pre><h3 id='example-command'>Example command</h3><pre class="highlight mid-column-code shell"><code>./bin/test_vn_9.1_x86_64 <span class="se">\</span>
     --graph-type market <span class="se">\</span>
     --graph-file ../../dataset/small/chesapeake.mtx <span class="se">\</span>
     --src random <span class="se">\</span>
     --srcs-per-run 10 <span class="se">\</span>
     --num-runs 2
-</code></pre><h3 id='example-output'>Example output</h3><pre class="highlight plaintext"><code>Loading Matrix-market coordinate-formatted graph ...
+</code></pre><h3 id='example-output'>Example output</h3><pre class="highlight mid-column-code plaintext"><code>Loading Matrix-market coordinate-formatted graph ...
   Reading meta data from ../../dataset/small/chesapeake.mtx.meta
   Reading edge lists from ../../dataset/small/chesapeake.mtx.coo_edge_pairs
   Assigning 1 to all 170 edges
@@ -409,7 +409,7 @@ First 40 distances of the reference CPU result.
 
 <p>The HIVE reference implementation implementation does 10 runs w/ 5 random seeds each on the <a href="https://hiveprogram.com/data/_v0/vertex_nomination_and_scan_statistics/">Enron email dataset</a>.  Results are as follows:</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>implementation</th>
 <th>elapsed_ms (avg of 10 runs)</th>
@@ -482,7 +482,7 @@ mean time = 0.921
 <h5 id='hollywood-2009-graph-u-1139905-e-57515616'>Hollywood-2009 graph (|U|=1139905, |E|=57515616)</h5>
 <p>The Hollywood-2009 graph is a graph of Hollywood movie actors, where nodes are actors and edges indicate two actors appear in a movie together.</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>implementation</th>
 <th>elapsed_ms (avg of 10 runs)</th>
@@ -543,7 +543,7 @@ mean time = 13.793
 <h5 id='indochina-2004-graph-u-7414866-e-191606827'>Indochina-2004 graph (|U|=7414866, |E|= 191606827)</h5>
 <p>The Indochina-2004 graph is an internet hyperlink graph, generated by a crawl of Asian country domains.</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>implementation</th>
 <th>elapsed_ms (avg of 10 runs)</th>

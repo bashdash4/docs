@@ -274,7 +274,7 @@
       <div class="content">
         <h1 id='seeded-graph-matching-sgm'>Seeded Graph Matching (SGM)</h1>
 <p>From <a href="https://arxiv.org/pdf/1209.0367.pdf">Fishkind et al.</a>:</p>
-<pre class="highlight plaintext"><code>Given two graphs, the graph matching problem is to align the two vertex sets
+<pre class="highlight mid-column-code plaintext"><code>Given two graphs, the graph matching problem is to align the two vertex sets
 so as to minimize the number of adjacency disagreements between the two graphs.
 The seeded graph matching problem is the graph matching problem when we are
 first given a partial alignment that we are tasked with completing.
@@ -314,7 +314,7 @@ first given a partial alignment that we are tasked with completing.
 <p>The reference implementation uses the Jonker-Volgenant algorithm to solve the linear assignment subproblem.  However, the JV algorithm (and the similar Hungarian algorithm) do not admit straightforward parallel implementations.  Thus, we replace the JV algorithm with <a href="http://web.mit.edu/dimitrib/www/Auction_Encycl.pdf">Bertsekas&#39; auction algorithm</a>, which is much more natural to parallelize.</p>
 
 <p>Because SGM consists of linear algebra plus an LSAP solver, we implement it outside of the Gunrock framework, using <a href="https://arxiv.org/abs/1804.03327">a GPU GraphBLAS implementation</a> from John Owens&#39; lab, as well as the <a href="https://nvlabs.github.io/cub/">CUDA CUB</a> library.</p>
-<h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA&#39;s DGX-1</h2><h3 id='prereqs-input'>Prereqs/input</h3><pre class="highlight shell"><code>git clone --recursive https://github.com/owensgroup/csgm.git
+<h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA&#39;s DGX-1</h2><h3 id='prereqs-input'>Prereqs/input</h3><pre class="highlight mid-column-code shell"><code>git clone --recursive https://github.com/owensgroup/csgm.git
 <span class="nb">cd </span>csgm
 
 <span class="c"># build</span>
@@ -327,10 +327,10 @@ python data/make-random.py --num-seeds 100
 wc -l data/<span class="o">{</span>A,B<span class="o">}</span>.mtx
 </code></pre><h3 id='running-the-application'>Running the application</h3>
 <p>Command:</p>
-<pre class="highlight shell"><code>./csgm --A data/A.mtx --B data/B.mtx --num-seeds 100 --sgm-debug 1
+<pre class="highlight mid-column-code shell"><code>./csgm --A data/A.mtx --B data/B.mtx --num-seeds 100 --sgm-debug 1
 </code></pre>
 <p>Output:</p>
-<pre class="highlight plaintext"><code>===== iter=0 ================================
+<pre class="highlight mid-column-code plaintext"><code>===== iter=0 ================================
 APB_num_entries=659238
 counter=17
 run_num=0 | h_numAssign=4096 | milliseconds=21.3737
@@ -408,7 +408,7 @@ total_timer=170.153473 | num_diff=0
 
 <p>The size of the connectome graphs we consider are as follows:</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>name</th>
 <th>num_nodes</th>
@@ -454,7 +454,7 @@ total_timer=170.153473 | num_diff=0
 
 <p>In the tables below, <code>orig_dist</code> indicates the number of adjacency disagreements between <code>A</code> and <code>B</code>, and <code>final_dist</code> indicates the number of adjacency disagreements between <code>A</code> and <code>P * B * P.T</code> w/ <code>P</code> found by SGM.  We run CSGM w/ two values of <code>eps</code>, which controls the precision of the auction algorithm (lower values = more precise but slower).</p>
 <h6 id='python-runtimes'>Python runtimes</h6>
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>name</th>
 <th>orig_dist</th>
@@ -500,7 +500,7 @@ total_timer=170.153473 | num_diff=0
 </tr>
 </tbody></table>
 <h6 id='csgm-runtimes'>CSGM runtimes</h6>
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>eps</th>
 <th>name</th>
@@ -628,7 +628,7 @@ total_timer=170.153473 | num_diff=0
 <h5 id='kasios'>Kasios</h5>
 <p>The Kasios call graph shows the communication pattern inside of a corporation -- nodes represent a person and edges indicate that two people spoke on the phone.  The whole graph has 10M edges and 500K nodes, which is too large for any of our SGM implementations to handle.  Thus, we sample subgraphs of size 2**10 - 2**15 by running a random walk until the desired number of nodes are observed, and then extracting the subgraph induced by those nodes.  We generate pairs of graphs by random permutations (except for the first <code>num_seeds=100</code> nodes).  Interestingly, with 100 seeds, SGM can almost always perfectly &quot;reidentify&quot; the permuted graph.</p>
 <h6 id='python-runtimes-2'>Python runtimes</h6>
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>num_nodes</th>
 <th>orig_dist</th>
@@ -674,7 +674,7 @@ total_timer=170.153473 | num_diff=0
 </tr>
 </tbody></table>
 <h6 id='csgm-runtimes-eps-1'>CSGM runtimes (<code>eps=1</code>)</h6>
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>num_nodes</th>
 <th>orig_dist</th>

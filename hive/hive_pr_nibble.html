@@ -286,7 +286,7 @@
 <p>The reference implementation of the algorithm was not explicitly written as <code>advance</code>/<code>filter</code>/<code>compute</code> operations, but we were able to quickly determine how to map the operations by using <a href="https://github.com/gunrock/pygunrock/blob/master/apps/pr_nibble.py">a lightweight Python implementation of the Gunrock programming API</a> as a development environment.  Thus, LGC was a good exercise in implementing a non-trivial end-to-end application in Gunrock from scratch.</p>
 <h2 id='summary-of-gunrock-implementation'>Summary of Gunrock Implementation</h2>
 <p>We implement Algorithm 2 from <a href="https://arxiv.org/pdf/1602.01886.pdf">Fountoulakis et al.</a>, which maps nicely to Gunrock. We present the pseudocode below along with the corresponding Gunrock operations:</p>
-<pre class="highlight plaintext"><code>A: adjacency matrix of graph
+<pre class="highlight mid-column-code plaintext"><code>A: adjacency matrix of graph
 D: diagonal degree matrix of graph
 Q: D^(-1/2) x (D - (1 - alpha)/2 x (D + A)) x D^(-1/2)
 s: teleportation distribution, a distribution over nodes of graph
@@ -323,7 +323,7 @@ For k = 0, 1, ..., inf
 EndFor
 
 return p_k = D^(1/2) x q_k
-</code></pre><h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA&#39;s DGX-1</h2><h3 id='prereqs-input'>Prereqs/input</h3><pre class="highlight shell"><code><span class="c"># clone gunrock</span>
+</code></pre><h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA&#39;s DGX-1</h2><h3 id='prereqs-input'>Prereqs/input</h3><pre class="highlight mid-column-code shell"><code><span class="c"># clone gunrock</span>
 git clone --recursive https://github.com/gunrock/gunrock.git <span class="se">\</span>
         -b dev-refactor
 
@@ -331,12 +331,12 @@ git clone --recursive https://github.com/gunrock/gunrock.git <span class="se">\<
 cp ../../gunrock/util/gitsha1.c.in ../../gunrock/util/gitsha1.c
 make clean
 make
-</code></pre><h3 id='running-the-application'>Running the application</h3><h4 id='example-command'>Example command</h4><pre class="highlight shell"><code>./bin/test_pr_nibble_9.1_x86_64 <span class="se">\</span>
+</code></pre><h3 id='running-the-application'>Running the application</h3><h4 id='example-command'>Example command</h4><pre class="highlight mid-column-code shell"><code>./bin/test_pr_nibble_9.1_x86_64 <span class="se">\</span>
     --graph-type market <span class="se">\</span>
     --graph-file ../../dataset/small/chesapeake.mtx <span class="se">\</span>
     --src 0 <span class="se">\</span>
     --max-iter 1
-</code></pre><h4 id='example-output'>Example output</h4><pre class="highlight plaintext"><code>Loading Matrix-market coordinate-formatted graph ...
+</code></pre><h4 id='example-output'>Example output</h4><pre class="highlight mid-column-code plaintext"><code>Loading Matrix-market coordinate-formatted graph ...
   Reading meta data from ../../dataset/small/chesapeake.mtx.meta
   Reading edge lists from ../../dataset/small/chesapeake.mtx.coo_edge_pairs
   Substracting 1 from node Ids...
@@ -416,7 +416,7 @@ Run 0 elapsed: 1.738071, #iterations = 10
 
 <p>All runtimes are in milliseconds (ms):</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Dataset</th>
 <th>HIVE Ref. C++</th>
@@ -534,7 +534,7 @@ Run 0 elapsed: 1.738071, #iterations = 10
 <h3 id='performance-limitations'>Performance limitations</h3>
 <p>We profiled the Gunrock GPU primitives on the <code>kron_g500-logn21</code> graph. The profiler adds approx. 100 ms of overhead (728.48 ms with profiler vs. 627.55 ms without profiler). The breakdown of runtime by kernel looks like:</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Gunrock Kernel</th>
 <th>Runtime (ms)</th>

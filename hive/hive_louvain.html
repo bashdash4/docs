@@ -290,7 +290,7 @@ implementation should have moderate scalability across multiple GPUs in an
 DGX-1.</p>
 <h2 id='summary-of-gunrock-implementation'>Summary of Gunrock Implementation</h2>
 <p>The commonly used approach to implement the Louvain algorithm uses a hash table. However, the memory access pattern that results from a hash table is almost totally random, and not GPU-friendly (more in the Alternative approaches section). Instead of using a hash table to accumulate the values associated with the same key, the Gunrock implementation on GPU tries another method: sort all key-value pairs, and use segmented reduce to accumulate the values in the continuous segments. Because Louvain always visits all edges in the graph, there is no need to use Gunrock frontiers, and the <code>advance</code> operator with the <code>ALL_EDGES</code> advance mode or a simple <code>ForAll</code> loop should be sufficient. The pseudocode is listed below:</p>
-<pre class="highlight plaintext"><code>m2 &lt;- sum(edge_weights);
+<pre class="highlight mid-column-code plaintext"><code>m2 &lt;- sum(edge_weights);
 //Outer-loop
 Do
     // Pass-initialization, assign each vertex to its own community
@@ -376,7 +376,7 @@ While pass stop condition not met
 set correctly to use CUDA. The current Gunrock configuration assumes boost
 (1.58.0 or 1.59.0) and Metis are installed; if not, changes need to be made in
 the Makefiles. DARPA&#39;s DGX-1 has both installed when the tests are performed.</p>
-<pre class="highlight shell tab-shell"><code>git clone --recursive https://github.com/gunrock/gunrock/
+<pre class="highlight mid-column-code shell tab-shell"><code>git clone --recursive https://github.com/gunrock/gunrock/
 <span class="nb">cd </span>gunrock
 git checkout dev-refactor
 git submodule init
@@ -393,7 +393,7 @@ make
 
 <p>The testing is done with Gunrock using the <code>dev-refactor</code> branch at commit <code>2699252</code>
 (Oct. 18, 2018), using CUDA 9.1 with NVIDIA driver 390.30.</p>
-<h3 id='running-the-application'>Running the application</h3><pre class="highlight shell tab-shell"><code>./bin/louvain_main_9.1_x86_64 --omp-threads<span class="o">=</span>32 --iter-stats --pass-stats <span class="se">\</span>
+<h3 id='running-the-application'>Running the application</h3><pre class="highlight mid-column-code shell tab-shell"><code>./bin/louvain_main_9.1_x86_64 --omp-threads<span class="o">=</span>32 --iter-stats --pass-stats <span class="se">\</span>
 --advance-mode<span class="o">=</span>ALL_EDGES --unify-segments<span class="o">=</span><span class="nb">true</span> --validation<span class="o">=</span>each --num-runs<span class="o">=</span>10 <span class="se">\</span>
 --graph-type<span class="o">=</span>market --graph-file<span class="o">=</span>/raid/data/hive/[DataSet]/[DataSet].mtx <span class="se">\</span>
 --jsondir<span class="o">=[</span>LogDir] &gt; <span class="o">[</span>LogDir]/[DataSet].txt 2&gt;&amp;1
@@ -422,7 +422,7 @@ the next section.</p>
 
 <p>The modularity of resulting communities:</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>DataSet</th>
 <th>Gunrock GPU</th>
@@ -456,7 +456,7 @@ the next section.</p>
 
 <p>The number of resulting communities:</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>DataSet</th>
 <th>Gunrock GPU</th>
@@ -490,7 +490,7 @@ the next section.</p>
 
 <p>Details of the datasets:</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>DataSet</th>
 <th style="text-align: right">#V</th>
@@ -616,7 +616,7 @@ the next section.</p>
 
 <p>Running time in seconds:</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>GPU</th>
 <th>Dataset</th>
@@ -814,7 +814,7 @@ the next section.</p>
 
 <p>Resulting modularity:</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>GPU</th>
 <th>DataSet</th>
@@ -1036,7 +1036,7 @@ the next section.</p>
 
 <p>The number of resulting communities:</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>GPU</th>
 <th>DataSet</th>
@@ -1245,7 +1245,7 @@ results">louvain_results.xlsx</a> file in the <code>louvain</code> directory.</p
 
 <p>Using the <code>akamai</code> dataset to profile the GPU Louvain implementation on a V100, an iteration in the first pass takes 64.08 ms, and the sort takes 42.05 ms, which is two-thirds of the iteration time. The Louvain implementation uses CUB&#39;s radix-sort-pair function. CUB is considered to be one of the GPU primitive libraries that provide the best performance. Further profiling shows during the sort kernel, the device memory controller is ~75% utilized; in other words, the sort is memory bound. This is as expected, as in each iteration of radix sort, the whole <code>edge_pairs</code> and <code>pair_weights</code> arrays are shuffled, with cost on the order of $O(|E|)$, although the memory accesses are mostly coalesced. The memory system utilizations are as below (from NVIDIA profiler):</p>
 
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Type</th>
 <th style="text-align: right">Transactions</th>

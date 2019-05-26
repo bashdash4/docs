@@ -310,17 +310,17 @@ which can be concisely implemented via cuSPARSE&#39;s <code>csr2csc</code> and <
 <p>The <code>csrgemm</code> functions in cuSPARSE allocate memory more intelligently than we do above, on the order of the number of edges in the output.  Thus, our GraphBLAS implementation can scale to substantially larger matrices than our Gunrock implementation.  However, implementing graph projection via a single call to <code>csrgemm</code> requires both the input graph <code>G</code> and output graph <code>H</code> to fit in GPU memory (16 GB on the DGX-1).  This limit can easily be hit, even for a moderately sized <code>G</code>, as the number of edges in <code>H</code> is often orders of magnitude larger than in <code>G</code>.</p>
 
 <p>Thus, to scale to larger graphs, we implement graph projections via a chunked matrix multiply.  Specifically, to compute <code>matmul(X, Y)</code> w/ <code>X.shape = (n, m)</code> and <code>Y.shape = (m, k)</code>, we split <code>X</code> into <code>c</code> matrices <code>(X_1, ..., X_c)</code>, w/ <code>X_i.shape = (n / c, m)</code>.  Then we compute <code>matmul(X_i, Y)</code> for each <code>X_i</code>, moving the output of each multiplication from GPU to CPU memory as we go.  This implementation addresses the common case where we can fit both <code>X</code> and <code>Y</code> in GPU memory, but not <code>matmul(X, Y)</code>. Obviously, the chunked matrix multiply incurs a performance penalty, but allows us to run graph projections of much larger graphs on the GPU.</p>
-<h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA&#39;s DGX-1</h2><h3 id='gunrock-2'>Gunrock</h3><h4 id='prereqs-input'>Prereqs/input</h4><pre class="highlight shell"><code>git clone --recursive https://github.com/gunrock/gunrock -b dev-refactor
+<h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA&#39;s DGX-1</h2><h3 id='gunrock-2'>Gunrock</h3><h4 id='prereqs-input'>Prereqs/input</h4><pre class="highlight mid-column-code shell"><code>git clone --recursive https://github.com/gunrock/gunrock -b dev-refactor
 <span class="nb">cd </span>gunrock/tests/proj/
 cp ../../gunrock/util/gitsha1.c.in ../../gunrock/util/gitsha1.c
 make clean
 make
 </code></pre><h4 id='application-specific-parameters'>Application specific parameters</h4>
 <p>None</p>
-<h4 id='example-command'>Example Command</h4><pre class="highlight shell"><code>./bin/test_proj_9.1_x86_64 <span class="se">\</span>
+<h4 id='example-command'>Example Command</h4><pre class="highlight mid-column-code shell"><code>./bin/test_proj_9.1_x86_64 <span class="se">\</span>
         --graph-type market <span class="se">\</span>
         --graph-file ../../dataset/small/chesapeake.mtx
-</code></pre><h4 id='example-output'>Example Output</h4><pre class="highlight plaintext"><code>Loading Matrix-market coordinate-formatted graph ...
+</code></pre><h4 id='example-output'>Example Output</h4><pre class="highlight mid-column-code plaintext"><code>Loading Matrix-market coordinate-formatted graph ...
 Reading from ../../dataset/small/chesapeake.mtx:
   Parsing MARKET COO format edge-value-seed = 1539110067
  (39 nodes, 340 directed edges)...
@@ -362,11 +362,11 @@ edge_counter=1372
  total time: 960.005045 ms
 </code></pre><h4 id='expected-output'>Expected Output</h4>
 <p>When run in <code>verbose</code> mode, the app outputs the weighted edgelist of the graph projection <code>H</code>. When run in <code>quiet</code> mode, it only outputs performance statistics and the results of a correctness check.</p>
-<h3 id='graphblas-2'>GraphBLAS</h3><h4 id='prereqs-input-2'>Prereqs/input</h4><pre class="highlight shell"><code>git clone --recursive https://github.com/bkj/graphblas_proj
+<h3 id='graphblas-2'>GraphBLAS</h3><h4 id='prereqs-input-2'>Prereqs/input</h4><pre class="highlight mid-column-code shell"><code>git clone --recursive https://github.com/bkj/graphblas_proj
 <span class="nb">cd </span>graphblas_proj
 make clean
 make
-</code></pre><h4 id='application-specific-parameters-2'>Application specific parameters</h4><pre class="highlight plaintext"><code>--unweighted
+</code></pre><h4 id='application-specific-parameters-2'>Application specific parameters</h4><pre class="highlight mid-column-code plaintext"><code>--unweighted
  1 = convert entries of adjacency matrix to 1
  0 = leave entries of adjacency matrix as-is
 --proj-debug
@@ -384,13 +384,13 @@ make
  &lt;= 1 = do matrix multiply in one step
   &gt; 1 = break matrix multiply into multiple chunks (eg, so we can compute
         projections larger than GPU memory)
-</code></pre><h4 id='example-command-2'>Example Command</h4><pre class="highlight shell"><code><span class="c"># generate some random data `data/X.mtx`</span>
+</code></pre><h4 id='example-command-2'>Example Command</h4><pre class="highlight mid-column-code shell"><code><span class="c"># generate some random data `data/X.mtx`</span>
 python data/make-random.py --seed 111 <span class="se">\</span>
         --num-rows 1000 --num-cols 1000 --density 0.1
 
 <span class="c"># run graph projection</span>
 ./proj --X data/X.mtx --unweighted 1 --proj-debug 1
-</code></pre><h4 id='example-output-2'>Example Output</h4><pre class="highlight plaintext"><code>proj.cu: loading data/X.mtx
+</code></pre><h4 id='example-output-2'>Example Output</h4><pre class="highlight mid-column-code plaintext"><code>proj.cu: loading data/X.mtx
   done
 proj.cu: computing transpose
   done
@@ -460,7 +460,7 @@ while this function (from the HIVE reference implementation) is not easy to impl
 
 <p><strong>Note:</strong> Small differences in the number of nonzero entries in the output (nnz_out) are due to small book-keeping differences (specifically, keeping or dropping self-loops).  These differences do not have any meaningful impact on runtimes.</p>
 <h6 id='1m-edge-subgraph-u-6743-v-13950-e-1m'>1M edge subgraph (|U|=6743 |V|=13950 |E|=1M)</h6>
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>implementation</th>
 <th>num_threads</th>
@@ -530,7 +530,7 @@ while this function (from the HIVE reference implementation) is not easy to impl
 </tr>
 </tbody></table>
 <h6 id='5m-edge-subgraph-u-34395-v-20402-e-5m'>5M edge subgraph (|U|=34395 |V|=20402 |E|=5M)</h6>
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>implementation</th>
 <th>num_threads</th>
@@ -600,7 +600,7 @@ while this function (from the HIVE reference implementation) is not easy to impl
 </tr>
 </tbody></table>
 <h6 id='movielens-20m-graph-u-138493-v-26744-e-20m'>MovieLens-20M graph (|U|=138493 |V|=26744 |E|=20M)</h6>
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>implementation</th>
 <th>num_threads</th>
@@ -676,7 +676,7 @@ while this function (from the HIVE reference implementation) is not easy to impl
 
 <p>This graph was chosen because it was used in benchmarks in <a href="https://gitlab.hiveprogram.com/jfiroz/graph_projection">PNNL&#39;s gitlab repo</a>.  However, their command line parameters appear to be incorrect, so our results here are substantially different than reported in their README.</p>
 <h6 id='rmat-18-v-174147-e-7600696'>RMAT-18 (|V|=174147 |E|=7600696)</h6>
-<table><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>implementation</th>
 <th>num_threads</th>
