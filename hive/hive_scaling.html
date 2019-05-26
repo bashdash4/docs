@@ -314,7 +314,7 @@ accesses across GPUs are particularly slow.</p>
 
 <p>Throughput in GBps:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Operation</th>
 <th style="text-align: right">Self</th>
@@ -369,7 +369,7 @@ accesses across GPUs are particularly slow.</p>
 
 <p>Latency in microseconds (us):</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Operation</th>
 <th style="text-align: right">Self</th>
@@ -461,7 +461,7 @@ inter-GPU communication would perform on the DGX-2.</p>
 
 <p>Throughput in GBps</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Operation</th>
 <th style="text-align: right">Self</th>
@@ -516,7 +516,7 @@ inter-GPU communication would perform on the DGX-2.</p>
 
 <p>Latency in microsecond (us)</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Operation</th>
 <th style="text-align: right">Self</th>
@@ -811,7 +811,7 @@ may run out of GPU memory.</p>
 contraction phase, the computation and communication of modularity optimization
 is dominant.</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Parts</th>
 <th>Comp cost</th>
@@ -912,7 +912,7 @@ sum up <code>child_feature</code> and <code>child_temp</code> for each source wi
 
 <p><em>Summary of Graph SAGE multi-GPU scaling</em></p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Parts</th>
 <th>Computation cost</th>
@@ -1047,7 +1047,7 @@ Repeat until all steps of walks finished:
 </code></pre>
 <p>Using W as the number of walks, for each step, we have</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Parts</th>
 <th>Comp. cost</th>
@@ -1086,7 +1086,7 @@ sufficient to select a neighbor, with weighted probabilities.</p>
 <p>The cost analysis, depending on the walk strategy and optimization,
                           results in:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Strategy</th>
 <th>Comp. cost</th>
@@ -1161,7 +1161,7 @@ each GPU, so instead of broadcast, p2p communication may be used to
 reduce the communication cost, especially when the graph connectivity
 is low.</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Comm. method</th>
 <th>Comp. cost</th>
@@ -1203,7 +1203,7 @@ While has new distance updates
 <p>Assuming on average, each vertex has its distance updated <code>a</code> times, and the
 average degree of vertices is <code>d</code>, the computation and the communication costs are:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Parts</th>
 <th>Comp. cost</th>
@@ -1292,7 +1292,7 @@ checked.</p>
 can be done in log(#neighbors). As a result, using $d$ as the average outdegree
 of vertices, the cost analysis is:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Parts</th>
 <th>Comp. cost</th>
@@ -1396,7 +1396,7 @@ Broadcast height[v] for all local vertex;
 push-relabel algorithm, as the bounds of the push and the relabel operations
 are known.</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Parts</th>
 <th>Comp. cost</th>
@@ -1442,7 +1442,7 @@ Updates source-vertex and vertex-destination capacities;
 </code></pre>
 <p>with scaling characteristics:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Parts</th>
 <th>Comp. cost</th>
@@ -1539,7 +1539,7 @@ While (vertex_start < num_vertices)
 <p>Using $E'$ to denote the number of edges in the projected graph, and
 $d$ to denote the average degree of vertices, the costs are:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Parts</th>
 <th>Comp. cost</th>
@@ -1649,7 +1649,7 @@ For each local vertex u with gradient updated:
 </code></pre>
 <p>The cost analysis is:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Parts</th>
 <th>Comp. cost</th>
@@ -1702,7 +1702,7 @@ applications.</p>
 <h2 id='summary-of-results'>Summary of Results</h2>
 <p>Scaling summary:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Application</th>
 <th>Computation to communication ratio</th>

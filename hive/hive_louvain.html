@@ -422,7 +422,7 @@ the next section.</p>
 
 <p>The modularity of resulting communities:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>DataSet</th>
 <th>Gunrock GPU</th>
@@ -456,7 +456,7 @@ the next section.</p>
 
 <p>The number of resulting communities:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>DataSet</th>
 <th>Gunrock GPU</th>
@@ -490,7 +490,7 @@ the next section.</p>
 
 <p>Details of the datasets:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>DataSet</th>
 <th style="text-align: right">#V</th>
@@ -616,7 +616,7 @@ the next section.</p>
 
 <p>Running time in seconds:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>GPU</th>
 <th>Dataset</th>
@@ -814,7 +814,7 @@ the next section.</p>
 
 <p>Resulting modularity:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>GPU</th>
 <th>DataSet</th>
@@ -1036,7 +1036,7 @@ the next section.</p>
 
 <p>The number of resulting communities:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>GPU</th>
 <th>DataSet</th>
@@ -1245,7 +1245,7 @@ results">louvain_results.xlsx</a> file in the <code>louvain</code> directory.</p
 
 <p>Using the <code>akamai</code> dataset to profile the GPU Louvain implementation on a V100, an iteration in the first pass takes 64.08 ms, and the sort takes 42.05 ms, which is two-thirds of the iteration time. The Louvain implementation uses CUB's radix-sort-pair function. CUB is considered to be one of the GPU primitive libraries that provide the best performance. Further profiling shows during the sort kernel, the device memory controller is ~75% utilized; in other words, the sort is memory bound. This is as expected, as in each iteration of radix sort, the whole <code>edge_pairs</code> and <code>pair_weights</code> arrays are shuffled, with cost on the order of $O(|E|)$, although the memory accesses are mostly coalesced. The memory system utilizations are as below (from NVIDIA profiler):</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Type</th>
 <th style="text-align: right">Transactions</th>

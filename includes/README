@@ -20,19 +20,19 @@
 
 <p><strong>Gunrock</strong> is a CUDA library for graph-processing designed specifically for the GPU. It uses a <strong>high-level</strong>, <strong>bulk-synchronous</strong>, <strong>data-centric abstraction</strong> focused on operations on a vertex or edge frontier. Gunrock achieves a balance between performance and expressiveness by coupling high performance GPU computing primitives and optimization strategies with a high-level programming model that allows programmers to quickly develop new graph primitives with small code size and minimal GPU programming knowledge. For more details, see <a href="http://gunrock.github.io/docs/#overview">Gunrock&#39;s Overview</a>.</p>
 
-<table style="font-size: 12px;"><thead>
+<table><thead>
 <tr>
-  <th><strong>Service</strong></th>
-  <th><strong>System</strong></th>
-  <th><strong>Environment</strong></th>
-  <th><strong>Status</strong></th>
+<th><strong>Service</strong></th>
+<th><strong>System</strong></th>
+<th><strong>Environment</strong></th>
+<th><strong>Status</strong></th>
 </tr>
 </thead><tbody>
 <tr>
-  <td><a href="https://jenkins.io/">Jenkins</a></td>
-  <td>Ubuntu 18.04.2 LTS</td>
-  <td>CUDA 10.1, NVIDIA Driver 418.39, GCC/G++ 7.3</td>
-  <td><a href="http://daisy.ece.ucdavis.edu:8080/blue/organizations/jenkins/gunrock/activity"><img src="http://daisy.ece.ucdavis.edu:8080/buildStatus/icon?job=gunrock/master" alt="Build Status"></a></td>
+<td><a href="https://jenkins.io/">Jenkins</a></td>
+<td>Ubuntu 18.04.2 LTS</td>
+<td>CUDA 10.1, NVIDIA Driver 418.39, GCC/G++ 7.3</td>
+<td><a href="http://daisy.ece.ucdavis.edu:8080/blue/organizations/jenkins/gunrock/activity"><img src="http://daisy.ece.ucdavis.edu:8080/buildStatus/icon?job=gunrock/master" alt="Build Status"></a></td>
 </tr>
 </tbody></table>
 <h2 id='quick-start-guide'>Quick Start Guide</h2>

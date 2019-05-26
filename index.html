@@ -464,23 +464,23 @@
 
 <table style="font-size: 12px;"><thead>
 <tr>
-  <th><strong>Service</strong></th>
-  <th><strong>System</strong></th>
-  <th><strong>Environment</strong></th>
-  <th><strong>Status</strong></th>
+<th><strong>Service</strong></th>
+<th><strong>System</strong></th>
+<th><strong>Environment</strong></th>
+<th><strong>Status</strong></th>
 </tr>
 </thead><tbody>
 <tr>
-  <td><a href="https://jenkins.io/">Jenkins</a></td>
-  <td>Ubuntu 18.04.2 LTS</td>
-  <td>CUDA 10.1, NVIDIA Driver 418.39, GCC/G++ 7.3</td>
-  <td><a href="http://daisy.ece.ucdavis.edu:8080/blue/organizations/jenkins/gunrock/activity"><img src="http://daisy.ece.ucdavis.edu:8080/buildStatus/icon?job=gunrock/master" alt="Build Status"></a></td>
+<td><a href="https://jenkins.io/">Jenkins</a></td>
+<td>Ubuntu 18.04.2 LTS</td>
+<td>CUDA 10.1, NVIDIA Driver 418.39, GCC/G++ 7.3</td>
+<td><a href="http://daisy.ece.ucdavis.edu:8080/blue/organizations/jenkins/gunrock/activity"><img src="http://daisy.ece.ucdavis.edu:8080/buildStatus/icon?job=gunrock/master" alt="Build Status"></a></td>
 </tr>
 </tbody></table>
 <h2 id='quick-start-guide'>Quick Start Guide</h2>
 <p>Before building Gunrock make sure you have <strong>CUDA 7.5 or higher</strong> (recommended CUDA 9 or higher) installed on your Linux system. We also support building Gunrock on docker images using the provided docker files under <code>docker</code> subdirectory. For complete build guide, see <a href="https://gunrock.github.io/docs/#building-gunrock">Building Gunrock</a>.</p>
 
-<pre class="highlight mid-column-code shell tab-shell">
+<pre class="highlight mid-column-code mid-column-code shell tab-shell">
 <code>git clone --recursive https://github.com/gunrock/gunrock/
 cd gunrock
 mkdir build && cd build
@@ -554,7 +554,7 @@ make test</code></pre>
 
 <p>The "Directory" column in the table below shows, which subdirectory within <code>gunrock/app</code> and <code>examples</code> these applications' implementations are. The version number in the "Single GPU" and "Multi-GPU" columns show which API abstraction of gunrock supports the respective application. If you are interested in helping us port an application in the older abstraction (<code>v0.5.x</code>) to a newer, much cleaner abstraction (<code>v1.x.x</code>), please see our <a href="https://gunrock.github.io/docs/#porting_guide">Porting Guide</a>.</p>
 
-<table><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Application</th>
 <th>Directory</th>
@@ -779,7 +779,7 @@ make test</code></pre>
 <blockquote>
 <p>Downloading gunrock</p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code><span class="c"># Using git (recursively) download gunrock</span>
+<pre class="highlight mid-column-code shell tab-shell"><code><span class="c"># Using git (recursively) download gunrock</span>
 git clone --recursive https://github.com/gunrock/gunrock
 <span class="c"># Using wget to download gunrock</span>
 wget --no-check-certificate https://github.com/gunrock/gunrock/archive/master.zip
@@ -787,7 +787,7 @@ wget --no-check-certificate https://github.com/gunrock/gunrock/archive/master.zi
 <blockquote>
 <p>Compiling gunrock</p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code><span class="nb">cd </span>gunrock
+<pre class="highlight mid-column-code shell tab-shell"><code><span class="nb">cd </span>gunrock
 mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd </span>build
 cmake ..
 make
@@ -812,7 +812,7 @@ make
 <li><strong>GUNROCK_GOOGLE_TESTS</strong> (default: OFF) - ON to build unit tests using googletest.</li>
 <li><strong>GUNROCK_CODE_COVERAGE</strong> (default: OFF) - ON to run code coverage on Gunrock's source code. Requires <code>lcov</code> to be installed on the system.</li>
 <li><p><strong>GUNROCK_BUILD_APPLICATIONS</strong> (default: ON) - Set off to only build one of the following primitive (GUNROCK_APP_* must be set on to build if this option is turned off.) Example for compiling gunrock with only <em>Breadth First Search (BFS)</em> primitive, and list of some of the other applications that can be compiled using <code>cmake</code> (note: for the full list, see the <code>CMakeLists.txt</code> file).
-<pre class="highlight mid-column-code shell tab-shell">
+<pre class="highlight mid-column-code mid-column-code shell tab-shell">
 <code>mkdir build &amp;&amp; cd build
 cmake -DGUNROCK_BUILD_APPLICATIONS=OFF -DGUNROCK_APP_BFS=ON ..
 make
@@ -978,7 +978,7 @@ idea of what needs to be in the test and what you are missing.</p>
 <p>Below is an example of what lines are a hit and a miss; you can target the lines missed in the tests to improve coverage.</p>
 
 <p><img src="https://i.imgur.com/5QwKjcB.png" alt="Example CodeCov Stats" /></p>
-<h2 id='example-test-using-googletest'>Example Test Using GoogleTest</h2><pre class="highlight c tab-c"><code><span class="cm">/**
+<h2 id='example-test-using-googletest'>Example Test Using GoogleTest</h2><pre class="highlight mid-column-code c tab-c"><code><span class="cm">/**
  * @brief BFS test for shared library advanced interface
  * @file test_lib_bfs.h
  */</span>
