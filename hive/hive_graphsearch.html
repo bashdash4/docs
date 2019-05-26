@@ -198,9 +198,9 @@
   color: #f92672;
 }
     </style>
-    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
-    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
-      <script src="javascripts/all.js"></script>
+    <link href="../stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="../stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="../javascripts/all.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/vega@3"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
@@ -227,15 +227,15 @@
     </style>
   </head>
 
-  <body class="hive_graphsearch" data-languages="[]">
+  <body class="hive hive_hive_graphsearch" data-languages="[]">
     <a href="#" id="nav-button">
       <span>
         NAV
-        <img src="images/navbar.png" alt="Navbar" />
+        <img src="../images/navbar.png" alt="Navbar" />
       </span>
     </a>
     <div class="toc-wrapper">
-      <img src="images/logo.png" class="logo" alt="Logo" />
+      <img src="../images/logo.png" class="logo" alt="Logo" />
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
@@ -275,47 +275,47 @@
         <h1 id='graphsearch'>GraphSearch</h1>
 <p>The graph search (GS) workflow is a walk-based method that searches a graph for nodes that score highly on some arbitrary indicator of interest.</p>
 
-<p>The use case given by the HIVE government partner was sampling a graph: given some seed nodes, and some model that can score a node as "interesting", find lots of "interesting" nodes as quickly as possible.  Their algorithm attempts to solve this problem by implementing several different strategies for walking the graph.</p>
+<p>The use case given by the HIVE government partner was sampling a graph: given some seed nodes, and some model that can score a node as &quot;interesting&quot;, find lots of &quot;interesting&quot; nodes as quickly as possible.  Their algorithm attempts to solve this problem by implementing several different strategies for walking the graph.</p>
 
 <ul>
-<li><code>uniform</code>: given a node <code>u</code>, randomly move to one of <code>u</code>'s neighbors (ignoring scores)</li>
+<li><code>uniform</code>: given a node <code>u</code>, randomly move to one of <code>u</code>&#39;s neighbors (ignoring scores)</li>
 <li><code>greedy</code>: given a node <code>u</code>, walk to neighbor with maximum score</li>
 <li><code>stochastic_greedy</code>: given a node <code>u</code>, choose neighbor to walk to with probability proportional to score</li>
 </ul>
 
 <p>Use of these walk-based methods is motivated by the presence of homophily in many real world social networks: we expect interesting people to have relationships with interesting people.</p>
 <h2 id='summary-of-results'>Summary of Results</h2>
-<p>Graph search is a relatively minor modification to Gunrock's random walk application, and was straightforward to implement.  Though random walks are a "worst case scenario" for GPU memory bandwidth, we still achieve 3--5x speedup over a modified version of the OpenMP reference implementation.</p>
+<p>Graph search is a relatively minor modification to Gunrock&#39;s random walk application, and was straightforward to implement.  Though random walks are a &quot;worst case scenario&quot; for GPU memory bandwidth, we still achieve 3--5x speedup over a modified version of the OpenMP reference implementation.</p>
 
 <p>The original OpenMP reference implementation actually ran slower with more threads -- we fixed the bugs, but the benchmarking experience highlights the need for performant and hardened CPU baselines.</p>
 
 <p>Until recently, Gunrock did not support parallelism <em>within</em> the lambda functions run by the <code>advance</code> operator, so neighbor selection for a given step in the walk is done sequentially.  Methods for exposing more parallelism to the programmer are currently being developed via parallel neighbor reduce functions.</p>
 
-<p>In an end-to-end graph search application, we'd need to implement the scoring function as well as the graph walk component.  For performance, we'd likely want to implement the scoring function on the GPU as well, which makes this a good example of a "Gunrock+X" app, where we'd need to integrate the high-performance graph processing component with arbitrary user code.</p>
+<p>In an end-to-end graph search application, we&#39;d need to implement the scoring function as well as the graph walk component.  For performance, we&#39;d likely want to implement the scoring function on the GPU as well, which makes this a good example of a &quot;Gunrock+X&quot; app, where we&#39;d need to integrate the high-performance graph processing component with arbitrary user code.</p>
 <h2 id='summary-of-gunrock-implementation'>Summary of Gunrock Implementation</h2>
-<p>The scoring model can be an arbitrary function (e.g., of node metadata).  For example, if we were running GS on the Twitter friends/followers graph, the scoring model might be the output of a text classifier on each users' messages.  Thus, we do not implement the scoring model in our Gunrock implementation -- instead, we read scores from an input file and access them as necessary.</p>
+<p>The scoring model can be an arbitrary function (e.g., of node metadata).  For example, if we were running GS on the Twitter friends/followers graph, the scoring model might be the output of a text classifier on each users&#39; messages.  Thus, we do not implement the scoring model in our Gunrock implementation -- instead, we read scores from an input file and access them as necessary.</p>
 
 <p>GS is a generalization of a random walk implementation, where there can be more variety in the transition function between nodes.</p>
 
 <p>The GS <code>uniform</code> mode is exactly a uniform random walk, so we can use the pre-existing Gunrock application.  Given a node, we compute the node to walk to as:</p>
-<pre class="highlight mid-column-code python tab-python"><code><span class="n">r</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<pre class="highlight python tab-python"><code><span class="n">r</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">neighbors</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
 <span class="n">next_node</span> <span class="o">=</span> <span class="n">neighbors</span><span class="p">[</span><span class="n">floor</span><span class="p">(</span><span class="n">r</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">neighbors</span><span class="p">))]</span>
 </code></pre>
 <p>Both the <code>GraphSearch</code> <code>greedy</code> and <code>stochastic_greedy</code> consist of small modifications to this transition function.</p>
 
 <p>For <code>greedy</code>, we find the neighbor with maximum score:</p>
-<pre class="highlight mid-column-code python tab-python"><code><span class="n">neighbors</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+<pre class="highlight python tab-python"><code><span class="n">neighbors</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
 <span class="n">next_node</span> <span class="o">=</span> <span class="n">neighbors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">next_node_score</span> <span class="o">=</span> <span class="n">scores</span><span class="p">[</span><span class="n">next_node</span><span class="p">]</span>
 <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">neighbors</span><span class="p">:</span>
     <span class="n">neighbor_score</span> <span class="o">=</span> <span class="n">scores</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">neighbor_score</span> <span class="o">></span> <span class="n">next_node_score</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">neighbor_score</span> <span class="o">&gt;</span> <span class="n">next_node_score</span><span class="p">:</span>
         <span class="n">next_node</span> <span class="o">=</span> <span class="n">neighbor</span>
         <span class="n">next_node_score</span> <span class="o">=</span> <span class="n">neighbor_score</span>
 </code></pre>
 <p>For <code>stochastic_greedy</code>, we sample neighbors proportional to their score -- e.g.:</p>
-<pre class="highlight mid-column-code python tab-python"><code><span class="n">sum_neighbor_scores</span> <span class="o">=</span> <span class="mi">0</span>
+<pre class="highlight python tab-python"><code><span class="n">sum_neighbor_scores</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
    <span class="n">sum_neighbor_scores</span> <span class="o">+=</span> <span class="n">scores</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]</span>
 
@@ -324,19 +324,19 @@
 <span class="n">tmp</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
    <span class="n">tmp</span> <span class="o">+=</span> <span class="n">scores</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]</span>
-   <span class="k">if</span> <span class="n">r</span> <span class="o"><</span> <span class="n">tmp</span><span class="p">:</span>
+   <span class="k">if</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="n">tmp</span><span class="p">:</span>
        <span class="n">next_node</span> <span class="o">=</span> <span class="n">neighbor</span>
        <span class="k">break</span>
 </code></pre>
-<p>In Gunrock, we create a frontier containing all of the nodes we want to walk from.  Then we map the transition function over the frontier using Gunrock's <code>ForEach</code> operator.  Current nodes in the frontier are replaced with the chosen neighbor, and the walk is (optionally) recorded in an output array.</p>
+<p>In Gunrock, we create a frontier containing all of the nodes we want to walk from.  Then we map the transition function over the frontier using Gunrock&#39;s <code>ForEach</code> operator.  Current nodes in the frontier are replaced with the chosen neighbor, and the walk is (optionally) recorded in an output array.</p>
 
 <p>Because this is such a straightforward modification, we implement GS inside of the existing random walk <code>rw</code> Gunrock application.  GS just requires adding a couple of extra flags and one extra array of size <code>|V|</code> to store the node values.</p>
-<h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA's DGX-1</h2><h3 id='prereqs-input'>Prereqs/input</h3><pre class="highlight mid-column-code shell"><code>git clone --recursive https://github.com/gunrock/gunrock -b dev-refactor
+<h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA&#39;s DGX-1</h2><h3 id='prereqs-input'>Prereqs/input</h3><pre class="highlight shell"><code>git clone --recursive https://github.com/gunrock/gunrock -b dev-refactor
 <span class="nb">cd </span>gunrock/tests/rw/
 cp ../../gunrock/util/gitsha1.c.in ../../gunrock/util/gitsha1.c
 make clean
 make
-</code></pre><h3 id='running-the-application'>Running the application</h3><h4 id='application-specific-parameters'>Application specific parameters</h4><pre class="highlight mid-column-code plaintext"><code>  --walk-mode
+</code></pre><h3 id='running-the-application'>Running the application</h3><h4 id='application-specific-parameters'>Application specific parameters</h4><pre class="highlight plaintext"><code>  --walk-mode
       0 = uniform
       1 = greedy
       2 = stochastic_greedy
@@ -351,8 +351,8 @@ make
       Number of walks to do per seed node
   --seed
       Seed for random number generator
-</code></pre><h4 id='example-command'>Example Command</h4><pre class="highlight mid-column-code shell"><code><span class="c"># generate random features</span>
-python random-values.py 39 > chesapeake.values
+</code></pre><h4 id='example-command'>Example Command</h4><pre class="highlight shell"><code><span class="c"># generate random features</span>
+python random-values.py 39 &gt; chesapeake.values
 
 <span class="c"># uniform random</span>
 ./bin/test_rw_9.1_x86_64 --graph-type market --graph-file <span class="se">\</span>
@@ -367,7 +367,7 @@ python random-values.py 39 > chesapeake.values
 ./bin/test_rw_9.1_x86_64 --graph-type market --graph-file <span class="se">\</span>
   ../../dataset/small/chesapeake.mtx --node-value-path chesapeake.values <span class="se">\</span>
   --walk-mode 2 --seed 123
-</code></pre><h4 id='example-output'>Example Output</h4><pre class="highlight mid-column-code plaintext"><code># ------------------------------------------------
+</code></pre><h4 id='example-output'>Example Output</h4><pre class="highlight plaintext"><code># ------------------------------------------------
 # uniform random
 
 Loading Matrix-market coordinate-formatted graph ...
@@ -384,12 +384,12 @@ Using advance mode LB
 Using filter mode CULL
 num_nodes=39
 __________________________
-0    0   0   queue3      oversize :  234 ->  682
-0    0   0   queue3      oversize :  234 ->  682
-0    1   0   queue3      oversize :  682 ->  1085
-0    1   0   queue3      oversize :  682 ->  1085
-0    5   0   queue3      oversize :  1085 ->     1166
-0    5   0   queue3      oversize :  1085 ->     1166
+0    0   0   queue3      oversize :  234 -&gt;  682
+0    0   0   queue3      oversize :  234 -&gt;  682
+0    1   0   queue3      oversize :  682 -&gt;  1085
+0    1   0   queue3      oversize :  682 -&gt;  1085
+0    5   0   queue3      oversize :  1085 -&gt;     1166
+0    5   0   queue3      oversize :  1085 -&gt;     1166
 --------------------------
 Run 0 elapsed: 4.551888, #iterations = 10
 [[0, 38, 8, 35, 11, 25, 13, 27, 37, 7, ],
@@ -427,10 +427,10 @@ Using advance mode LB
 Using filter mode CULL
 num_nodes=39
 __________________________
-0    0   0   queue3      oversize :  234 ->  682
-0    0   0   queue3      oversize :  234 ->  682
-0    1   0   queue3      oversize :  682 ->  770
-0    1   0   queue3      oversize :  682 ->  770
+0    0   0   queue3      oversize :  234 -&gt;  682
+0    0   0   queue3      oversize :  234 -&gt;  682
+0    1   0   queue3      oversize :  682 -&gt;  770
+0    1   0   queue3      oversize :  682 -&gt;  770
 --------------------------
 Run 0 elapsed: 0.695944, #iterations = 10
 [[0:0, 22:22, 32:32, 18:18, 11:11, 18:18, 11:11, 18:18, 11:11, 18:18, ],
@@ -480,7 +480,7 @@ Run 0 elapsed: 0.695944, #iterations = 10
 
 <p>At a high level, the results show:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>Variant</th>
 <th>OpenMP w/ 64 threads</th>
@@ -534,7 +534,7 @@ Run 0 elapsed: 0.695944, #iterations = 10
 
 <p>We omit the <code>greedy</code> undirected case because the algorithm gets stuck jumping between a local maximum and its highest-scoring neighbor.</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>threads</th>
 <th>method</th>
@@ -782,7 +782,7 @@ threads | method | num_nodes | num_edges | num_seeds | seconds | num_steps | ste
 
 <p>After these fixes, runtimes were as follows:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>threads</th>
 <th>method</th>
@@ -1013,7 +1013,7 @@ threads | method | num_nodes | num_edges | num_seeds | seconds | num_steps | ste
 <p>Note the improved runtimes and scaling.  These experiments were run with <a href="https://gitlab.hiveprogram.com/bjohnson/graphsearch/tree/gunrock_test">this branch</a> at commit 6c25a0687eecebfd4393e86fa4c7308d5594b73d.</p>
 
 <p>All experiments are conducted on the HIVE DGX-1.</p>
-<h4 id='gunrock-gpu-implementation'>Gunrock GPU implementation</h4><h6 id='directed-greedy'>directed, greedy</h6><pre class="highlight mid-column-code shell"><code>./bin/test_rw_9.1_x86_64 --graph-type market --graph-file dir_gs_twitter.mtx <span class="se">\</span>
+<h4 id='gunrock-gpu-implementation'>Gunrock GPU implementation</h4><h6 id='directed-greedy'>directed, greedy</h6><pre class="highlight shell"><code>./bin/test_rw_9.1_x86_64 --graph-type market --graph-file dir_gs_twitter.mtx <span class="se">\</span>
     --node-value-path gs_twitter.values <span class="se">\</span>
     --walk-mode 1 <span class="se">\</span>
     --walk-length 32 <span class="se">\</span>
@@ -1021,7 +1021,7 @@ threads | method | num_nodes | num_edges | num_seeds | seconds | num_steps | ste
     --store-walks 0 <span class="se">\</span>
     --quick <span class="se">\</span>
     --num-runs 10
-</code></pre><pre class="highlight mid-column-code plaintext"><code>Loading Matrix-market coordinate-formatted graph ...
+</code></pre><pre class="highlight plaintext"><code>Loading Matrix-market coordinate-formatted graph ...
 Reading from dir_gs_twitter.mtx:
   Parsing MARKET COO format
  (7199978 nodes, 21741663 directed edges)...
@@ -1054,7 +1054,7 @@ Validate_Results: total_steps_taken=16325873
  preprocess time: 1016.620000 ms
  postprocess time: 101.121902 ms
  total time: 2073.837996 ms
-</code></pre><h6 id='directed-uniform'>directed, uniform</h6><pre class="highlight mid-column-code shell"><code>./bin/test_rw_9.1_x86_64 --graph-type market --graph-file dir_gs_twitter.mtx <span class="se">\</span>
+</code></pre><h6 id='directed-uniform'>directed, uniform</h6><pre class="highlight shell"><code>./bin/test_rw_9.1_x86_64 --graph-type market --graph-file dir_gs_twitter.mtx <span class="se">\</span>
     --node-value-path gs_twitter.values <span class="se">\</span>
     --walk-mode 0 <span class="se">\</span>
     --walk-length 128 <span class="se">\</span>
@@ -1063,7 +1063,7 @@ Validate_Results: total_steps_taken=16325873
     --quick <span class="se">\</span>
     --num-runs 10 <span class="se">\</span>
     --seed 123
-</code></pre><pre class="highlight mid-column-code plaintext"><code>Loading Matrix-market coordinate-formatted graph ...
+</code></pre><pre class="highlight plaintext"><code>Loading Matrix-market coordinate-formatted graph ...
 Reading from dir_gs_twitter.mtx:
   Parsing MARKET COO format
  (7199978 nodes, 21741663 directed edges)...
@@ -1098,7 +1098,7 @@ Validate_Results: total_steps_taken=16530404
  preprocess time: 1016.720000 ms
  postprocess time: 101.902962 ms
  total time: 1781.071901 ms
-</code></pre><h6 id='undirected-uniform'>undirected, uniform</h6><pre class="highlight mid-column-code shell"><code>./bin/test_rw_9.1_x86_64 --graph-type market --graph-file undir_gs_twitter.mtx <span class="se">\</span>
+</code></pre><h6 id='undirected-uniform'>undirected, uniform</h6><pre class="highlight shell"><code>./bin/test_rw_9.1_x86_64 --graph-type market --graph-file undir_gs_twitter.mtx <span class="se">\</span>
     --node-value-path gs_twitter.values <span class="se">\</span>
     --walk-mode 0 <span class="se">\</span>
     --walk-length 128 <span class="se">\</span>
@@ -1106,7 +1106,7 @@ Validate_Results: total_steps_taken=16530404
     --quick <span class="se">\</span>
     --num-runs 10 <span class="se">\</span>
     --seed 123
-</code></pre><pre class="highlight mid-column-code plaintext"><code>Loading Matrix-market coordinate-formatted graph ...
+</code></pre><pre class="highlight plaintext"><code>Loading Matrix-market coordinate-formatted graph ...
 Reading from undir_gs_twitter.mtx:
   Parsing MARKET COO format
  (7199978 nodes, 43483326 directed edges)...
@@ -1147,11 +1147,11 @@ Validate_Results: total_steps_taken=914397206
 
 <p>When we do a large number of walks and/or the length of each walk is very long, there may not be enough GPU memory to store all of the walks in memory.  For now, we expose the <code>--store-walks</code> parameter -- when this is set to zero, the walk is discarded as it is computed and only the length of the walk is stored.  A better solution that could be implemented in the future would be to move walks from GPU to CPU memory as they grow too large.</p>
 
-<p><strong>Optimization:</strong> In a directed walk, once we hit a node with no outgoing neighbors, we halt the walk.  In the current Gunrock implementation, the enactor runs for a fixed number of iterations, regardless of whether any of the nodes are still active.  It would be straightforward to add a check that terminates the app when no "living" nodes are left.</p>
+<p><strong>Optimization:</strong> In a directed walk, once we hit a node with no outgoing neighbors, we halt the walk.  In the current Gunrock implementation, the enactor runs for a fixed number of iterations, regardless of whether any of the nodes are still active.  It would be straightforward to add a check that terminates the app when no &quot;living&quot; nodes are left.</p>
 <h2 id='next-steps'>Next Steps</h2><h3 id='alternate-approaches'>Alternate approaches</h3>
 <p>The size of the output array may become a significant bottleneck for large graphs.  However, since all of the transition functions do not depend on anything besides the current node, we could reasonably move the results of the walk from GPU to CPU memory every N iterations.  Properly executed, this should eliminate the largest bottleneck without unduely impacting performance.</p>
 <h3 id='gunrock-implications'>Gunrock implications</h3>
-<p>For the <code>greedy</code> and <code>stochastic_greedy</code> transition function, we have to sequentially iterate over all of a node's neighbors.  Simple wrappers for computing, e.g., the maximum of node scores across all of a node's neighbors could be helpful, both for ease of programming and performance.  Gunrock has a newly added <code>NeighborReduce</code> kernel that supports associative reductions -- it should be straightforward to implement (at least) the <code>greedy</code> transition function with this kernel.  The <code>stochastic_greedy</code> transition function would require a more complex reduction function along the lines of reservoir sampling.</p>
+<p>For the <code>greedy</code> and <code>stochastic_greedy</code> transition function, we have to sequentially iterate over all of a node&#39;s neighbors.  Simple wrappers for computing, e.g., the maximum of node scores across all of a node&#39;s neighbors could be helpful, both for ease of programming and performance.  Gunrock has a newly added <code>NeighborReduce</code> kernel that supports associative reductions -- it should be straightforward to implement (at least) the <code>greedy</code> transition function with this kernel.  The <code>stochastic_greedy</code> transition function would require a more complex reduction function along the lines of reservoir sampling.</p>
 <h3 id='notes-on-multi-gpu-parallelization'>Notes on multi-GPU parallelization</h3>
 <p>If the graph is small enough to be duplicated on each GPU, the implementation is trivial: just do a subset of the walks on each GPU.  The scalability will be perfect, as there is no communication involved at all.</p>
 
@@ -1161,7 +1161,7 @@ Validate_Results: total_steps_taken=914397206
 <h3 id='notes-on-larger-datasets'>Notes on larger datasets</h3>
 <p>The random accesses inherent to graph search make it a particularly difficult workflow for larger-than-GPU memory datasets.  The most straightforward solution would be to let Unified Virtual Memory (UVM) in CUDA automatically handle memory movement, but we should expect to see a substantial reduction in performance.</p>
 <h3 id='notes-on-other-pieces-of-this-workload'>Notes on other pieces of this workload</h3>
-<p>In real use cases, the scoring function would be computed lazily -- that is, we wouldn't have a precomputed array with scores for each of the nodes, and we would need to run the scoring function as the walk is running.  Thus, it would be critical for us to be able to call the scoring function from within Gunrock quickly and without excessive programmer overhead.</p>
+<p>In real use cases, the scoring function would be computed lazily -- that is, we wouldn&#39;t have a precomputed array with scores for each of the nodes, and we would need to run the scoring function as the walk is running.  Thus, it would be critical for us to be able to call the scoring function from within Gunrock quickly and without excessive programmer overhead.</p>
 
       </div>
 

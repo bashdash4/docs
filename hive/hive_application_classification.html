@@ -198,9 +198,9 @@
   color: #f92672;
 }
     </style>
-    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
-    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
-      <script src="javascripts/all.js"></script>
+    <link href="../stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="../stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="../javascripts/all.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/vega@3"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
@@ -227,15 +227,15 @@
     </style>
   </head>
 
-  <body class="hive_application_classification" data-languages="[]">
+  <body class="hive hive_hive_application_classification" data-languages="[]">
     <a href="#" id="nav-button">
       <span>
         NAV
-        <img src="images/navbar.png" alt="Navbar" />
+        <img src="../images/navbar.png" alt="Navbar" />
       </span>
     </a>
     <div class="toc-wrapper">
-      <img src="images/logo.png" class="logo" alt="Logo" />
+      <img src="../images/logo.png" class="logo" alt="Logo" />
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
@@ -289,10 +289,10 @@
 <li>sum/max neighborhood reduce on the data/pattern graphs</li>
 </ul>
 
-<p>Apart from the last one, these kernels do not obviously map to Gunrock's advance/filter model.</p>
+<p>Apart from the last one, these kernels do not obviously map to Gunrock&#39;s advance/filter model.</p>
 
 <p>Pseudocode for the core belief propagation algorithm is as follows:</p>
-<pre class="highlight mid-column-code plaintext"><code>for iteration in range(num_iterations):
+<pre class="highlight plaintext"><code>for iteration in range(num_iterations):
 
     # Update edge messages
     edge_msg_f = diff_r[data_edges.srcs] - edge_distances # data.num_edges x pattern.num_edges
@@ -323,19 +323,19 @@
 </code></pre>
 <p>where <code>normprob</code> is the column-wise log-softmax function.  That is, since <code>belief</code> is <code>data.num_nodes x patt.num_nodes</code>, each node in the <code>pattern</code> graph gets assigned a probability distribution over nodes in the <code>data</code> graph.</p>
 
-<p>Our implementation is based on the <a href="https://gitlab.hiveprogram.com/pnnl/ApplicationClassification">PNNL implementation</a> rather than the <a href="https://gitlab.hiveprogram.com/jcromano/applicationClassification">distributed GraphX reference implementation</a>.  On all of the graphs we've tested, the output of our implementation exactly matches the output of the PNNL code.  According to PNNL, their implementation may give different results than the HIVE reference implementation (due to e.g., different normalization schemes).</p>
-<h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA's DGX-1</h2><h3 id='prereqs-input'>Prereqs/input</h3><pre class="highlight mid-column-code shell"><code>git clone --recursive <span class="se">\</span>
+<p>Our implementation is based on the <a href="https://gitlab.hiveprogram.com/pnnl/ApplicationClassification">PNNL implementation</a> rather than the <a href="https://gitlab.hiveprogram.com/jcromano/applicationClassification">distributed GraphX reference implementation</a>.  On all of the graphs we&#39;ve tested, the output of our implementation exactly matches the output of the PNNL code.  According to PNNL, their implementation may give different results than the HIVE reference implementation (due to e.g., different normalization schemes).</p>
+<h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA&#39;s DGX-1</h2><h3 id='prereqs-input'>Prereqs/input</h3><pre class="highlight shell"><code>git clone --recursive <span class="se">\</span>
         https://github.com/owensgroup/application_classification
 <span class="nb">cd </span>application_classification
 make clean
 make
-</code></pre><h3 id='running-the-application'>Running the application</h3><h4 id='example-command'>Example Command</h4><pre class="highlight mid-column-code shell"><code>mkdir -p results
+</code></pre><h3 id='running-the-application'>Running the application</h3><h4 id='example-command'>Example Command</h4><pre class="highlight shell"><code>mkdir -p results
 ./main <span class="se">\</span>
     ./data/georgiyData.Vertex.csv <span class="se">\</span>
     ./data/georgiyData.Edges.csv <span class="se">\</span>
     ./data/georgiyPattern.Vertex.csv <span class="se">\</span>
-    ./data/georgiyPattern.Edges.csv > results/georgiy
-</code></pre><h4 id='example-output'>Example output</h4><pre class="highlight mid-column-code shell"><code><span class="gp">$ </span>head -n 5 results/georgiy
+    ./data/georgiyPattern.Edges.csv &gt; results/georgiy
+</code></pre><h4 id='example-output'>Example output</h4><pre class="highlight shell"><code><span class="gp">$ </span>head -n 5 results/georgiy
 -8.985810e+00
 -3.859019e+01
 -4.470994e+01
@@ -353,7 +353,7 @@ make
 <p>The output of the program is a <code>data.num_nodes x pattern.num_nodes</code> matrix, where each column represents a log-probability distribution of assignments of pattern node <code>j</code> to data node <code>i</code>.  This matrix is printed in row major order as a file with <code>data.num_nodes x pattern.num_nodes</code> lines.</p>
 
 <p>In python, you could inspect the output like:</p>
-<pre class="highlight mid-column-code python tab-python"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
 
 <span class="c"># load results</span>
 <span class="n">x</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'./results/georgiy'</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
@@ -398,7 +398,7 @@ make
 <li>pattern.num_edges = 20</li>
 </ul>
 
-<p>then the memory footprint will be on the order of 13 GB.  (<em>Note:</em> It's likely that reordering of operations could reduce the number of intermediate data structures required.)</p>
+<p>then the memory footprint will be on the order of 13 GB.  (<em>Note:</em> It&#39;s likely that reordering of operations could reduce the number of intermediate data structures required.)</p>
 
 <p>AC is only applicable to graphs with node and edge features.  However, the runtime of the algorithm is only dependent on the <em>dimension</em> of these features, rather than the values.  Thus, for benchmarking purposes, we can pick a <code>node_feature_dim</code> and <code>edge_feature_dim</code> and use randomly generated features.  This is helpful becaus we do not have a good real-world dataset for benchmarking.</p>
 
@@ -411,13 +411,13 @@ make
 <li>In our <code>RepeatColumnsByDataEdges</code>, <code>FE</code> and <code>RE</code> both use the <code>src</code> of an edge, which conflicts with the algorithm description in the paper.  One of these should probably be using the <code>src</code> and the other the <code>dst</code>.</li>
 </ul>
 
-<p>These bugs are easy to fix, but we left them "as is" because a) we have no easy way to verify which is correct and b) we'd like consistency of results w/ the PNNL implementation.</p>
+<p>These bugs are easy to fix, but we left them &quot;as is&quot; because a) we have no easy way to verify which is correct and b) we&#39;d like consistency of results w/ the PNNL implementation.</p>
 <h3 id='comparison-against-existing-implementations'>Comparison against existing implementations</h3>
 <p><em>The original reference implementation consisted of a large amount of distributed Spark and GraphX Scala code.  For ease of implementation, and to make sure performance comparisons are meaningful, we instead based our implementation on the <a href="https://gitlab.hiveprogram.com/pnnl/ApplicationClassification">PNNL ApplicationClassification</a> OpenMP code.</em></p>
 
 <p>Overall, the CUDA implementation is between 10x and 100x faster than the best run of the PNNL OpenMP code.</p>
 
-<p>We compare our CUDA implementation to PNNL's C++ OpenMP implementation on several different graphs:</p>
+<p>We compare our CUDA implementation to PNNL&#39;s C++ OpenMP implementation on several different graphs:</p>
 <h6 id='georgiydata'>georgiyData</h6>
 <ul>
 <li>a small graph included w/ real (source unknown) node/edge features (included in PNNL repo)</li>
@@ -436,7 +436,7 @@ make
 
 <p>For the first two, we use the <code>georgiyPattern</code> pattern graph included in the PNNL repo.  For the latter, we generate a pattern graph using the neighborhood induction mentioned above.</p>
 <h4 id='georgiydata-2'>georgiyData</h4>
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>implementation</th>
 <th>threads</th>
@@ -487,7 +487,7 @@ make
 
 <p><strong>Takeaway:</strong> Our CUDA implementation is approximately 12.8x faster than the fastest OpenMP run (32 threads).  However, this problem is quite small and both implementations run in under 1 second.</p>
 <h4 id='rmat18-2'>rmat18</h4>
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>implementation</th>
 <th>threads</th>
@@ -536,9 +536,9 @@ make
 </tr>
 </tbody></table>
 
-<p><strong>Takeaway:</strong> Our CUDA implementation is approximately 99x faster than the fastest PNNL run (64 threads).  The absolute magnitude of the differences is much more substantial here --  the CUDA implementation runs in < 1 second while the OpenMP version runs in ~ 1.5 minutes.</p>
+<p><strong>Takeaway:</strong> Our CUDA implementation is approximately 99x faster than the fastest PNNL run (64 threads).  The absolute magnitude of the differences is much more substantial here --  the CUDA implementation runs in &lt; 1 second while the OpenMP version runs in ~ 1.5 minutes.</p>
 <h4 id='johnshopkins_random-2'>JohnsHopkins_random</h4>
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>implementation</th>
 <th>threads</th>
@@ -587,9 +587,9 @@ make
 </tr>
 </tbody></table>
 
-<p><strong>Takeaway:</strong> Our CUDA implementation is approximately 37x faster than the fastest PNNL run (32 threads).  Again, the absolute difference in runtimes is more substantial, with our code running in < 1 second vs. ~ 20 seconds.</p>
+<p><strong>Takeaway:</strong> Our CUDA implementation is approximately 37x faster than the fastest PNNL run (32 threads).  Again, the absolute difference in runtimes is more substantial, with our code running in &lt; 1 second vs. ~ 20 seconds.</p>
 <h3 id='performance-limitations'>Performance limitations</h3>
-<p>Profiling (on the RMAT graph) reveals that the distribution of runtime over kernels is flatter in AC than for many applications -- often, a single kernel will account for > 80% of runtime, but here the most expensive kernel only accounts for 12.8% of compute time.</p>
+<p>Profiling (on the RMAT graph) reveals that the distribution of runtime over kernels is flatter in AC than for many applications -- often, a single kernel will account for &gt; 80% of runtime, but here the most expensive kernel only accounts for 12.8% of compute time.</p>
 
 <ul>
 <li>12.8% of time spent in <code>__reorderColumns</code>, which is a gather/scatter operation (memory bandwidth = 281 GB/s)</li>
@@ -605,13 +605,13 @@ make
 <h2 id='next-steps'>Next Steps</h2><h3 id='alternate-approaches-gunrock-implications'>Alternate approaches + Gunrock implications</h3>
 <p>In the CUDA implementation, there are a number of places where we could take advantage of multiple streams to reduce runtimes.  For example, in the initialization phase, we compute the pairwise distance between a) data/pattern node features and b) data/pattern edge features.  These operations are completely independent of one another, and so could happen asynchronously on different streams.</p>
 
-<p>The application was implemented outside of the Gunrock framework because it had a large number of (dense matrix) operations that are not explicitly supported by Gunrock, and a relatively small number of kernels that map well to Gunrock's advance/filter paradigm.  However, the code uses CUB's <code>DeviceSegmentedReduce</code> a number of times -- Gunrock recently added a similar operator that is load-balanced for better performance.  In the future, it would be worthwhile to see what kind of speedup we could get from the Gunrock version, which should roughly be a drop-in replacement.</p>
+<p>The application was implemented outside of the Gunrock framework because it had a large number of (dense matrix) operations that are not explicitly supported by Gunrock, and a relatively small number of kernels that map well to Gunrock&#39;s advance/filter paradigm.  However, the code uses CUB&#39;s <code>DeviceSegmentedReduce</code> a number of times -- Gunrock recently added a similar operator that is load-balanced for better performance.  In the future, it would be worthwhile to see what kind of speedup we could get from the Gunrock version, which should roughly be a drop-in replacement.</p>
 <h3 id='notes-on-multi-gpu-parallelization'>Notes on multi-GPU parallelization</h3>
-<p>Most of the kernels are either row or column operations (reductions) over dense matrices, and thus relatively easy to partition over multiple nodes.  They would either end up being embarrassingly parallel or would require a per-node reduction and then a reduction across nodes.   Replacing CUB's <code>DeviceSegmentedReduce</code> with Gunrock's implementation would give us multi-GPU support for the remaining kernel.</p>
+<p>Most of the kernels are either row or column operations (reductions) over dense matrices, and thus relatively easy to partition over multiple nodes.  They would either end up being embarrassingly parallel or would require a per-node reduction and then a reduction across nodes.   Replacing CUB&#39;s <code>DeviceSegmentedReduce</code> with Gunrock&#39;s implementation would give us multi-GPU support for the remaining kernel.</p>
 
 <p>Alternatively, depending on the topology of the graph, we may be able to partition the data graph so that we can duplicate the pattern graph across nodes and run an independent instance of application classification on each partition.  The partition would need to be constructed in a way that ensures that every subgraph is intact on <em>some</em> GPU, which implies some partial duplication of the data graph.  If the data graph has a large diameter, or the pattern graph has a small diameter, this may be possible without excessive duplication.  If the data graph has a small diameter, we may still be able to partition the graph by e.g. removing edges that are particularly dissimilar from edges in the pattern graph.  This kind of approach is clearly very application specific, and may not be possible at all in some cases.</p>
 <h3 id='notes-on-dynamic-graphs'>Notes on dynamic graphs</h3>
-<p>In practice, it's likely that practitioners would like to run application classification on a dynamic graph (e.g., the HIVE use case was for detecting certain suspicious patterns of communication in a cybersecurity graph). However, it is not obvious how the current algorithm would be applied in a streaming fashion without relatively major modifications.  It's more likely that the current AC algorithm would be applied to a dynamic graph via some kind of sliding window.</p>
+<p>In practice, it&#39;s likely that practitioners would like to run application classification on a dynamic graph (e.g., the HIVE use case was for detecting certain suspicious patterns of communication in a cybersecurity graph). However, it is not obvious how the current algorithm would be applied in a streaming fashion without relatively major modifications.  It&#39;s more likely that the current AC algorithm would be applied to a dynamic graph via some kind of sliding window.</p>
 <h3 id='notes-on-larger-datasets'>Notes on larger datasets</h3>
 <p>We may be able to use a partitioning scheme like the one described in the multi-GPU section above to handle data graphs that are larger than GPU memory.</p>
 <h3 id='notes-on-other-pieces-of-this-workload'>Notes on other pieces of this workload</h3>

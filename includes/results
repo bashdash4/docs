@@ -1,4 +1,20 @@
-<h1 id='results'>Results</h1>
+<h1 id='results-and-analysis'>Results and Analysis</h1>
+<p>We are gradually adding summaries of our results to these web pages (please let us know if you would like other comparisons). These summaries also include a table of results along with links to the configuration and results of each individual run. We detail our <a href="https://gunrock.github.io/docs/#methodology-for-graph-analytics-performance">methodology for our measurements here</a>.</p>
+
+<ul>
+<li><a href="https://gunrock.github.io/docs/engines_topc.html">Gunrock performance compared with other engines for graph analytics</a></li>
+<li><a href="http://gunrock.github.io/gunrock/doc/latest/md_stats_do_ab_random.html">Setting parameters for direction-optimized BFS</a></li>
+<li><a href="https://gunrock.github.io/docs/gunrock_gpus.html">Gunrock results on different GPUs</a></li>
+<li><a href="https://gunrock.github.io/docs/frontier.html">Gunrock BFS throughput as a function of frontier size</a></li>
+<li><a href="https://gunrock.github.io/docs/mgpu_speedup.html">Multi-GPU Gunrock Speedups</a> and <a href="https://gunrock.github.io/docs/mgpu_scalability.html">Multi-GPU Gunrock Scalability</a></li>
+<li><a href="https://gunrock.github.io/docs/mgpu_partition.html">Multi-GPU Gunrock Partition Performance</a></li>
+<li><a href="http://gunrock.github.io/docs/groute.html">Comparison to Groute</a></li>
+</ul>
+
+<p>For reproducibility, we maintain Gunrock configurations and results in our github <a href="https://github.com/gunrock/io/tree/master/gunrock-output">gunrock/io</a> repository.</p>
+
+<p>We are happy to run experiments with other engines, particularly if those engines output results in our JSON format / a format that can be easily parsed into JSON format.</p>
+<h1 id='preliminary-performance-results'>Preliminary Performance Results</h1>
 <p>The following are some preliminary performance results. It is meant to give a rough idea
 of how Gunrock performs with specific version, testing environment, parameters
 and datasets. The numbers may change (with very high chances in reality),

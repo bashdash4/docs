@@ -198,9 +198,9 @@
   color: #f92672;
 }
     </style>
-    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
-    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
-      <script src="javascripts/all.js"></script>
+    <link href="../stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="../stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="../javascripts/all.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/vega@3"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
@@ -227,15 +227,15 @@
     </style>
   </head>
 
-  <body class="hive_geolocation" data-languages="[]">
+  <body class="hive hive_hive_geolocation" data-languages="[]">
     <a href="#" id="nav-button">
       <span>
         NAV
-        <img src="images/navbar.png" alt="Navbar" />
+        <img src="../images/navbar.png" alt="Navbar" />
       </span>
     </a>
     <div class="toc-wrapper">
-      <img src="images/logo.png" class="logo" alt="Logo" />
+      <img src="../images/logo.png" class="logo" alt="Logo" />
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
@@ -273,7 +273,7 @@
 
       <div class="content">
         <h1 id='geolocation'>Geolocation</h1>
-<p>Infers user locations using the location (latitude, longitude) of friends through spatial label propagation. Given a graph <code>G</code>, geolocation examines each vertex <code>v</code>'s neighbors and computes the spatial median of the neighbors' location list. The output is a list of predicted locations for all vertices with unknown locations.</p>
+<p>Infers user locations using the location (latitude, longitude) of friends through spatial label propagation. Given a graph <code>G</code>, geolocation examines each vertex <code>v</code>&#39;s neighbors and computes the spatial median of the neighbors&#39; location list. The output is a list of predicted locations for all vertices with unknown locations.</p>
 <h2 id='summary-of-results'>Summary of Results</h2>
 <p>Geolocation or geotagging is an interesting parallel problem, because it is among the few that exhibits the dynamic parallelism pattern within the compute. The pattern is as follows; there is parallel compute across nodes, each node has some serial work and within the serial work there are several parallel math operations. Even without leveraging dynamic parallelism within CUDA (kernel launches within a kernel), Geolocation performs well on the GPU environment because it mainly requires simple math operations, instead of complicated memory movement schemes.</p>
 
@@ -282,9 +282,9 @@
 <p>There are two approaches we took to implement Geolocation within Gunrock:</p>
 
 <ul>
-<li><strong>[Fewer Reads] Global Gather:</strong> uses two <code>compute</code> operators as <code>ForAll()</code>. The first <code>ForAll()</code> is a <code>gather</code> operation, gathering all the values of neighbors with known locations for an active vertex <code>v</code>, and the second <code>ForAll()</code> uses those values to compute the <code>spatial_center</code> where the spatial center of a list's points is the center of those points on the earth's surface.</li>
+<li><strong>[Fewer Reads] Global Gather:</strong> uses two <code>compute</code> operators as <code>ForAll()</code>. The first <code>ForAll()</code> is a <code>gather</code> operation, gathering all the values of neighbors with known locations for an active vertex <code>v</code>, and the second <code>ForAll()</code> uses those values to compute the <code>spatial_center</code> where the spatial center of a list&#39;s points is the center of those points on the earth&#39;s surface.</li>
 </ul>
-<pre class="highlight mid-column-code python tab-python"><code><span class="k">def</span> <span class="nf">gather_op</span><span class="p">(</span><span class="n">Vertex</span> <span class="n">v</span><span class="p">):</span>
+<pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">gather_op</span><span class="p">(</span><span class="n">Vertex</span> <span class="n">v</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">isValid</span><span class="p">(</span><span class="n">neighbor</span><span class="o">.</span><span class="n">location</span><span class="p">):</span>
             <span class="n">locations_list</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">neighbor</span><span class="o">.</span><span class="n">location</span><span class="p">)</span>
@@ -296,14 +296,14 @@
 <ul>
 <li><strong>[Less Memory] Repeated Compute:</strong> skips the global gather and uses only one <code>compute</code> operator as a <code>ForAll()</code> to find the spatial center of every vertex. During the spatial center computation, instead of iterating over all valid neighbors (where valid neighbor is a neighbor with a known location), we iterate over all neighbors for each vertex, doing more random reads than the global gather approach, but using <code>3x</code> less memory.</li>
 </ul>
-<pre class="highlight mid-column-code python tab-python"><code><span class="k">def</span> <span class="nf">spatial_center</span><span class="p">(</span><span class="n">Vertex</span> <span class="n">v</span><span class="p">):</span>
+<pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">spatial_center</span><span class="p">(</span><span class="n">Vertex</span> <span class="n">v</span><span class="p">):</span>
     <span class="k">if</span> <span class="err">!</span><span class="n">isValid</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">location</span><span class="p">):</span>
         <span class="n">v</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">spatial_median</span><span class="p">(</span><span class="n">neighbors_list</span><span class="p">[</span><span class="n">v</span><span class="p">])</span>
 </code></pre>
 <ul>
 <li><strong>[Optimization] Early Exit:</strong> fuses the global gather approach with the repeated compute, by performing one local gather for every vertex within the spatial center operator (without a costly device barrier), and exiting early if a vertex <code>v</code> has only one or two valid neighbors:</li>
 </ul>
-<pre class="highlight mid-column-code python tab-python"><code><span class="k">def</span> <span class="nf">spatial_center</span><span class="p">(</span><span class="n">Vertex</span> <span class="n">v</span><span class="p">):</span>
+<pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">spatial_center</span><span class="p">(</span><span class="n">Vertex</span> <span class="n">v</span><span class="p">):</span>
     <span class="k">if</span> <span class="err">!</span><span class="n">isValid</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">location</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">valid_locations</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">v</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">valid_neighbor</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">.</span><span class="n">location</span><span class="p">:</span>
@@ -313,7 +313,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">v</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">spatial_median</span><span class="p">(</span><span class="n">neighbors_list</span><span class="p">[</span><span class="n">v</span><span class="p">])</span>
 </code></pre><h3 id='comparing-global-gather-vs-repeated-compute'>Comparing Global Gather vs. Repeated Compute</h3>
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>Approach</th>
 <th>Memory Usage</th>
@@ -324,27 +324,27 @@
 </thead><tbody>
 <tr>
 <td>Global Gather</td>
-<td>$O(3 \cdot &vert;E&vert;)$</td>
+<td>$O(3 \cdot \cardinality{E})$</td>
 <td># of valid locations</td>
 <td>1</td>
 <td>~160M Edges</td>
 </tr>
 <tr>
 <td>Repeated Compute</td>
-<td>$O(&vert;E&vert;)$</td>
+<td>$O(\cardinality{E})$</td>
 <td>degree of vertex</td>
 <td>0</td>
 <td>~500M Edges</td>
 </tr>
 </tbody></table>
 
-<p><strong>Note:</strong> <code>spatial_median()</code> is defined as center of points on earth's surface -- given a set of points <code>Q</code>, the function computes the point <code>p</code> such that: <code>sum([haversine_distance(p, q) for q in Q])</code> is minimized. See <code>gunrock/app/geo/geo_spatial.cuh</code> for details on the spatial median implementation.</p>
-<h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA's DGX-1</h2><h3 id='prerequisites'>Prerequisites</h3><pre class="highlight mid-column-code shell tab-shell"><code>git clone --recursive https://github.com/gunrock/gunrock -b dev-refactor
+<p><strong>Note:</strong> <code>spatial_median()</code> is defined as center of points on earth&#39;s surface -- given a set of points <code>Q</code>, the function computes the point <code>p</code> such that: <code>sum([haversine_distance(p, q) for q in Q])</code> is minimized. See <code>gunrock/app/geo/geo_spatial.cuh</code> for details on the spatial median implementation.</p>
+<h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA&#39;s DGX-1</h2><h3 id='prerequisites'>Prerequisites</h3><pre class="highlight shell tab-shell"><code>git clone --recursive https://github.com/gunrock/gunrock -b dev-refactor
 <span class="nb">cd </span>gunrock/tests/geo/
 make clean <span class="o">&amp;&amp;</span> make
 </code></pre><h3 id='hive-data-preparation'>HIVE Data Preparation</h3>
 <p>Prepare the data, skip this step if you are just running the sample dataset. Assuming we are in <code>tests/geo</code> directory:</p>
-<pre class="highlight mid-column-code shell tab-shell"><code><span class="nb">export </span><span class="nv">TOKEN</span><span class="o">=</span> <span class="c"># get this Authentication TOKEN from</span>
+<pre class="highlight shell tab-shell"><code><span class="nb">export </span><span class="nv">TOKEN</span><span class="o">=</span> <span class="c"># get this Authentication TOKEN from</span>
               <span class="c"># https://api-token.hiveprogram.com/#!/user</span>
 wget --header <span class="s2">"Authorization:</span><span class="nv">$TOKEN</span><span class="s2">"</span> <span class="se">\</span>
   https://hiveprogram.com/data/_v0/geotagging/instagram/instagram.tar.gz
@@ -356,7 +356,7 @@ python generate-data.py
 <p>This will generate two files, <code>instagram.mtx</code> and <code>instagram.labels</code>, which can be used as an input to the geolocation app.</p>
 <h3 id='running-the-application'>Running the application</h3>
 <p>Application specific parameters:</p>
-<pre class="highlight mid-column-code plaintext"><code>--labels-file
+<pre class="highlight plaintext"><code>--labels-file
     file name containing node ids and their locations.
 
 --geo-iter
@@ -378,12 +378,12 @@ python generate-data.py
     (default = false)
 </code></pre>
 <p>Example command-line:</p>
-<pre class="highlight mid-column-code shell tab-shell"><code><span class="c"># geolocation.mtx is a graph based on chesapeake.mtx dataset</span>
+<pre class="highlight shell tab-shell"><code><span class="c"># geolocation.mtx is a graph based on chesapeake.mtx dataset</span>
 ./bin/test_geo_10.0_x86_64 --graph-type<span class="o">=</span>market --graph-file<span class="o">=</span>./geolocation.mtx <span class="se">\</span>
   --labels-file<span class="o">=</span>./locations.labels --geo-iter<span class="o">=</span>2 --geo-complete<span class="o">=</span><span class="nb">false</span>
 </code></pre>
 <p>Sample input (labels):</p>
-<pre class="highlight mid-column-code plaintext"><code>% Nodes Latitude Longitude
+<pre class="highlight plaintext"><code>% Nodes Latitude Longitude
 39 2 2
 1 37.7449063493 -122.009432884
 2 37.8668048274 -122.257973253
@@ -398,7 +398,7 @@ python generate-data.py
 39 9.4276164485 -110.640705659
 </code></pre>
 <p>Sample output:</p>
-<pre class="highlight mid-column-code plaintext"><code>Loading Matrix-market coordinate-formatted graph ...
+<pre class="highlight plaintext"><code>Loading Matrix-market coordinate-formatted graph ...
 Reading from ./geolocation.mtx:
   Parsing MARKET COO format edge-value-seed = 1539674096
  (39 nodes, 340 directed edges)...
@@ -413,15 +413,15 @@ Reading from ./locations.labels:
 Done parsing (0 s).
 Debugging Labels -------------
  (nans represent unknown locations)
-    locations[ 0 ] = < 37.744907 , -122.009430 >
-    locations[ 1 ] = < 37.866806 , -122.257973 >
-    locations[ 2 ] = < nan , nan >
-    locations[ 3 ] = < 37.869114 , -122.259109 >
+    locations[ 0 ] = &lt; 37.744907 , -122.009430 &gt;
+    locations[ 1 ] = &lt; 37.866806 , -122.257973 &gt;
+    locations[ 2 ] = &lt; nan , nan &gt;
+    locations[ 3 ] = &lt; 37.869114 , -122.259109 &gt;
      ...
-    locations[ 35 ] = < nan , nan >
-    locations[ 36 ] = < nan , nan >
-    locations[ 37 ] = < nan , nan >
-    locations[ 38 ] = < 9.427616 , -110.640709 >
+    locations[ 35 ] = &lt; nan , nan &gt;
+    locations[ 36 ] = &lt; nan , nan &gt;
+    locations[ 37 ] = &lt; nan , nan &gt;
+    locations[ 38 ] = &lt; 9.427616 , -110.640709 &gt;
 __________________________
 ______ CPU Reference _____
 --------------------------
@@ -433,19 +433,19 @@ Using advance mode LB
 Using filter mode CULL
 nodes=39
 __________________________
-0        0       0       queue3          oversize :      234 ->  342
-0        0       0       queue3          oversize :      234 ->  342
+0        0       0       queue3          oversize :      234 -&gt;  342
+0        0       0       queue3          oversize :      234 -&gt;  342
 --------------------------
 Run 0 elapsed: 11.322021, #iterations = 2
-Node [ 0 ]: Predicted = < 37.744907 , -122.009430 > Reference = < 37.744907 , -122.009430 >
-Node [ 1 ]: Predicted = < 37.866806 , -122.257973 > Reference = < 37.866806 , -122.257973 >
-Node [ 2 ]: Predicted = < 9.427616 , -110.640709 > Reference = < 9.427616 , -110.640709 >
-Node [ 3 ]: Predicted = < 37.869114 , -122.259109 > Reference = < 37.869114 , -122.259109 >
+Node [ 0 ]: Predicted = &lt; 37.744907 , -122.009430 &gt; Reference = &lt; 37.744907 , -122.009430 &gt;
+Node [ 1 ]: Predicted = &lt; 37.866806 , -122.257973 &gt; Reference = &lt; 37.866806 , -122.257973 &gt;
+Node [ 2 ]: Predicted = &lt; 9.427616 , -110.640709 &gt; Reference = &lt; 9.427616 , -110.640709 &gt;
+Node [ 3 ]: Predicted = &lt; 37.869114 , -122.259109 &gt; Reference = &lt; 37.869114 , -122.259109 &gt;
 ...
-Node [ 35 ]: Predicted = < 37.864429 , -122.199409 > Reference = < 37.864429 , -122.199409 >
-Node [ 36 ]: Predicted = < 23.755602 , -115.803055 > Reference = < 37.807079 , -122.134163 >
-Node [ 37 ]: Predicted = < 37.053715 , -115.913658 > Reference = < 37.053719 , -115.913628 >
-Node [ 38 ]: Predicted = < 9.427616 , -110.640709 > Reference = < 9.427616 , -110.640709 >
+Node [ 35 ]: Predicted = &lt; 37.864429 , -122.199409 &gt; Reference = &lt; 37.864429 , -122.199409 &gt;
+Node [ 36 ]: Predicted = &lt; 23.755602 , -115.803055 &gt; Reference = &lt; 37.807079 , -122.134163 &gt;
+Node [ 37 ]: Predicted = &lt; 37.053715 , -115.913658 &gt; Reference = &lt; 37.053719 , -115.913628 &gt;
+Node [ 38 ]: Predicted = &lt; 9.427616 , -110.640709 &gt; Reference = &lt; 9.427616 , -110.640709 &gt;
 0 errors occurred.
 [geolocation] finished.
  avg. elapsed: 11.322021 ms
@@ -471,14 +471,14 @@ Node [ 38 ]: Predicted = < 9.427616 , -110.640709 > Reference = < 9.427616 , -11
 <li>Parallel compute within the serial compute per node.</li>
 </ul>
 
-<p>One way to implement this will use the <code>ForAll()</code> operator for the parallel compute across the nodes, a simple while loop for the serial compute per node, and finally multiple <code>neighbor_reduce()</code> operators for the parallel work within the serial while loop. Currently, we do not have a way to support this within Gunrock, but moving forward we can potentially leverage kernel launch within a kernel ("dynamic parallelism") to address this limitation.</p>
+<p>One way to implement this will use the <code>ForAll()</code> operator for the parallel compute across the nodes, a simple while loop for the serial compute per node, and finally multiple <code>neighbor_reduce()</code> operators for the parallel work within the serial while loop. Currently, we do not have a way to support this within Gunrock, but moving forward we can potentially leverage kernel launch within a kernel (&quot;dynamic parallelism&quot;) to address this limitation.</p>
 <h3 id='comparison-against-existing-implementations'>Comparison against existing implementations</h3>
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>GPU</th>
 <th>Dataset</th>
-<th>$&vert;V&vert;$</th>
-<th>$&vert;E&vert;$</th>
+<th>$\cardinality{V}$</th>
+<th>$\cardinality{E}$</th>
 <th>Iters</th>
 <th>Spatial Iters</th>
 <th>GTUSC (16 threads)</th>
@@ -521,40 +521,40 @@ Node [ 38 ]: Predicted = < 9.427616 , -110.640709 > Reference = < 9.427616 , -11
 </tr>
 </tbody></table>
 
-<p>On a workload that fills the GPU, Gunrock outperforms GT's OpenMP C++ implementation by ~533x. Comparing Gunrock's GPU vs. CPU performance, we see that Gunrock's GPU version outperforms the CPU implementation by 100x. There is a lack of available datasets against which we can compare performance, so we use only the provided instagram and twitter datasets, and a toy sample for a sanity check on NVIDIA's P100 with 16GB of global memory and V100 with 32GB of global memory. All tested implementations meet the criteria of accuracy, which is validated against the output of the original python implementation.</p>
+<p>On a workload that fills the GPU, Gunrock outperforms GT&#39;s OpenMP C++ implementation by ~533x. Comparing Gunrock&#39;s GPU vs. CPU performance, we see that Gunrock&#39;s GPU version outperforms the CPU implementation by 100x. There is a lack of available datasets against which we can compare performance, so we use only the provided instagram and twitter datasets, and a toy sample for a sanity check on NVIDIA&#39;s P100 with 16GB of global memory and V100 with 32GB of global memory. All tested implementations meet the criteria of accuracy, which is validated against the output of the original python implementation.</p>
 
 <ul>
 <li><a href="https://gitlab.hiveprogram.com/ggillary/geotagging.git">HIVE reference implementation</a> uses distributed PySpark.</li>
 <li><a href="https://gitlab.hiveprogram.com/gtusc/geotagging">GTUSC implementation</a> uses C++ OpenMP.</li>
 </ul>
 <h3 id='performance-limitations'>Performance limitations</h3>
-<p>As discussed later in the "Alternate approaches" section, the current implementation of geolocation uses a compute operator with minimal load balancing. In cases where the graph is not so nicely distributed (where there is a great deal of difference in the degrees of vertices), the entire application will suffer significantly from load imbalance.</p>
+<p>As discussed later in the &quot;Alternate approaches&quot; section, the current implementation of geolocation uses a compute operator with minimal load balancing. In cases where the graph is not so nicely distributed (where there is a great deal of difference in the degrees of vertices), the entire application will suffer significantly from load imbalance.</p>
 
 <p>Profiling the application shows 98.78% of the compute time in GPU activities is in the <code>spatial_median</code> kernel, which gives us a good direction to focus our efforts on load-balancing the workloads within the operator. Specifically, we must target the <code>for</code> loops iterating over the neighbor list for spatial center calculations.</p>
 <h2 id='next-steps'>Next Steps</h2><h3 id='alternate-approaches'>Alternate approaches</h3>
 <ul>
 <li><p><strong>Neighborhood Reduce w/ Spatial Center:</strong> We can perform better load balancing by leveraging a neighbor-reduce (<code>advance</code> operator + <code>cub::DeviceSegmentedReduce</code>) instead of using a compute operator. In graphs where the degrees of nodes vary a lot, the compute operator will be significantly slower than a load-balanced advance + segmented reduce.</p></li>
-<li><p><strong>Push Based Approach:</strong> Instead of gathering all the locations from all the neighbors of an active vertex, we could instead perform a scatter of valid locations of all active vertices to their neighbors; this is a push approach vs. our current implementation's pull. Similar to the global gather approach, a push-based geolocation could also suffer from load imbalance, where some vertices will have to broadcast their valid locations to a long list of neighbors, while others will only have few neighbors to update. A push-based approach will also require a device synchronize before the spatial center computation, but may perform better by using an <code>advance_op</code> with an atomic update (note, pull is done using a <code>ForAll()</code>).</p></li>
+<li><p><strong>Push Based Approach:</strong> Instead of gathering all the locations from all the neighbors of an active vertex, we could instead perform a scatter of valid locations of all active vertices to their neighbors; this is a push approach vs. our current implementation&#39;s pull. Similar to the global gather approach, a push-based geolocation could also suffer from load imbalance, where some vertices will have to broadcast their valid locations to a long list of neighbors, while others will only have few neighbors to update. A push-based approach will also require a device synchronize before the spatial center computation, but may perform better by using an <code>advance_op</code> with an atomic update (note, pull is done using a <code>ForAll()</code>).</p></li>
 </ul>
 <h3 id='gunrock-implications'>Gunrock implications</h3>
 <ul>
-<li><p><strong>The <code>predicted</code> atomic:</strong> Geolocation and some other applications exhibit the same behavior where the algorithm stops when all vertices' labels are predicted or determined. In Geolocation's case, when a location for all nodes is predicted, geolocation converges. We currently implement this with a loop and an atomic. This needs to be more of a core operation (mini-operator) such that when <code>isValidCount(labels|V|) == |V|</code>, a stop condition is met. Currently, we sidestep this issue by using a number-of-iterations parameter to determine the stop condition.</p></li>
-<li><p><strong>Parallel -> Serial -> Parallel:</strong> As discussed earlier, Gunrock currently doesn't have a way to address the dynamic parallelism problem, or even a kernel launch within a kernel. In geolocation's case, these minor parallel work inside the serial loop need to be multiple neighbor reduce.</p></li>
+<li><p><strong>The <code>predicted</code> atomic:</strong> Geolocation and some other applications exhibit the same behavior where the algorithm stops when all vertices&#39; labels are predicted or determined. In Geolocation&#39;s case, when a location for all nodes is predicted, geolocation converges. We currently implement this with a loop and an atomic. This needs to be more of a core operation (mini-operator) such that when <code>isValidCount(labels|V|) == |V|</code>, a stop condition is met. Currently, we sidestep this issue by using a number-of-iterations parameter to determine the stop condition.</p></li>
+<li><p><strong>Parallel -&gt; Serial -&gt; Parallel:</strong> As discussed earlier, Gunrock currently doesn&#39;t have a way to address the dynamic parallelism problem, or even a kernel launch within a kernel. In geolocation&#39;s case, these minor parallel work inside the serial loop need to be multiple neighbor reduce.</p></li>
 </ul>
 <h3 id='notes-on-multi-gpu-parallelization'>Notes on multi-GPU parallelization</h3>
-<p>The challenging part for a multi-GPU Geolocation would be to obtain the updated node location from a separate device if the two vertices on different devices share an edge. An interesting approach here would be leveraging the P2P memory bandwidth with the new NVLink connectors to exchange a small amount of updates across the NVLink's memory lane; other ways are simply using direct accesses or explicit data movement. This is detailed more in the scaling documentation, but the communication model for multi-GPU geolocation could be done in the following way:</p>
-<pre class="highlight mid-column-code plaintext"><code>do
+<p>The challenging part for a multi-GPU Geolocation would be to obtain the updated node location from a separate device if the two vertices on different devices share an edge. An interesting approach here would be leveraging the P2P memory bandwidth with the new NVLink connectors to exchange a small amount of updates across the NVLink&#39;s memory lane; other ways are simply using direct accesses or explicit data movement. This is detailed more in the scaling documentation, but the communication model for multi-GPU geolocation could be done in the following way:</p>
+<pre class="highlight plaintext"><code>do
     Local geo location updates on local vertices;
     Broadcast local vertices' updates;
 while no more update.
 </code></pre><h3 id='notes-on-dynamic-graphs'>Notes on dynamic graphs</h3>
-<p>Streaming graphs is an interesting problem for the Geolocation application, because when predicting the location of a certain node, if another edge is introduced, the location of the vertex has to be recomputed entirely. This can still be done in an iterative manner, where if a node was inserted as a neighbor to a vertex, that vertex's predicted location will be marked invalid and during the next iteration it will be computed again along with all the other invalid vertices (locations).</p>
+<p>Streaming graphs is an interesting problem for the Geolocation application, because when predicting the location of a certain node, if another edge is introduced, the location of the vertex has to be recomputed entirely. This can still be done in an iterative manner, where if a node was inserted as a neighbor to a vertex, that vertex&#39;s predicted location will be marked invalid and during the next iteration it will be computed again along with all the other invalid vertices (locations).</p>
 <h3 id='notes-on-larger-datasets'>Notes on larger datasets</h3>
-<p>If the datasets are larger than a single or multi-GPU's aggregate memory, the straightforward solution would be to let Unified Virtual Memory (UVM) in CUDA automatically handle memory movement.</p>
+<p>If the datasets are larger than a single or multi-GPU&#39;s aggregate memory, the straightforward solution would be to let Unified Virtual Memory (UVM) in CUDA automatically handle memory movement.</p>
 <h3 id='notes-on-other-pieces-of-this-workload'>Notes on other pieces of this workload</h3>
-<p>Geolocation calls a lot of CUDA math functions (<code>sin</code>, <code>cos</code>, <code>atan</code>, <code>atan2</code>, <code>median</code>, <code>mean</code>, <code>fminf</code>, <code>fmaxf</code>, etc.).  Some of these micro-workloads can also leverage the GPU's parallelism; for example, a mean could be implemented using <code>reduce-mean/sum</code>. We currently don't have these math operators exposed within Gunrock in such a way they can be used in graph applications.</p>
+<p>Geolocation calls a lot of CUDA math functions (<code>sin</code>, <code>cos</code>, <code>atan</code>, <code>atan2</code>, <code>median</code>, <code>mean</code>, <code>fminf</code>, <code>fmaxf</code>, etc.).  Some of these micro-workloads can also leverage the GPU&#39;s parallelism; for example, a mean could be implemented using <code>reduce-mean/sum</code>. We currently don&#39;t have these math operators exposed within Gunrock in such a way they can be used in graph applications.</p>
 <h3 id='research-potential'>Research Potential</h3>
-<p>Further research is required to study Geolocation's dynamic parallelism pattern, it's memory access behavior, compute resource utilization, implementation details (API and core) and load balancing strategies for dynamic parallelism on the GPUs. Studying and understanding this pattern can allow us to create a more generalized approach for load balancing <code>parallel -> serial -> parallel</code> type of problems. It further invokes the question of studying when dynamic parallelism is better than mapping an algorithm to a more conventional static approach (if possible).</p>
+<p>Further research is required to study Geolocation&#39;s dynamic parallelism pattern, it&#39;s memory access behavior, compute resource utilization, implementation details (API and core) and load balancing strategies for dynamic parallelism on the GPUs. Studying and understanding this pattern can allow us to create a more generalized approach for load balancing <code>parallel -&gt; serial -&gt; parallel</code> type of problems. It further invokes the question of studying when dynamic parallelism is better than mapping an algorithm to a more conventional static approach (if possible).</p>
 
       </div>
 

@@ -198,9 +198,9 @@
   color: #f92672;
 }
     </style>
-    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
-    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
-      <script src="javascripts/all.js"></script>
+    <link href="../stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="../stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="../javascripts/all.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/vega@3"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
@@ -227,15 +227,15 @@
     </style>
   </head>
 
-  <body class="hive_louvain" data-languages="[]">
+  <body class="hive hive_hive_louvain" data-languages="[]">
     <a href="#" id="nav-button">
       <span>
         NAV
-        <img src="images/navbar.png" alt="Navbar" />
+        <img src="../images/navbar.png" alt="Navbar" />
       </span>
     </a>
     <div class="toc-wrapper">
-      <img src="images/logo.png" class="logo" alt="Logo" />
+      <img src="../images/logo.png" class="logo" alt="Logo" />
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
@@ -290,93 +290,93 @@ implementation should have moderate scalability across multiple GPUs in an
 DGX-1.</p>
 <h2 id='summary-of-gunrock-implementation'>Summary of Gunrock Implementation</h2>
 <p>The commonly used approach to implement the Louvain algorithm uses a hash table. However, the memory access pattern that results from a hash table is almost totally random, and not GPU-friendly (more in the Alternative approaches section). Instead of using a hash table to accumulate the values associated with the same key, the Gunrock implementation on GPU tries another method: sort all key-value pairs, and use segmented reduce to accumulate the values in the continuous segments. Because Louvain always visits all edges in the graph, there is no need to use Gunrock frontiers, and the <code>advance</code> operator with the <code>ALL_EDGES</code> advance mode or a simple <code>ForAll</code> loop should be sufficient. The pseudocode is listed below:</p>
-<pre class="highlight mid-column-code plaintext"><code>m2 <- sum(edge_weights);
+<pre class="highlight plaintext"><code>m2 &lt;- sum(edge_weights);
 //Outer-loop
 Do
     // Pass-initialization, assign each vertex to its own community
     For each vertex v in graph:
-        current_communities[v] <- v;
-        weights_v2any      [v] <- 0;
-        weights_v2self     [v] <- 0;
-    For each edge e<v, u> in graph: //an advance operator on all edges
+        current_communities[v] &lt;- v;
+        weights_v2any      [v] &lt;- 0;
+        weights_v2self     [v] &lt;- 0;
+    For each edge e&lt;v, u&gt; in graph: //an advance operator on all edges
         weights_v2any[v] += edge_weights[e];
         if (v == u)
             weights_v2self[v] += edge_weights[e];
     For each vertex v in graph:
-        weights_community2any[v] <- weights_v2any[v];
-    pass_gain <- 0;
+        weights_community2any[v] &lt;- weights_v2any[v];
+    pass_gain &lt;- 0;
 
     // Modularity optimizing iterations
     Do
         // Get weights between vertex and community
-        For each edge e<v, u> in graph:
-            edge_pairs  [e] <- <v, current_communities[u]>;
-            pair_weights[e] <- edge_weights[e];
+        For each edge e&lt;v, u&gt; in graph:
+            edge_pairs  [e] &lt;- &lt;v, current_communities[u]&gt;;
+            pair_weights[e] &lt;- edge_weights[e];
         Sort(edge_pairs, pair_weights)
             by edge_pair.first, then edge_pair.second if tie;
-        segment_offsets <- offsets of continuous edge_pairs;
-        segment_weights <- SegmentedReduce(pair_weights, segment_offsets, sum);
+        segment_offsets &lt;- offsets of continuous edge_pairs;
+        segment_weights &lt;- SegmentedReduce(pair_weights, segment_offsets, sum);
 
         // Compute base modularity gains
         // if moving vertices out of current communities
         For each vertex v in graph:
-            comm <- current_communities[v];
-            w_v2comm <- Find weights from v to comm in segment_weights;
+            comm &lt;- current_communities[v];
+            w_v2comm &lt;- Find weights from v to comm in segment_weights;
             gain_bases[v] = weights_v2self[v] - w_v2comm
                 - (weights_v2any[v] - weights_community2any[comm])
                     * weights_v2any[v] / m2;
 
         // Find the max gains if moving vertices into adjacent communities
         For each vertex v in graph:
-            gains[v] <- 0;
-            next_communities[v] <- current_communities[v];
-        For each seg<v, comm> segment:
+            gains[v] &lt;- 0;
+            next_communities[v] &lt;- current_communities[v];
+        For each seg&lt;v, comm&gt; segment:
             if (comm == current_communities[v])
                 continue;
-            gain <- gain_bases[v] + segment_weights[seg]
+            gain &lt;- gain_bases[v] + segment_weights[seg]
                 - weights_community2any[comm] * weights_v2any[v] / m2;
             atomicMax(max_gains + v, gain);
-            seg_gains[seg] <- gain;
-        For each seg<v, comm> segment:
+            seg_gains[seg] &lt;- gain;
+        For each seg&lt;v, comm&gt; segment:
             if (seg_gains[seg] != max_gains[v])
                 continue;
-            next_communities[v] <- comm;
+            next_communities[v] &lt;- comm;
 
         // Update communities
         For each vertex v in graph:
-            curr_comm <- current_communities[v];
-            next_comm <- next_communities[v];
+            curr_comm &lt;- current_communities[v];
+            next_comm &lt;- next_communities[v];
             if (curr_comm == next_comm)
                 continue;
 
             atomicAdd(weights_community2any[next_comm],  weights_v2any[v]);
             atomicAdd(weights_community2any[curr_comm], -weights_v2any[v]);
-            current_communities[v] <- next_comm;
+            current_communities[v] &lt;- next_comm;
 
-        iteration_gain <- Reduce(max_gains, sum);
+        iteration_gain &lt;- Reduce(max_gains, sum);
         pass_gain += iteration_gain;
     While iterations stop condition not met
     // End of modularity optimizing iterations
 
     // Contract the graph
     // renumber occupied communities
-    new_communities <- Renumber(current_communities);
-    For each edge e<v, u> in graph: //an advance operator on all edges
-        edge_pairs[e] <- <new_communities[current_communities[v]],
-                          new_communities[current_communities[u]]>
+    new_communities &lt;- Renumber(current_communities);
+    For each edge e&lt;v, u&gt; in graph: //an advance operator on all edges
+        edge_pairs[e] &lt;- &lt;new_communities[current_communities[v]],
+                          new_communities[current_communities[u]]&gt;
     Sort(edge_pairs, edge_weights) by pair.x, then pair.y if tie;
-    segment_offsets <- offsets of continuous edge_pairs;
+    segment_offsets &lt;- offsets of continuous edge_pairs;
     new_graph.Allocate(|new_communities|, |segments|);
-    new_graph.edges <- first pair of each segments;
-    new_graph.edge_values <- SegmentedReduce(edge_weights, segment_offsets, sum);
+    new_graph.edges &lt;- first pair of each segments;
+    new_graph.edge_values &lt;- SegmentedReduce(edge_weights, segment_offsets, sum);
 
 While pass stop condition not met
-</code></pre><h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA's DGX-1</h2><h3 id='prereqs-input'>Prereqs/input</h3>
+</code></pre><h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA&#39;s DGX-1</h2><h3 id='prereqs-input'>Prereqs/input</h3>
 <p>CUDA should have been installed; <code>$PATH</code> and <code>$LD_LIBRARY_PATH</code> should have been
 set correctly to use CUDA. The current Gunrock configuration assumes boost
 (1.58.0 or 1.59.0) and Metis are installed; if not, changes need to be made in
-the Makefiles. DARPA's DGX-1 has both installed when the tests are performed.</p>
-<pre class="highlight mid-column-code shell tab-shell"><code>git clone --recursive https://github.com/gunrock/gunrock/
+the Makefiles. DARPA&#39;s DGX-1 has both installed when the tests are performed.</p>
+<pre class="highlight shell tab-shell"><code>git clone --recursive https://github.com/gunrock/gunrock/
 <span class="nb">cd </span>gunrock
 git checkout dev-refactor
 git submodule init
@@ -387,16 +387,16 @@ cmake ..
 <span class="nb">cd</span> ../tests/louvain
 make
 </code></pre>
-<p>At this point, there should be an executable <code>louvain_main_<CUDA version>_x86_64</code> in <code>tests/louvain/bin</code>.</p>
+<p>At this point, there should be an executable <code>louvain_main_&lt;CUDA version&gt;_x86_64</code> in <code>tests/louvain/bin</code>.</p>
 
-<p>The datasets are assumed to have been placed in <code>/raid/data/hive</code>, and converted to proper matrix market format (.mtx). At the time of testing, <code>ca</code>, <code>amazon</code>, <code>akamai</code>, and <code>pokec</code> are available in that directory. <code>ca</code> and <code>amazon</code> are taken from PNNL's implementation, and originally use 0-based vertex indices; 1 is added to each vertex id to make them proper .mtx files.</p>
+<p>The datasets are assumed to have been placed in <code>/raid/data/hive</code>, and converted to proper matrix market format (.mtx). At the time of testing, <code>ca</code>, <code>amazon</code>, <code>akamai</code>, and <code>pokec</code> are available in that directory. <code>ca</code> and <code>amazon</code> are taken from PNNL&#39;s implementation, and originally use 0-based vertex indices; 1 is added to each vertex id to make them proper .mtx files.</p>
 
 <p>The testing is done with Gunrock using the <code>dev-refactor</code> branch at commit <code>2699252</code>
 (Oct. 18, 2018), using CUDA 9.1 with NVIDIA driver 390.30.</p>
-<h3 id='running-the-application'>Running the application</h3><pre class="highlight mid-column-code shell tab-shell"><code>./bin/louvain_main_9.1_x86_64 --omp-threads<span class="o">=</span>32 --iter-stats --pass-stats <span class="se">\</span>
+<h3 id='running-the-application'>Running the application</h3><pre class="highlight shell tab-shell"><code>./bin/louvain_main_9.1_x86_64 --omp-threads<span class="o">=</span>32 --iter-stats --pass-stats <span class="se">\</span>
 --advance-mode<span class="o">=</span>ALL_EDGES --unify-segments<span class="o">=</span><span class="nb">true</span> --validation<span class="o">=</span>each --num-runs<span class="o">=</span>10 <span class="se">\</span>
 --graph-type<span class="o">=</span>market --graph-file<span class="o">=</span>/raid/data/hive/[DataSet]/[DataSet].mtx <span class="se">\</span>
---jsondir<span class="o">=[</span>LogDir] > <span class="o">[</span>LogDir]/[DataSet].txt 2>&amp;1
+--jsondir<span class="o">=[</span>LogDir] &gt; <span class="o">[</span>LogDir]/[DataSet].txt 2&gt;&amp;1
 </code></pre>
 <ul>
 <li>Add <code>--undirected</code>, if the graph is indeed undirected.</li>
@@ -409,20 +409,20 @@ make
 ./bin/louvain_main_9.1_x86_64 --omp-threads=32 --iter-stats --pass-stats \
 --advance-mode=ALL_EDGES --unify-segments=true --validation=each --num-runs=10 \
 --graph-type=market --graph-file=/raid/data/hive/akamai/akamai.mtx \
---jsondir=eval/DGX1-P100x1 > eval/DGX1-P100x1/akamai.txt 2>&amp;1
+--jsondir=eval/DGX1-P100x1 &gt; eval/DGX1-P100x1/akamai.txt 2&gt;&amp;1
 </code></p>
 <h3 id='output'>Output</h3>
-<p>The outputs are in the <a href="attachments/louvain" title="louvain">louvain</a> directory. Look for the <code>.txt</code> files: running time is after <code>Run x elapsed:</code>, and the number of communities and the resulting modularity is in the line that starts with <code>Computed:</code>. There are 12 runs in each <code>.txt</code> file: 1 single thread CPU run for reference, 1 OpenMP multiple-thread (32 threads in the example, may not be optimal) run, and 10 GPU runs.</p>
+<p>The outputs are in the <a href="../attachments/louvain" title="louvain">louvain</a> directory. Look for the <code>.txt</code> files: running time is after <code>Run x elapsed:</code>, and the number of communities and the resulting modularity is in the line that starts with <code>Computed:</code>. There are 12 runs in each <code>.txt</code> file: 1 single thread CPU run for reference, 1 OpenMP multiple-thread (32 threads in the example, may not be optimal) run, and 10 GPU runs.</p>
 
-<p>The output was compared against PNNL's results on the number of communities and
-modularity for the amazon and ca datasets. Note that PNNL's code does not count
+<p>The output was compared against PNNL&#39;s results on the number of communities and
+modularity for the amazon and ca datasets. Note that PNNL&#39;s code does not count
 dangling vertices in communities. The results listed below use the number of
 communities minus dangling vertices; the dataset details are can be found in
 the next section.</p>
 
 <p>The modularity of resulting communities:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>DataSet</th>
 <th>Gunrock GPU</th>
@@ -456,7 +456,7 @@ the next section.</p>
 
 <p>The number of resulting communities:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>DataSet</th>
 <th>Gunrock GPU</th>
@@ -490,7 +490,7 @@ the next section.</p>
 
 <p>Details of the datasets:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>DataSet</th>
 <th style="text-align: right">#V</th>
@@ -616,7 +616,7 @@ the next section.</p>
 
 <p>Running time in seconds:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>GPU</th>
 <th>Dataset</th>
@@ -814,7 +814,7 @@ the next section.</p>
 
 <p>Resulting modularity:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>GPU</th>
 <th>DataSet</th>
@@ -1036,7 +1036,7 @@ the next section.</p>
 
 <p>The number of resulting communities:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>GPU</th>
 <th>DataSet</th>
@@ -1213,7 +1213,7 @@ the next section.</p>
 <li><p><strong>Data types</strong> The edge weights and all computation around them are double-precision floating point values (64-bit <code>double</code> in C/C++); we tried single precision and found it resulted in very poor modularities. The <code>weight * weight / m2</code> part in the modularity calculation may be the reason for this limitation. Vertex ids should be 32-bit, as the implementation uses 64-bit integers to represent an edge pair for the sort function; if fast GPU sorting is available for 128-bit integers, 64-bit vertex ids might be used.</p></li>
 </ul>
 <h3 id='comparison-against-existing-implementations'>Comparison against existing implementations</h3>
-<p>We compare against serial CPU and OpenMP implementations; both are Gunrock's CPU reference routines. PNNL's results and previous published works are also referenced, to make sure the resulting modularities and running times are sane.</p>
+<p>We compare against serial CPU and OpenMP implementations; both are Gunrock&#39;s CPU reference routines. PNNL&#39;s results and previous published works are also referenced, to make sure the resulting modularities and running times are sane.</p>
 
 <ul>
 <li><p><strong>Modularity</strong> The modularities have some variation from different
@@ -1225,27 +1225,27 @@ expected from Gunrock, as compared to the serial implementation. As mentioned
 in the output section, that variation could be caused by concurrent movement of vertices. Small graphs could suffer more than larger graphs, as movements to a community have a higher chance to happen concurrently.</p></li>
 <li><p><strong>Running time</strong> Overall, the Gunrock implementation is 2x to 5x faster than
 previous work on GPU (Naim 2017, Cheong 2013). Our OMP implementation is a bit
-faster than PNNL's, and much faster than previous work using multiple CPU
+faster than PNNL&#39;s, and much faster than previous work using multiple CPU
 threads (Lu 2015, Naim 2016). The sequential CPU is an order of magnitude faster than previous
 sequential CPU work (Naim 2017, Naim 2016, Blondel 2008, Cheong 2013, Lu 2015).
 Comparing across different Gunrock implementations, the GPU is not always the
 fastest: on small graphs, GPU could actually be slower, caused by GPU kernel
 overheads and hardware underutilization; so for small graphs, the OpenMP
-implementation may be a better choice. Gunrock's GPU implementation in practice
+implementation may be a better choice. Gunrock&#39;s GPU implementation in practice
 runs slower than OpenMP for mesh-like graphs, in which every vertex only has a
 very small neighbor list; the parallel formulation Gunrock uses does not work
 well on this kind of graph.</p></li>
 </ul>
 
 <p>Published results (timing and modularity) from previous work are summarized in
-the <a href="attachments/louvain/louvain_results.xlsx" title="Louvain
+the <a href="../attachments/louvain/louvain_results.xlsx" title="Louvain
 results">louvain_results.xlsx</a> file in the <code>louvain</code> directory.</p>
 <h3 id='performance-limitations'>Performance limitations</h3>
-<p>The GPU performance bottleneck is the sort function, especially in the first pass. It's true that sort on GPU is much faster than CPU; but the CPU implementations use hash tables, which may not be suitable for the GPU; the alternative approaches section has more details on this.</p>
+<p>The GPU performance bottleneck is the sort function, especially in the first pass. It&#39;s true that sort on GPU is much faster than CPU; but the CPU implementations use hash tables, which may not be suitable for the GPU; the alternative approaches section has more details on this.</p>
 
-<p>Using the <code>akamai</code> dataset to profile the GPU Louvain implementation on a V100, an iteration in the first pass takes 64.08 ms, and the sort takes 42.05 ms, which is two-thirds of the iteration time. The Louvain implementation uses CUB's radix-sort-pair function. CUB is considered to be one of the GPU primitive libraries that provide the best performance. Further profiling shows during the sort kernel, the device memory controller is ~75% utilized; in other words, the sort is memory bound. This is as expected, as in each iteration of radix sort, the whole <code>edge_pairs</code> and <code>pair_weights</code> arrays are shuffled, with cost on the order of $O(|E|)$, although the memory accesses are mostly coalesced. The memory system utilizations are as below (from NVIDIA profiler):</p>
+<p>Using the <code>akamai</code> dataset to profile the GPU Louvain implementation on a V100, an iteration in the first pass takes 64.08 ms, and the sort takes 42.05 ms, which is two-thirds of the iteration time. The Louvain implementation uses CUB&#39;s radix-sort-pair function. CUB is considered to be one of the GPU primitive libraries that provide the best performance. Further profiling shows during the sort kernel, the device memory controller is ~75% utilized; in other words, the sort is memory bound. This is as expected, as in each iteration of radix sort, the whole <code>edge_pairs</code> and <code>pair_weights</code> arrays are shuffled, with cost on the order of $O(|E|)$, although the memory accesses are mostly coalesced. The memory system utilizations are as below (from NVIDIA profiler):</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>Type</th>
 <th style="text-align: right">Transactions</th>
@@ -1357,17 +1357,17 @@ results">louvain_results.xlsx</a> file in the <code>louvain</code> directory.</p
 </tr>
 </tbody></table>
 
-<p><img src="attachments/louvain/Louvain_akamai.png" title="Memory statistics" alt="Louvain_akamai" /></p>
+<p><img src="../attachments/louvain/Louvain_akamai.png" title="Memory statistics" alt="Louvain_akamai" /></p>
 
-<p>It's clear that the bottleneck is at the device memory: most data are read-once and write-once,  with little possibility to reuse the data. The kernel achieved 691 GB/s bandwidth utilization, ~77% of the 32GB HBM2's 900 GB/s capability. This high-bandwidth utilization fits the memory access pattern: mostly regular and coalesced.</p>
+<p>It&#39;s clear that the bottleneck is at the device memory: most data are read-once and write-once,  with little possibility to reuse the data. The kernel achieved 691 GB/s bandwidth utilization, ~77% of the 32GB HBM2&#39;s 900 GB/s capability. This high-bandwidth utilization fits the memory access pattern: mostly regular and coalesced.</p>
 
-<p>The particular issue here is not the kernel implementation itself, it's the usage of sorting: fully sorting the whole edge list is perhaps overkill. One possible improvement is to use a custom hash table on the GPU, to replace the sort + segmented reduce part. The hash table could also cut the memory requirement by about 50%.</p>
-<h2 id='next-steps'>Next Steps</h2><h3 id='alternate-approaches'>Alternate approaches</h3><h4 id='things-we-tried-that-didn-39-t-work-well'>Things we tried that didn't work well</h4>
-<p><strong>Segmented sort and CUB segmented reduce</strong>: the original idea for modularity optimization is to use CUB's segmented sort and segmented reduce within each vertex's neighborhood to get the vertex-community weights. However, CUB uses one block per each segment in these two routines, and that creates huge load imbalance, as the neighbor list length can have large differences. The solution is 1) use vertex-community pairs as keys, and CUB's unsegmented sort; 2) implement a load-balanced segmented-reduce kernel. This solution reduces the sort-reduce time by a few X, and can be enabled by the <code>--unify-segments</code> flag on the command line.</p>
+<p>The particular issue here is not the kernel implementation itself, it&#39;s the usage of sorting: fully sorting the whole edge list is perhaps overkill. One possible improvement is to use a custom hash table on the GPU, to replace the sort + segmented reduce part. The hash table could also cut the memory requirement by about 50%.</p>
+<h2 id='next-steps'>Next Steps</h2><h3 id='alternate-approaches'>Alternate approaches</h3><h4 id='things-we-tried-that-didn-39-t-work-well'>Things we tried that didn&#39;t work well</h4>
+<p><strong>Segmented sort and CUB segmented reduce</strong>: the original idea for modularity optimization is to use CUB&#39;s segmented sort and segmented reduce within each vertex&#39;s neighborhood to get the vertex-community weights. However, CUB uses one block per each segment in these two routines, and that creates huge load imbalance, as the neighbor list length can have large differences. The solution is 1) use vertex-community pairs as keys, and CUB&#39;s unsegmented sort; 2) implement a load-balanced segmented-reduce kernel. This solution reduces the sort-reduce time by a few X, and can be enabled by the <code>--unify-segments</code> flag on the command line.</p>
 
 <p><strong>STL hash table on CPU</strong>: the <code>std::map</code> class has performance issues when used in a multi-threading environment, and yields poor scalability; it might be caused by using locks in the STL. The solution is to use a size $|V|$ array per thread for the vertices that thread processes. Since within a thread, vertices are processed one by one, and the maximum number of communities is $|V|$, so instead of a hash table, a flat size $|V|$ array can replace the hash table. This solution significantly reduces the running time, even using a single thread. The multi-thread scalability is also much better.</p>
 
-<p><strong>Vanilla hash table on GPU</strong>: this can't be used, as keys (vertex-community or community-community pair) and the values (edge weights) are both 64-bit, and there is currently no support of atomic-compare-and-exchange operations for 128-bit data. Even if that's available, a vanilla table only provides insert and query operations, but not accumulation of values for the same key.</p>
+<p><strong>Vanilla hash table on GPU</strong>: this can&#39;t be used, as keys (vertex-community or community-community pair) and the values (edge weights) are both 64-bit, and there is currently no support of atomic-compare-and-exchange operations for 128-bit data. Even if that&#39;s available, a vanilla table only provides insert and query operations, but not accumulation of values for the same key.</p>
 <h4 id='custom-hash-table'>Custom hash table</h4>
 <p>Hash tables can be used to accumulate the vertex-to-community weights during modularity optimization iterations, and to get the community-to-community edge weights during the graph contraction part of the algorithm. Previous implementations use hash tables as a common practice. However, as mentioned above, vanilla hash tables that store key-value pairs are not a good choice for Louvain.</p>
 
@@ -1390,11 +1390,11 @@ running time by about 40%, with the modularity value roughly unchanged. The
 actual cap is dataset-dependent, and more investigation is needed to get a
 better understanding of how to set the cap.</p>
 <h3 id='gunrock-implications'>Gunrock implications</h3>
-<p>The core of the Louvain implementation mainly uses all-edges advance, sort, segmented reduce, and for loops. The sort-segmented reduce operation is actually a segmented keyed reduce; if that's a common operation that appears  in more algorithms, it could be made into a new operator. The all-edges advance is used quite often in several applications, so wrapping it with a simpler operator interface could be helpful.</p>
+<p>The core of the Louvain implementation mainly uses all-edges advance, sort, segmented reduce, and for loops. The sort-segmented reduce operation is actually a segmented keyed reduce; if that&#39;s a common operation that appears  in more algorithms, it could be made into a new operator. The all-edges advance is used quite often in several applications, so wrapping it with a simpler operator interface could be helpful.</p>
 <h3 id='notes-on-multi-gpu-parallelization'>Notes on multi-GPU parallelization</h3>
 <p>When parallelizing across multiple GPUs, the community assignment of local vertices and their neighbors needs to available locally, either explicitly by moving them using communication functions, or implicitly by peer memory access or unified virtual memory. The communication volume is in the order of $O(|V|)$ and the computation workload is at least in $O(|E|)$, so the scalability should be manageable.</p>
 
-<p>When the number of GPUs is small, 1D partitioning can be used to divide the edges, and replicate the vertices, so there is no need to do vertex id conversion across multiple GPUs. When the number of GPUs is large, the high-low degree vertex separation and partitioning scheme can be used: edges are still distributed across GPUs, high degree vertices are duplicated, and low degree vertices are owned by one GPU each. The boundary to use different partitioning scheme is still unclear, but it's likely that 8 GPUs within a DGX-1 can still be considered as a small number, and use the simple 1D partitioning.</p>
+<p>When the number of GPUs is small, 1D partitioning can be used to divide the edges, and replicate the vertices, so there is no need to do vertex id conversion across multiple GPUs. When the number of GPUs is large, the high-low degree vertex separation and partitioning scheme can be used: edges are still distributed across GPUs, high degree vertices are duplicated, and low degree vertices are owned by one GPU each. The boundary to use different partitioning scheme is still unclear, but it&#39;s likely that 8 GPUs within a DGX-1 can still be considered as a small number, and use the simple 1D partitioning.</p>
 <h3 id='notes-on-dynamic-graphs'>Notes on dynamic graphs</h3>
 <p>Louvain is not directly related to dynamic graphs. But it should be able to run on a dynamic graph, provided the way to access all the edges is the same. Community assignment from the previous graph can be used as a good starting point, if the vertex ids are consistent and the graph is not dramatically changed.</p>
 <h3 id='notes-on-larger-datasets'>Notes on larger datasets</h3>
@@ -1407,7 +1407,7 @@ better understanding of how to set the cap.</p>
 <p>Community detection on graphs is generally an interesting research topic,
 and others have targeted good GPU implementations for it.
 Our work is the first time Louvain is mapped to sort and segmented reduce, so more
-comparisons are needed to know whether it's better than the hash table mapping.
+comparisons are needed to know whether it&#39;s better than the hash table mapping.
 The custom hash table implementation is worth trying out, and comparing with the
 current sort and segmented reduce implementation. Multi-GPU implementations,
 particularly the graph contraction part, can be a place for research
@@ -1422,15 +1422,15 @@ computation speed (the running time) will be beneficial.</p>
 
 <p><strong>References</strong></p>
 
-<p>[1] Hao Lu, Mahantesh Halappanavar, Ananth Kalyanaraman. "Parallel Heuristics for Scalable Community Detection", <a href="https://arxiv.org/abs/1410.1237">https://arxiv.org/abs/1410.1237</a> (2015).</p>
+<p>[1] Hao Lu, Mahantesh Halappanavar, Ananth Kalyanaraman. &quot;Parallel Heuristics for Scalable Community Detection&quot;, <a href="https://arxiv.org/abs/1410.1237">https://arxiv.org/abs/1410.1237</a> (2015).</p>
 
-<p>[2] Cheong C.Y., Huynh H.P., Lo D., Goh R.S.M. "Hierarchical Parallel Algorithm for Modularity-Based Community Detection Using GPUs". Euro-Par 2013.</p>
+<p>[2] Cheong C.Y., Huynh H.P., Lo D., Goh R.S.M. &quot;Hierarchical Parallel Algorithm for Modularity-Based Community Detection Using GPUs&quot;. Euro-Par 2013.</p>
 
-<p>[3] Md. Naim, Fredrik Manne, Mahantesh Halappanavar, and Antonio Tumeo. "Highly Scalable Community Detection Using a GPU", <a href="https://www.eecs.wsu.edu/%7Eassefaw/CSC16/abstracts/naim-CSC16_paper_14.pdf">https://www.eecs.wsu.edu/~assefaw/CSC16/abstracts/naim-CSC16_paper_14.pdf</a> (2016).</p>
+<p>[3] Md. Naim, Fredrik Manne, Mahantesh Halappanavar, and Antonio Tumeo. &quot;Highly Scalable Community Detection Using a GPU&quot;, <a href="https://www.eecs.wsu.edu/%7Eassefaw/CSC16/abstracts/naim-CSC16_paper_14.pdf">https://www.eecs.wsu.edu/~assefaw/CSC16/abstracts/naim-CSC16_paper_14.pdf</a> (2016).</p>
 
-<p>[4] M. Naim, F. Manne, M. Halappanavar and A. Tumeo, "Community Detection on the GPU," IPDPS `17.</p>
+<p>[4] M. Naim, F. Manne, M. Halappanavar and A. Tumeo, &quot;Community Detection on the GPU,&quot; IPDPS `17.</p>
 
-<p>[5] Vincent D. Blondel, Jean-Loup Guillaume, Renaud Lambiotte, Etienne Lefebvre, "Fast unfolding of communities in large networks". <a href="https://arxiv.org/abs/0803.0476">https://arxiv.org/abs/0803.0476</a> (2008).</p>
+<p>[5] Vincent D. Blondel, Jean-Loup Guillaume, Renaud Lambiotte, Etienne Lefebvre, &quot;Fast unfolding of communities in large networks&quot;. <a href="https://arxiv.org/abs/0803.0476">https://arxiv.org/abs/0803.0476</a> (2008).</p>
 
       </div>
 

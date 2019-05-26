@@ -198,9 +198,9 @@
   color: #f92672;
 }
     </style>
-    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
-    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
-      <script src="javascripts/all.js"></script>
+    <link href="../stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="../stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="../javascripts/all.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/vega@3"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
@@ -227,15 +227,15 @@
     </style>
   </head>
 
-  <body class="hive_scan_statistics" data-languages="[]">
+  <body class="hive hive_hive_scan_statistics" data-languages="[]">
     <a href="#" id="nav-button">
       <span>
         NAV
-        <img src="images/navbar.png" alt="Navbar" />
+        <img src="../images/navbar.png" alt="Navbar" />
       </span>
     </a>
     <div class="toc-wrapper">
-      <img src="images/logo.png" class="logo" alt="Logo" />
+      <img src="../images/logo.png" class="logo" alt="Logo" />
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
@@ -284,15 +284,15 @@
 <p>Scan statistics applied to static graphs fits perfectly into the Gunrock framework. Using a combination of <code>ForAll</code> and Intersection operations, we outperform the parallel OpenMP CPU reference by up to 45.4 times speedup on the small Enron graph (provided as part of the HIVE workflows) and up to a 580 times speedup on larger graphs that feature enough computation to saturate the throughput of the GPU.</p>
 <h2 id='algorithm-scan-statistics'>Algorithm: Scan Statistics</h2>
 <p>Input is an undirected graph w/o self-loops.</p>
-<pre class="highlight mid-column-code python tab-python"><code><span class="n">scan_stats</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">u</span><span class="p">))</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">]</span>
+<pre class="highlight python tab-python"><code><span class="n">scan_stats</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">u</span><span class="p">))</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">]</span>
 <span class="k">for</span> <span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">u</span> <span class="o"><</span> <span class="n">v</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">u</span> <span class="o">&lt;</span> <span class="n">v</span><span class="p">:</span>
         <span class="n">u_neibs</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
         <span class="n">v_neibs</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">shared_neib</span> <span class="ow">in</span> <span class="n">intersect</span><span class="p">(</span><span class="n">u_neibs</span><span class="p">,</span> <span class="n">v_neibs</span><span class="p">):</span>
             <span class="n">scan_stats</span><span class="p">[</span><span class="n">shared_neib</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 <span class="k">return</span> <span class="n">argmax</span><span class="p">([</span><span class="n">scan_stats</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">])</span>
-</code></pre><h2 id='summary-of-gunrock-implementation'>Summary of Gunrock implementation</h2><pre class="highlight mid-column-code plaintext"><code>max_scan_stat = -1
+</code></pre><h2 id='summary-of-gunrock-implementation'>Summary of Gunrock implementation</h2><pre class="highlight plaintext"><code>max_scan_stat = -1
 node = -1
 src_node_ids[nodes]
 scan_stats[nodes]
@@ -303,7 +303,7 @@ Intersection (src_node_ids, scan_stats): intersect neighboring nodes of both
   we get from the intersection.
 
 return [scan_stats]
-</code></pre><h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA's DGX-1</h2><h3 id='prereqs-input'>Prereqs/input</h3><pre class="highlight mid-column-code shell"><code>git clone --recursive https://github.com/gunrock/gunrock <span class="se">\</span>
+</code></pre><h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA&#39;s DGX-1</h2><h3 id='prereqs-input'>Prereqs/input</h3><pre class="highlight shell"><code>git clone --recursive https://github.com/gunrock/gunrock <span class="se">\</span>
     -b dev-refactor
 <span class="nb">cd </span>gunrock/tests/ss/
 make clean <span class="o">&amp;&amp;</span> make
@@ -311,7 +311,7 @@ make clean <span class="o">&amp;&amp;</span> make
 <p>Application specific parameters:</p>
 
 <p>Example command-line:</p>
-<pre class="highlight mid-column-code shell"><code>./bin/test_ss_main_10.0_x86_64 <span class="se">\</span>
+<pre class="highlight shell"><code>./bin/test_ss_main_10.0_x86_64 <span class="se">\</span>
     --graph-type<span class="o">=</span>market <span class="se">\</span>
     --graph-file<span class="o">=</span>./enron.mtx <span class="se">\</span>
         --undirected --num_runs<span class="o">=</span>10
@@ -322,11 +322,11 @@ make clean <span class="o">&amp;&amp;</span> make
 
 <p>Details of the datasets:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>DataSet</th>
-<th style="text-align: right">$&vert;V&vert;$</th>
-<th style="text-align: right">$&vert;E&vert;$</th>
+<th style="text-align: right">$\cardinality{V}$</th>
+<th style="text-align: right">$\cardinality{E}$</th>
 <th style="text-align: right">#dangling vertices</th>
 </tr>
 </thead><tbody>
@@ -418,7 +418,7 @@ make clean <span class="o">&amp;&amp;</span> make
 
 <p>Running time in milliseconds:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>GPU</th>
 <th>Dataset</th>
@@ -527,9 +527,9 @@ make clean <span class="o">&amp;&amp;</span> make
 </tr>
 </tbody></table>
 <h2 id='performance-and-analysis'>Performance and Analysis</h2>
-<p>We measure the performance by runtime. The whole process runs on the GPU; we don't include data copy time and regard it as part of preprocessing. The  algorithm is deterministic so does not require any accuracy comparison.</p>
+<p>We measure the performance by runtime. The whole process runs on the GPU; we don&#39;t include data copy time and regard it as part of preprocessing. The  algorithm is deterministic so does not require any accuracy comparison.</p>
 <h3 id='implementation-limitations'>Implementation limitations</h3>
-<p>Since the implementation only needs <code>number of nodes</code>'s size of memory allocated on the GPU, so the largest dataset that can fit on a single GPU is limited by GPU on-die memory size / number of nodes.</p>
+<p>Since the implementation only needs <code>number of nodes</code>&#39;s size of memory allocated on the GPU, so the largest dataset that can fit on a single GPU is limited by GPU on-die memory size / number of nodes.</p>
 
 <p>Our implementation regards the graph as undirected and is limited to graphs of that type.</p>
 <h3 id='performance-limitations'>Performance limitations</h3>
@@ -542,19 +542,19 @@ make clean <span class="o">&amp;&amp;</span> make
 <h3 id='gunrock-implications'>Gunrock implications</h3>
 <p>Gunrock is well-suited for this implementation. The major challenge is the need for accumulation when doing intersection. Intersection was originally designed to count the total number of triangles. But in scan statistics, we instead need the triangle count for each node, which introduces an extra atomic add when doing the accumulation if multiple edges share the same node, since we count triangles in parallel for each edge.</p>
 <h3 id='notes-on-multi-gpu-parallelization'>Notes on multi-GPU parallelization</h3>
-<p>Non-ideal graph partitioning could be a bottleneck on a multi-GPU parallelization. Because we need the info of each node's two-hop neighbors, an unbalanced workload will decrease the performance and increase the communication bottleneck.</p>
+<p>Non-ideal graph partitioning could be a bottleneck on a multi-GPU parallelization. Because we need the info of each node&#39;s two-hop neighbors, an unbalanced workload will decrease the performance and increase the communication bottleneck.</p>
 <h3 id='notes-on-dynamic-graphs'>Notes on dynamic graphs</h3>
 <p>Scan statistics as a workload certainly has a dynamic-graph component: in its general form, it inputs a time-series graph and tries to identify any abnormal behavior in any statistics change (as mentioned in the referenced papers). To support this general workload, we would need Gunrock to support dynamic graphs in its advance and intersection operators. The application could be easily changed to record all history scan statistics and then to try to find any significant changes given a certain threshold.</p>
 <h3 id='notes-on-larger-datasets'>Notes on larger datasets</h3>
-<p>For a dataset which is too large to fit into a single GPU, we can leverage the multi-GPU implementation of Gunrock to make it work on multiple GPUs on a single node. The implementation won't change a lot since Gunrock already has good support in its multi-GPU implementation. We expect the performance and memory usage to scale linearly with good graph partionling method.</p>
+<p>For a dataset which is too large to fit into a single GPU, we can leverage the multi-GPU implementation of Gunrock to make it work on multiple GPUs on a single node. The implementation won&#39;t change a lot since Gunrock already has good support in its multi-GPU implementation. We expect the performance and memory usage to scale linearly with good graph partionling method.</p>
 
-<p>For a dataset that cannot fit onto multiple GPUs on a single node, we need a distributed level of computation, which Gunrock doesn't support yet. However, we can leverage open-source libraries such as NCCL and Horovod that support this. Performance-wise, the way of partitioning the graph as well as the properties of a graph will affect the communication bottleneck. Since we need to calculate the total number of triangles each node is involved in, if we cannot fit the entire neighborhood of a node on a single node, we need other compute resources' help to compute its scan statistic. The worst-case senario is if the graph is fully connected, in which case we must to wait for the counting results from all other compute resources and then sum them up. In this case, if we can do good load-balanced scheduling, we can potentially minimize the communication bottleneck and reduce latency.</p>
+<p>For a dataset that cannot fit onto multiple GPUs on a single node, we need a distributed level of computation, which Gunrock doesn&#39;t support yet. However, we can leverage open-source libraries such as NCCL and Horovod that support this. Performance-wise, the way of partitioning the graph as well as the properties of a graph will affect the communication bottleneck. Since we need to calculate the total number of triangles each node is involved in, if we cannot fit the entire neighborhood of a node on a single node, we need other compute resources&#39; help to compute its scan statistic. The worst-case senario is if the graph is fully connected, in which case we must to wait for the counting results from all other compute resources and then sum them up. In this case, if we can do good load-balanced scheduling, we can potentially minimize the communication bottleneck and reduce latency.</p>
 <h3 id='notes-on-other-pieces-of-this-workload'>Notes on other pieces of this workload</h3>
 <p>The other important piece of this work is statistical time series analysis on dynamic changes of the graph. We hope to add dynamic graph capability in the future.</p>
 <h3 id='research-value'>Research value</h3>
-<p>This application leverages a classic triangle-counting problem to solve a more complex statistics problem. Instead of directly using the existing solution, we solve it from a different angle: rather than counting the total number of triangles in the graph, we instead count triangles from each node's perspective.</p>
+<p>This application leverages a classic triangle-counting problem to solve a more complex statistics problem. Instead of directly using the existing solution, we solve it from a different angle: rather than counting the total number of triangles in the graph, we instead count triangles from each node&#39;s perspective.</p>
 
-<p>From this app, we see the flexibility of Gunrock's intersection operation. This operation could potentially be used in other graph analytics problems such as community detection, etc.</p>
+<p>From this app, we see the flexibility of Gunrock&#39;s intersection operation. This operation could potentially be used in other graph analytics problems such as community detection, etc.</p>
 <h2 id='references'>References</h2>
 <p><a href="http://www.cis.jhu.edu/~parky/CEP-Publications/PCMP-CMOT2005.pdf">Scan Statistics on Enron Graphs</a></p>
 

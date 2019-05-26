@@ -198,9 +198,9 @@
   color: #f92672;
 }
     </style>
-    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
-    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
-      <script src="javascripts/all.js"></script>
+    <link href="../stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="../stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="../javascripts/all.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/vega@3"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
@@ -227,15 +227,15 @@
     </style>
   </head>
 
-  <body class="hive_graphSage" data-languages="[]">
+  <body class="hive hive_hive_graphSage" data-languages="[]">
     <a href="#" id="nav-button">
       <span>
         NAV
-        <img src="images/navbar.png" alt="Navbar" />
+        <img src="../images/navbar.png" alt="Navbar" />
       </span>
     </a>
     <div class="toc-wrapper">
-      <img src="images/logo.png" class="logo" alt="Logo" />
+      <img src="../images/logo.png" class="logo" alt="Logo" />
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
@@ -274,7 +274,7 @@
       <div class="content">
         <h1 id='graphsage'>GraphSAGE</h1>
 <p>GraphSAGE is a way to fit graphs into a neural network: instead of getting the
-embedding of a vertex from all its neighbors' features as in conventional
+embedding of a vertex from all its neighbors&#39; features as in conventional
 implementations, GraphSAGE selects some 1-hop neighbors, some 2-hop neighbors
 connected to those 1-hop neighbors, and computes the embedding based on the
 features of the 1-hop and 2-hop neighbors. The embedding can be considered as
@@ -284,7 +284,7 @@ vertex.</p>
 <p>During the training process, the adjacency matrix and features of the nodes in the graph are fed into a neural network. The
 parameters (the <code>W</code> arrays in the algorithm) are updated after each batch by the
 difference between the predicted labels and the real labels. The per-vertex
-features won't change, but the parameters will, so the GraphSAGE computation needs
+features won&#39;t change, but the parameters will, so the GraphSAGE computation needs
 to be performed for each batch. Ultimately it should connect to the training
 process to complete a workflow. However, the training part is pure matrix
 operations, and the year 1 deliverable only focuses on the graph related
@@ -304,9 +304,9 @@ making the GraphSAGE workflow complete, would be an interesting task for year 2.
 Testing on the complete workflow for prediction accuracy and running speed will
 be more meaningful.</p>
 <h2 id='summary-of-gunrock-implementation'>Summary of Gunrock Implementation</h2>
-<p>Gunrock's implementation for the 1st year is only the embedding / inferencing
+<p>Gunrock&#39;s implementation for the 1st year is only the embedding / inferencing
 phase, without the training phase. It is based on Algorithm 2 with K=2 of the GraphSAGE
-paper ("Inductive Representation Learning on Large Graphs",
+paper (&quot;Inductive Representation Learning on Large Graphs&quot;,
 <a href="https://arxiv.org/abs/1706.02216">https://arxiv.org/abs/1706.02216</a>).</p>
 
 <p>Given a graph G, the inputs are per-vertex features, weight matrices W^k, and a
@@ -319,7 +319,7 @@ PinSage). An aggregator is a function to accumulate data from the
 selected neighbors; the current implementation uses the Mean aggregator,
 and it can be changed to other accumulation functions easily.</p>
 
-<p>The pseudocode of Gunrock's implementation follows. The current
+<p>The pseudocode of Gunrock&#39;s implementation follows. The current
 implementation uses custom CUDA kernels, because block-level parallelism is critical for
 faster running speed; all other functions, such as memory management,
 load and store routines, block level parallel reduction, and graph accesses
@@ -330,9 +330,9 @@ easier understanding of the code, we use <code>sources</code>, <code>children</c
 these three groups of vertices instead. To manage the memory usage of
 intermediate data, batches of source vertices are processed one by one, with each
 of size B.</p>
-<pre class="highlight mid-column-code plaintext"><code>source_start := 0;
-While (source_source < V)
-    num_sources := (source_start + B > V) ? V - source_start : B;
+<pre class="highlight plaintext"><code>source_start := 0;
+While (source_source &lt; V)
+    num_sources := (source_start + B &gt; V) ? V - source_start : B;
 
     // Kernel1: pick children and leafs
     For children# from 0 to num_children_per_source x num_sources:
@@ -371,12 +371,12 @@ While (source_source < V)
 
     Move source_embedding from GPU to CPU;
     source_start += B;
-</code></pre><h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA's DGX-1</h2><h3 id='prereqs-input'>Prereqs/input</h3>
+</code></pre><h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA&#39;s DGX-1</h2><h3 id='prereqs-input'>Prereqs/input</h3>
 <p>CUDA should have been installed; <code>$PATH</code> and <code>$LD_LIBRARY_PATH</code> should have been
 set correctly to use CUDA. The current Gunrock configuration assumes boost
 (1.58.0 or 1.59.0) and Metis are installed; if not, changes need to be made in
-the Makefiles. DARPA's DGX-1 has both installed when the tests are performed.</p>
-<pre class="highlight mid-column-code plaintext"><code>git clone --recursive https://github.com/gunrock/gunrock/ \
+the Makefiles. DARPA&#39;s DGX-1 has both installed when the tests are performed.</p>
+<pre class="highlight plaintext"><code>git clone --recursive https://github.com/gunrock/gunrock/ \
   -b dev-refactor
 cd gunrock
 git submodule init
@@ -387,7 +387,7 @@ cmake ..
 cd ../tests/sage
 make
 </code></pre>
-<p>At this point, there should be an executable <code>test_sage_<CUDA version>_x86_64</code>
+<p>At this point, there should be an executable <code>test_sage_&lt;CUDA version&gt;_x86_64</code>
 in <code>tests/sage/bin</code>.</p>
 
 <p>The datasets are assumed to have been placed in <code>/raid/data/hive</code>, and converted
@@ -410,44 +410,44 @@ the training part at the moment, we use some given datasets or randomly generate
 them if not available. The array input files are floating-point values in plain
 text format; examples can be found in the <code>gunrock/app/sage</code> directory of the
 gunrock repo.</p>
-<pre class="highlight mid-column-code plaintext"><code>--Wa1 : std::string, default =
-        <weight matrix for W^1 matrix in algorithm 2, aggregation part>
+<pre class="highlight plaintext"><code>--Wa1 : std::string, default =
+        &lt;weight matrix for W^1 matrix in algorithm 2, aggregation part&gt;
          dimension 64 by 128 for pokec;
          It should be leaf feature length by a value you want for W2 layer
 --Wa1-dim1 : int, default = 128
         Wa1 matrix column dimension
 --Wa2 : std::string, default =
-        <weight matrix for W^2 matrix in algorithm 2, aggregation part>
+        &lt;weight matrix for W^2 matrix in algorithm 2, aggregation part&gt;
          dimension 256 by 128 for pokec;
          It should be child_temp length by output length
 --Wa2-dim1 : int, default = 128
         Wa2 matrix column dimension
 --Wf1 : std::string, default =
-        <weight matrix for W^1 matrix in algorithm 2, feature part>
+        &lt;weight matrix for W^1 matrix in algorithm 2, feature part&gt;
          dimension 64 by 128 for pokec;
          It should be child feature length by a value you want for W2 layer
 --Wf1-dim1 : int, default = 128
         Wf1 matrix column dimension
 --Wf2 : std::string, default =
-        <weight matrix for W^2 matrix in algorithm 2, feature part>
+        &lt;weight matrix for W^2 matrix in algorithm 2, feature part&gt;
          dimension 256 by 128 for pokec;
          It should be source_temp length by output length
 --Wf2-dim1 : int, default = 128
         Wf2 matrix column dimension
---feature-column : std::vector<int>, default = 64
+--feature-column : std::vector&lt;int&gt;, default = 64
         feature column dimension
 --features : std::string, default =
-        <features matrix>
+        &lt;features matrix&gt;
     dimension |V| by 64 for pokec;
 --omp-threads : int, default = 32
     number of threads to run CPU reference
---num-children-per-source : std::vector<int>, default = 10
+--num-children-per-source : std::vector&lt;int&gt;, default = 10
         number of sampled children per source
---num-leafs-per-child : std::vector<int>, default = -1
+--num-leafs-per-child : std::vector&lt;int&gt;, default = -1
         number of sampled leafs per child; default is the same as num-children-per-source
---batch-size : std::vector<int>, default = 65536
+--batch-size : std::vector&lt;int&gt;, default = 65536
         number of source vertex to process in one iteration
-</code></pre><h4 id='example-command'>Example Command</h4><pre class="highlight mid-column-code shell"><code>./bin/test_sage_9.2_x86_64 <span class="se">\</span>
+</code></pre><h4 id='example-command'>Example Command</h4><pre class="highlight shell"><code>./bin/test_sage_9.2_x86_64 <span class="se">\</span>
  market /raid/data/hive/pokec/pokec.mtx  --undirected <span class="se">\</span>
  --Wf1 ../../gunrock/app/sage/wf1.txt <span class="se">\</span>
  --Wa1 ../../gunrock/app/sage/wa1.txt <span class="se">\</span>
@@ -465,7 +465,7 @@ requiring the associative arrays.</p>
 <h3 id='output'>Output</h3>
 <p>The outputs are in the <code>sage</code> directory; look for the .txt files. An example is
 shown below for the <code>pokec</code> dataset:</p>
-<pre class="highlight mid-column-code plaintext"><code>Loading Matrix-market coordinate-formatted graph ...
+<pre class="highlight plaintext"><code>Loading Matrix-market coordinate-formatted graph ...
   ... Loading progress ...
 Converting 1632803 vertices, 44603928 directed edges ( ordered tuples) to CSR format...Done (0s).
 Degree Histogram (1632803 vertices, 44603928 edges):
@@ -544,7 +544,7 @@ additionally useful to validate the successful rate of the whole pipeline with t
 
 <p>The datasets used for experiments are:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>Dataset</th>
 <th style="text-align: right">V</th>
@@ -591,7 +591,7 @@ produces the shortest running time on GPU among {512, 1024, 2048, 4096, 8192,
 
 <p>The running time on DGX-1 with Tesla P100 GPU:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>Dataset</th>
 <th style="text-align: right">F</th>
@@ -903,7 +903,7 @@ produces the shortest running time on GPU among {512, 1024, 2048, 4096, 8192,
 
 <p>The running time on Bowser with a Tesla V100 GPU</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>Dataset</th>
 <th style="text-align: right">F</th>
@@ -1248,7 +1248,7 @@ produces the shortest running time on GPU among {512, 1024, 2048, 4096, 8192,
 </tbody></table>
 <h3 id='implementation-limitations'>Implementation limitations</h3>
 <ul>
-<li><p><strong>Memory usage</strong> Gunrock's GPU implementation uses <code>B x (C x (Wf2.x + F + 1) +
+<li><p><strong>Memory usage</strong> Gunrock&#39;s GPU implementation uses <code>B x (C x (Wf2.x + F + 1) +
 2Wf2.x + 2R.x) x 4</code> bytes in additional to the features that takes up <code>VF x 4</code>
 bytes and the graph itself. Because the batch size B can be adjusted, the main
 memory consumption is from the feature array. For a P100 with 16 GB memory, if
@@ -1265,7 +1265,7 @@ precision, and also cuts the memory usage to store the features in half. It woul
 be interesting to see what would happen if the data type is changed to half
 precision.</p></li>
 <li><p><strong>Graph types</strong> The training process requires the graph to be undirected
-(enforced by <code>--undirected</code> in Gunrock's command line parameters). The behavior of
+(enforced by <code>--undirected</code> in Gunrock&#39;s command line parameters). The behavior of
 sampling a zero-length neighbor list is undefined, and currently it will return
 the source vertex itself.</p></li>
 </ul>
@@ -1278,13 +1278,13 @@ on the DGX-1 takes 366390.250 ms, as compared to 25242.941 ms using 32 threads;
 using 32 threads is about 14.5X faster than a single thread, which shows GraphSAGE
 scales pretty well on the CPU.</p>
 
-<p>Comparing the running time of a 32-thread OpenMP and Gunrock's GPU implementation,
+<p>Comparing the running time of a 32-thread OpenMP and Gunrock&#39;s GPU implementation,
 the P100 is about 7.5X to 15X faster. Increasing the feature length from 64 to
 128 roughly doubles the computation workload, and the speedup does not change
 very much for datasets with more than about 1M vertices. However, increasing the
 number of children per source and the number of leafs per child decreases the
-speedup. The OMP's running time increases slower than the number of neighbors
-selected, while the GPU's running time increases faster than the number of neighbors
+speedup. The OMP&#39;s running time increases slower than the number of neighbors
+selected, while the GPU&#39;s running time increases faster than the number of neighbors
 selected. This may be attributed to the cache effect: the parallelism on CPU is
 limited, so data reuse rate is high, even when the number of neighbors increases;
 however, the number of source or children processed on the GPU at the same time
@@ -1309,7 +1309,7 @@ and Kernel3 takes 5.52 ms, or 31.1%.</p>
 <p>Further detail on the profile of Kernel2 on the Titan Xp shows the
 utilization of the memory system:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>Type</th>
 <th style="text-align: right">Transactions</th>
@@ -1409,16 +1409,16 @@ utilization of the memory system:</p>
 </tr>
 </tbody></table>
 
-<p><img src="attachments/sage/pokec_TitanXp.png" title="Memory statics" alt="Sage_Pokec_TianXp" /></p>
+<p><img src="../attachments/sage/pokec_TitanXp.png" title="Memory statics" alt="Sage_Pokec_TianXp" /></p>
 
-<p>It's clear that the unified cache is almost fully utilized, at 4 TBps out of
+<p>It&#39;s clear that the unified cache is almost fully utilized, at 4 TBps out of
 the 5 TBps theoretical upper bound, and is the bottleneck.
 This is because the <code>W</code> arrays and the intermediate arrays are highly reusable.</p>
 
 <p>Running the same experiment on the V100 shows a different picture within the memory
 system:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>Type</th>
 <th style="text-align: right">Transactions</th>
@@ -1518,12 +1518,12 @@ system:</p>
 </tr>
 </tbody></table>
 
-<p><img src="attachments/sage/pokec_V100.png" title="Memory statics" alt="Sage_Pokec_V100" /></p>
+<p><img src="../attachments/sage/pokec_V100.png" title="Memory statics" alt="Sage_Pokec_V100" /></p>
 
 <p>On the V100, kernel2 only takes 3.982 ms (about 60% of 6.67 ms per batch), and the
 unified-cache throughput increases to 9.8 TBps, more than double than on the
-Titan Xp. In fact, the theoretical upper bound of V100's L1 throughput is 28
-TBps, resulted from doubling each SM's load throughput from 128 bytes per
+Titan Xp. In fact, the theoretical upper bound of V100&#39;s L1 throughput is 28
+TBps, resulted from doubling each SM&#39;s load throughput from 128 bytes per
 cycle to 256 bytes per cycle, and increasing the SM count to 80. This is the
 reason why the V100 can outperform P100 and Titan Xp by about 3X. The performance
 bottleneck is no longer the memory system, and switches to integer
@@ -1532,7 +1532,7 @@ kernel also takes up 32 registers per thread, which is the limit for full GPU
 occupancy. Storing intermediate index calculation results would help if the
 register usage is not so high.</p>
 <h2 id='next-steps'>Next Steps</h2><h3 id='alternate-approaches'>Alternate approaches</h3>
-<p><strong>Things we tried that didn't really work</strong></p>
+<p><strong>Things we tried that didn&#39;t really work</strong></p>
 
 <p>An simple implementation that uses a thread to process the per-source or per-child
 computation is coded, but it runs about 10X slower than the current
@@ -1563,7 +1563,7 @@ significantly changed, but the resulting memory requirement to store the interme
 data may make data reuse impossible.</p>
 <h3 id='notes-on-larger-datasets'>Notes on larger datasets</h3>
 <p>If the dataset is so large that the graph and the per-vertex feature data are
-larger than the combined GPU memory, it's possible to accumulate the features
+larger than the combined GPU memory, it&#39;s possible to accumulate the features
 of leafs and children on CPU, transfer the data on to GPU, and perform the
 computation. Because of the cost of the transfer, runtime will increase significantly as compared to the cases when
 the full data can fit in the GPU memory, but whether that will cause an increase above
@@ -1577,12 +1577,12 @@ the main task for this workload going forward.</p>
 <p>The GPU implementation of the embedding part runs a lot faster than on the CPU,
 and hits a few GPU hardware limitations. It should have comparable runtime
 to other GPU implementations.
-But it's only useful as a part of the whole workload and achieves comparable
+But it&#39;s only useful as a part of the whole workload and achieves comparable
 prediction accuracy as conventional / reference implementations.</p>
 
 <p>An interesting question raised from the GraphSAGE GPU implementation is
 whether it is useful to expose block-level parallelism to higher-level
-programming models/APIs, and if so, how to do that. It's clear that working at the block level
+programming models/APIs, and if so, how to do that. It&#39;s clear that working at the block level
 provides benefits, such as the ability to use block-level primitives like scan
 and reduce. But it also comes with costs, most importantly, requiring the programmer to have
 knowledge about the GPU hardware. It also reduces the

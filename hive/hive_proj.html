@@ -198,9 +198,9 @@
   color: #f92672;
 }
     </style>
-    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
-    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
-      <script src="javascripts/all.js"></script>
+    <link href="../stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="../stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="../javascripts/all.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/vega@3"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
@@ -227,15 +227,15 @@
     </style>
   </head>
 
-  <body class="hive_proj" data-languages="[]">
+  <body class="hive hive_hive_proj" data-languages="[]">
     <a href="#" id="nav-button">
       <span>
         NAV
-        <img src="images/navbar.png" alt="Navbar" />
+        <img src="../images/navbar.png" alt="Navbar" />
       </span>
     </a>
     <div class="toc-wrapper">
-      <img src="images/logo.png" class="logo" alt="Logo" />
+      <img src="../images/logo.png" class="logo" alt="Logo" />
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
@@ -305,22 +305,22 @@ That is, for each edge in the graph, we fetch the neighbors of the source node i
 <code>
 H = matmul(transpose(A), A)
 </code>
-which can be concisely implemented via cuSPARSE's <code>csr2csc</code> and <code>csrgemm</code> functions.</p>
+which can be concisely implemented via cuSPARSE&#39;s <code>csr2csc</code> and <code>csrgemm</code> functions.</p>
 
 <p>The <code>csrgemm</code> functions in cuSPARSE allocate memory more intelligently than we do above, on the order of the number of edges in the output.  Thus, our GraphBLAS implementation can scale to substantially larger matrices than our Gunrock implementation.  However, implementing graph projection via a single call to <code>csrgemm</code> requires both the input graph <code>G</code> and output graph <code>H</code> to fit in GPU memory (16 GB on the DGX-1).  This limit can easily be hit, even for a moderately sized <code>G</code>, as the number of edges in <code>H</code> is often orders of magnitude larger than in <code>G</code>.</p>
 
 <p>Thus, to scale to larger graphs, we implement graph projections via a chunked matrix multiply.  Specifically, to compute <code>matmul(X, Y)</code> w/ <code>X.shape = (n, m)</code> and <code>Y.shape = (m, k)</code>, we split <code>X</code> into <code>c</code> matrices <code>(X_1, ..., X_c)</code>, w/ <code>X_i.shape = (n / c, m)</code>.  Then we compute <code>matmul(X_i, Y)</code> for each <code>X_i</code>, moving the output of each multiplication from GPU to CPU memory as we go.  This implementation addresses the common case where we can fit both <code>X</code> and <code>Y</code> in GPU memory, but not <code>matmul(X, Y)</code>. Obviously, the chunked matrix multiply incurs a performance penalty, but allows us to run graph projections of much larger graphs on the GPU.</p>
-<h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA's DGX-1</h2><h3 id='gunrock-2'>Gunrock</h3><h4 id='prereqs-input'>Prereqs/input</h4><pre class="highlight mid-column-code shell"><code>git clone --recursive https://github.com/gunrock/gunrock -b dev-refactor
+<h2 id='how-to-run-this-application-on-darpa-39-s-dgx-1'>How To Run This Application on DARPA&#39;s DGX-1</h2><h3 id='gunrock-2'>Gunrock</h3><h4 id='prereqs-input'>Prereqs/input</h4><pre class="highlight shell"><code>git clone --recursive https://github.com/gunrock/gunrock -b dev-refactor
 <span class="nb">cd </span>gunrock/tests/proj/
 cp ../../gunrock/util/gitsha1.c.in ../../gunrock/util/gitsha1.c
 make clean
 make
 </code></pre><h4 id='application-specific-parameters'>Application specific parameters</h4>
 <p>None</p>
-<h4 id='example-command'>Example Command</h4><pre class="highlight mid-column-code shell"><code>./bin/test_proj_9.1_x86_64 <span class="se">\</span>
+<h4 id='example-command'>Example Command</h4><pre class="highlight shell"><code>./bin/test_proj_9.1_x86_64 <span class="se">\</span>
         --graph-type market <span class="se">\</span>
         --graph-file ../../dataset/small/chesapeake.mtx
-</code></pre><h4 id='example-output'>Example Output</h4><pre class="highlight mid-column-code plaintext"><code>Loading Matrix-market coordinate-formatted graph ...
+</code></pre><h4 id='example-output'>Example Output</h4><pre class="highlight plaintext"><code>Loading Matrix-market coordinate-formatted graph ...
 Reading from ../../dataset/small/chesapeake.mtx:
   Parsing MARKET COO format edge-value-seed = 1539110067
  (39 nodes, 340 directed edges)...
@@ -333,18 +333,18 @@ __________________________
 Using advance mode LB
 Using filter mode CULL
 __________________________
-0    0   0   queue3      oversize :  234 ->  342
-0    0   0   queue3      oversize :  234 ->  342
+0    0   0   queue3      oversize :  234 -&gt;  342
+0    0   0   queue3      oversize :  234 -&gt;  342
 --------------------------
 Run 0 elapsed: 0.199080, #iterations = 1
 edge_counter=1372
-0->1 | GPU=9.000000 CPU=9.000000
-0->2 | GPU=1.000000 CPU=1.000000
-0->3 | GPU=2.000000 CPU=2.000000
+0-&gt;1 | GPU=9.000000 CPU=9.000000
+0-&gt;2 | GPU=1.000000 CPU=1.000000
+0-&gt;3 | GPU=2.000000 CPU=2.000000
 ...
-38->35 | GPU=28.000000 CPU=28.000000
-38->36 | GPU=2.000000 CPU=2.000000
-38->37 | GPU=18.000000 CPU=18.000000
+38-&gt;35 | GPU=28.000000 CPU=28.000000
+38-&gt;36 | GPU=2.000000 CPU=2.000000
+38-&gt;37 | GPU=18.000000 CPU=18.000000
 ======= PASSED ======
 [proj] finished.
  avg. elapsed: 0.199080 ms
@@ -362,11 +362,11 @@ edge_counter=1372
  total time: 960.005045 ms
 </code></pre><h4 id='expected-output'>Expected Output</h4>
 <p>When run in <code>verbose</code> mode, the app outputs the weighted edgelist of the graph projection <code>H</code>. When run in <code>quiet</code> mode, it only outputs performance statistics and the results of a correctness check.</p>
-<h3 id='graphblas-2'>GraphBLAS</h3><h4 id='prereqs-input-2'>Prereqs/input</h4><pre class="highlight mid-column-code shell"><code>git clone --recursive https://github.com/bkj/graphblas_proj
+<h3 id='graphblas-2'>GraphBLAS</h3><h4 id='prereqs-input-2'>Prereqs/input</h4><pre class="highlight shell"><code>git clone --recursive https://github.com/bkj/graphblas_proj
 <span class="nb">cd </span>graphblas_proj
 make clean
 make
-</code></pre><h4 id='application-specific-parameters-2'>Application specific parameters</h4><pre class="highlight mid-column-code plaintext"><code>--unweighted
+</code></pre><h4 id='application-specific-parameters-2'>Application specific parameters</h4><pre class="highlight plaintext"><code>--unweighted
  1 = convert entries of adjacency matrix to 1
  0 = leave entries of adjacency matrix as-is
 --proj-debug
@@ -381,16 +381,16 @@ make
  0 = given adjacency matrix A w/ `A.shape = (m, n)`,
      compute projection `H = matmul(A, transpose(A))` w/ `H.shape = (m, m)`
 --num-chunks
- <= 1 = do matrix multiply in one step
-  > 1 = break matrix multiply into multiple chunks (eg, so we can compute
+ &lt;= 1 = do matrix multiply in one step
+  &gt; 1 = break matrix multiply into multiple chunks (eg, so we can compute
         projections larger than GPU memory)
-</code></pre><h4 id='example-command-2'>Example Command</h4><pre class="highlight mid-column-code shell"><code><span class="c"># generate some random data `data/X.mtx`</span>
+</code></pre><h4 id='example-command-2'>Example Command</h4><pre class="highlight shell"><code><span class="c"># generate some random data `data/X.mtx`</span>
 python data/make-random.py --seed 111 <span class="se">\</span>
         --num-rows 1000 --num-cols 1000 --density 0.1
 
 <span class="c"># run graph projection</span>
 ./proj --X data/X.mtx --unweighted 1 --proj-debug 1
-</code></pre><h4 id='example-output-2'>Example Output</h4><pre class="highlight mid-column-code plaintext"><code>proj.cu: loading data/X.mtx
+</code></pre><h4 id='example-output-2'>Example Output</h4><pre class="highlight plaintext"><code>proj.cu: loading data/X.mtx
   done
 proj.cu: computing transpose
   done
@@ -420,7 +420,7 @@ Additionally,</p>
 <li>whether to project onto the rows or columns of the graph.</li>
 </ul>
 <h3 id='implementation-limitations'>Implementation limitations</h3><h4 id='gunrock-3'>Gunrock</h4>
-<p>The primary limitation of the current implementation is that it allocates a <code>|V|x|V|</code> array, where <code>|V|</code> is the number of nodes in the network.  This means that the memory requirements of the app can easily exceed the memory available on a single GPU (16 GB on the DGX-1).  The size of this array reflects the <em>worst case</em> memory requirements of the graph projection workflow; while some graphs can become exceptionally large and dense when projected, we should be able to run the app on larger graphs if we store the output in a different data structure and/or allocate memory more efficiently.  Algorithms do exist for mitigating this issue: cuSPARSE's <code>csrgemm</code> method computes the row pointers in one pass, then allocates the exact amount of memory for <code>H</code>'s column and value arrays, then actually computes the matrix product.  An interesting future direction would be to integrate this sort of algorithm into Gunrock.</p>
+<p>The primary limitation of the current implementation is that it allocates a <code>|V|x|V|</code> array, where <code>|V|</code> is the number of nodes in the network.  This means that the memory requirements of the app can easily exceed the memory available on a single GPU (16 GB on the DGX-1).  The size of this array reflects the <em>worst case</em> memory requirements of the graph projection workflow; while some graphs can become exceptionally large and dense when projected, we should be able to run the app on larger graphs if we store the output in a different data structure and/or allocate memory more efficiently.  Algorithms do exist for mitigating this issue: cuSPARSE&#39;s <code>csrgemm</code> method computes the row pointers in one pass, then allocates the exact amount of memory for <code>H</code>&#39;s column and value arrays, then actually computes the matrix product.  An interesting future direction would be to integrate this sort of algorithm into Gunrock.</p>
 
 <p>It may be possible to improve performance by making assumptions about the topology of the graph.  Graph projection is often used for bipartite graphs, but this app does not make any assumptions about the topology of the graph.  This choice was made in order to remain consistent with the <a href="https://hiveprogram.com/wiki/display/WOR/V0+-+Application+Classification">HIVE reference implementation</a>.</p>
 
@@ -431,8 +431,8 @@ Additionally,</p>
 <p>Certain weighting functions are easily implemented by applying a transformation to the values of the sparse adjacency matrix <code>A</code>, but others cannot.  For instance, these weighting functions are easy to implement:
 <code>
     weight_out = 1                             (by setting both matrices entries to 1)
-    weight_out = weight_edge_1                 (by setting one matrix's entries to 1)
-    weight_out = weight_edge_1 / weight_edge_2 (by setting one matrix's entries to 1 / x)
+    weight_out = weight_edge_1                 (by setting one matrix&#39;s entries to 1)
+    weight_out = weight_edge_1 / weight_edge_2 (by setting one matrix&#39;s entries to 1 / x)
     ...
 </code>
 while this function (from the HIVE reference implementation) is not easy to implement in the <code>cuSPARSE</code> plus/multiply semiring:
@@ -442,25 +442,25 @@ while this function (from the HIVE reference implementation) is not easy to impl
 
 <p>Implementation of additional semirings in GraphBLAS is currently in progress, and will extend the family of weightings we could support.</p>
 <h3 id='comparison-against-existing-implementations'>Comparison against existing implementations</h3>
-<p>When the graph fits in its memory, the Gunrock implementation is approx. 5x faster than the GraphBLAS implementation and approx. 100x faster than PNNL's OpenMP CPU implemention w/ 64 threads.  Somewhat surprisingly, PNNL's implementation is substantially slower than a single-threaded scipy sparse matrix multiplication.</p>
+<p>When the graph fits in its memory, the Gunrock implementation is approx. 5x faster than the GraphBLAS implementation and approx. 100x faster than PNNL&#39;s OpenMP CPU implemention w/ 64 threads.  Somewhat surprisingly, PNNL&#39;s implementation is substantially slower than a single-threaded scipy sparse matrix multiplication.</p>
 
-<p>When the graph does not fit in the Gunrock implementation's memory, our GPU GraphBLAS implementation is the fastest of the remaining implementations.</p>
+<p>When the graph does not fit in the Gunrock implementation&#39;s memory, our GPU GraphBLAS implementation is the fastest of the remaining implementations.</p>
 <h4 id='existing-implementations'>Existing implementations</h4><h5 id='pnnl'>PNNL</h5>
-<p>We compare our results against <a href="https://gitlab.hiveprogram.com/jfiroz/graph_projection">PNNL's OpenMP reference implementation</a>.  We make <a href="https://gitlab.hiveprogram.com/bjohnson/graph_projection/commit/b37aabe2e56fe5207bc22c09c029b7e88c0327c1">minor modifications</a> to their code to handle unweighted graphs, in order to match the Gunrock and GraphBLAS implementations.  That is, the weight of the edge in the output graph <code>H</code> is the number of shared neighbors in the original graph.</p>
+<p>We compare our results against <a href="https://gitlab.hiveprogram.com/jfiroz/graph_projection">PNNL&#39;s OpenMP reference implementation</a>.  We make <a href="https://gitlab.hiveprogram.com/bjohnson/graph_projection/commit/b37aabe2e56fe5207bc22c09c029b7e88c0327c1">minor modifications</a> to their code to handle unweighted graphs, in order to match the Gunrock and GraphBLAS implementations.  That is, the weight of the edge in the output graph <code>H</code> is the number of shared neighbors in the original graph.</p>
 
-<p>There is a <code>--simple</code> flag in PNNL's CLI, but examining the code reveals that it just changes the order of operations.  Thus, all of our experiments are conducted with <code>--simple=1</code>, which is faster than <code>--simple=0</code> due to better data access patterns.</p>
+<p>There is a <code>--simple</code> flag in PNNL&#39;s CLI, but examining the code reveals that it just changes the order of operations.  Thus, all of our experiments are conducted with <code>--simple=1</code>, which is faster than <code>--simple=0</code> due to better data access patterns.</p>
 <h5 id='scipy'>Scipy</h5>
 <p>A very simple baseline is sparse matrix-matrix multiplication as implemented in the popular <code>scipy</code> python package.  This is a single-threaded C++ implementation with a Python wrapper.  Note, this implementation comes with the same caveats about weighting functions as the Gunrock implementation.</p>
 <h4 id='experiments'>Experiments</h4><h5 id='movielens'>MovieLens</h5>
 <p>MovieLens is a bipartite graph <code>G=(U, V, E)</code> w/ <code>|U|=138493</code>, <code>|V|=26744</code> and <code>|E|=20000264</code>. We report results on the full graph, as well as several random subgraphs.</p>
 
-<p>For PNNL's OpenMP implementation, we report results using {1, 2, 4, 8, 16, 32,  64} threads.</p>
+<p>For PNNL&#39;s OpenMP implementation, we report results using {1, 2, 4, 8, 16, 32,  64} threads.</p>
 
 <p>In all cases, we project onto the nodeset <code>|V|</code>, producing a <code>|V|x|V|</code> graph.</p>
 
 <p><strong>Note:</strong> Small differences in the number of nonzero entries in the output (nnz_out) are due to small book-keeping differences (specifically, keeping or dropping self-loops).  These differences do not have any meaningful impact on runtimes.</p>
 <h6 id='1m-edge-subgraph-u-6743-v-13950-e-1m'>1M edge subgraph (|U|=6743 |V|=13950 |E|=1M)</h6>
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>implementation</th>
 <th>num_threads</th>
@@ -530,7 +530,7 @@ while this function (from the HIVE reference implementation) is not easy to impl
 </tr>
 </tbody></table>
 <h6 id='5m-edge-subgraph-u-34395-v-20402-e-5m'>5M edge subgraph (|U|=34395 |V|=20402 |E|=5M)</h6>
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>implementation</th>
 <th>num_threads</th>
@@ -600,7 +600,7 @@ while this function (from the HIVE reference implementation) is not easy to impl
 </tr>
 </tbody></table>
 <h6 id='movielens-20m-graph-u-138493-v-26744-e-20m'>MovieLens-20M graph (|U|=138493 |V|=26744 |E|=20M)</h6>
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>implementation</th>
 <th>num_threads</th>
@@ -674,9 +674,9 @@ while this function (from the HIVE reference implementation) is not easy to impl
 <h5 id='rmat'>RMAT</h5>
 <p>Next we test on a <a href="https://graphchallenge.s3.amazonaws.com/synthetic/graph500-scale18-ef16/graph500-scale18-ef16_adj.tsv.gz">scale 18 RMAT graph</a>.  This is <em>not</em> a bipartite graph, but the graph projection algorithm can still be applied.</p>
 
-<p>This graph was chosen because it was used in benchmarks in <a href="https://gitlab.hiveprogram.com/jfiroz/graph_projection">PNNL's gitlab repo</a>.  However, their command line parameters appear to be incorrect, so our results here are substantially different than reported in their README.</p>
+<p>This graph was chosen because it was used in benchmarks in <a href="https://gitlab.hiveprogram.com/jfiroz/graph_projection">PNNL&#39;s gitlab repo</a>.  However, their command line parameters appear to be incorrect, so our results here are substantially different than reported in their README.</p>
 <h6 id='rmat-18-v-174147-e-7600696'>RMAT-18 (|V|=174147 |E|=7600696)</h6>
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table><thead>
 <tr>
 <th>implementation</th>
 <th>num_threads</th>
@@ -748,7 +748,7 @@ while this function (from the HIVE reference implementation) is not easy to impl
 
 <p><strong>Takeaway:</strong> GraphBLAS is approx. 5.7x faster than scipy, the next fastest implementation. Again, the PNNL OpenMP implementation is substantially faster than the single-threaded scipy implementation.</p>
 
-<p><em>When the dataset can fit into memory</em>, Gunrock is ~ 4x faster than GraphBLAS.  Since the two implementations use slightly different algorithms, it's hard to tell where the Gunrock speedup comes from.  Our hunch is that Gunrock's superior load balancing gives better performance than GraphBLAS, but this is an interesting topic for further research.</p>
+<p><em>When the dataset can fit into memory</em>, Gunrock is ~ 4x faster than GraphBLAS.  Since the two implementations use slightly different algorithms, it&#39;s hard to tell where the Gunrock speedup comes from.  Our hunch is that Gunrock&#39;s superior load balancing gives better performance than GraphBLAS, but this is an interesting topic for further research.</p>
 <h3 id='performance-information'>Performance information</h3><h4 id='gunrock-4'>Gunrock</h4>
 <ul>
 <li>Results of profiling indicate that the Gunrock implementation is bound by memory latency.</li>
@@ -757,7 +757,7 @@ while this function (from the HIVE reference implementation) is not easy to impl
 </ul>
 <h4 id='graphblas-4'>GraphBLAS</h4>
 <ul>
-<li>99% of time is spent in cuSPARSE's <code>csrgemm</code> routines</li>
+<li>99% of time is spent in cuSPARSE&#39;s <code>csrgemm</code> routines</li>
 </ul>
 <h2 id='next-steps'>Next Steps</h2><h3 id='alternate-approaches'>Alternate approaches</h3>
 <p>As mentioned above, it would be worthwhile to implement a Gunrock version that does not require allocating the <code>|V|x|V|</code> array.  It should be possible to achieve this by implementing the same kind of two-pass approach that cuSPARSE uses for <code>spgemm</code> -- one pass computes the CSR offsets, then column and data values are inserted at the appropriate locations.</p>
@@ -770,7 +770,7 @@ while this function (from the HIVE reference implementation) is not easy to impl
 
 <p>Further discussion can be found <a href="https://gunrock.github.io/docs/hive_year1_summary.html#scaling-analysis-for-hive-applications">here</a>.</p>
 <h3 id='notes-on-dynamic-graphs'>Notes on dynamic graphs</h3>
-<p>This workflow does not have an explicit dynamic component.  The graph projection operation seems like it would be fairly straightforward to adapt to dynamic graphs -- as nodes/edges are added to <code>G</code>, we create/increment the weight of the appropriate edges in <code>H</code>.  However, this adds an additional layer of complexity to the memory allocation step, as we can't use the two-pass approach to allocate memory conservatively.</p>
+<p>This workflow does not have an explicit dynamic component.  The graph projection operation seems like it would be fairly straightforward to adapt to dynamic graphs -- as nodes/edges are added to <code>G</code>, we create/increment the weight of the appropriate edges in <code>H</code>.  However, this adds an additional layer of complexity to the memory allocation step, as we can&#39;t use the two-pass approach to allocate memory conservatively.</p>
 <h3 id='notes-on-larger-datasets'>Notes on larger datasets</h3>
 <p>If the dataset were too big to fit into the aggregate GPU memory of multiple GPUs on a node, then two directions can be taken in order to be able to tackle these larger datasets:</p>
 
