@@ -301,8 +301,11 @@
               </ul>
           </li>
           <li>
-            <a href="#methodology-for-graph-analytics-performance" class="toc-h1 toc-link" data-title="Methodology for Graph Analytics Performance">METHODOLOGY FOR GRAPH ANALYTICS PERFORMANCE</a>
+            <a href="#methodology" class="toc-h1 toc-link" data-title="Methodology">METHODOLOGY</a>
               <ul class="toc-list-h2">
+                  <li>
+                    <a href="#methodology-for-graph-analytics-performance" class="toc-h2 toc-link" data-title="Methodology for Graph Analytics Performance">Methodology for Graph Analytics Performance</a>
+                  </li>
                   <li>
                     <a href="#breadth-first-search-bfs" class="toc-h2 toc-link" data-title="Breadth-First Search (BFS)">Breadth-First Search (BFS)</a>
                   </li>
@@ -314,6 +317,32 @@
                   </li>
                   <li>
                     <a href="#pagerank-pr" class="toc-h2 toc-link" data-title="PageRank (PR)">PageRank (PR)</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#results-and-analysis" class="toc-h1 toc-link" data-title="Results and Analysis">RESULTS AND ANALYSIS</a>
+          </li>
+          <li>
+            <a href="#preliminary-performance-results" class="toc-h1 toc-link" data-title="Preliminary Performance Results">PRELIMINARY PERFORMANCE RESULTS</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#general-remarks" class="toc-h2 toc-link" data-title="General remarks">General remarks</a>
+                  </li>
+                  <li>
+                    <a href="#breadth-first-search-bfs" class="toc-h2 toc-link" data-title="Breadth-First Search (BFS)">Breadth-First Search (BFS)</a>
+                  </li>
+                  <li>
+                    <a href="#page-rank-pr" class="toc-h2 toc-link" data-title="Page Rank (PR)">Page Rank (PR)</a>
+                  </li>
+                  <li>
+                    <a href="#hardware" class="toc-h2 toc-link" data-title="Hardware">Hardware</a>
+                  </li>
+                  <li>
+                    <a href="#software" class="toc-h2 toc-link" data-title="Software">Software</a>
+                  </li>
+                  <li>
+                    <a href="#gunrock-version" class="toc-h2 toc-link" data-title="Gunrock version">Gunrock version</a>
                   </li>
               </ul>
           </li>
@@ -330,7 +359,7 @@
                     <a href="#how-forking-workflow-works" class="toc-h2 toc-link" data-title="How Forking Workflow Works?">How Forking Workflow Works?</a>
                   </li>
                   <li>
-                    <a href="#gunrock-39-s-forking-workflow" class="toc-h2 toc-link" data-title="Gunrock's Forking Workflow:">Gunrock's Forking Workflow:</a>
+                    <a href="#gunrock-39-s-forking-workflow" class="toc-h2 toc-link" data-title="Gunrock's Forking Workflow">Gunrock's Forking Workflow</a>
                   </li>
                   <li>
                     <a href="#how-to-contribute" class="toc-h2 toc-link" data-title="How to contribute?">How to contribute?</a>
@@ -358,9 +387,6 @@
                     <a href="#research-projects" class="toc-h2 toc-link" data-title="Research projects">Research projects</a>
                   </li>
               </ul>
-          </li>
-          <li>
-            <a href="#release-notes" class="toc-h1 toc-link" data-title="Release Notes">RELEASE NOTES</a>
           </li>
           <li>
             <a href="#gunrock-developers" class="toc-h1 toc-link" data-title="Gunrock Developers">GUNROCK DEVELOPERS</a>
@@ -417,6 +443,9 @@
                     <a href="#how-would-someone-use-it-with-their-own-data" class="toc-h2 toc-link" data-title="How would someone use it with their own data?">How would someone use it with their own data?</a>
                   </li>
               </ul>
+          </li>
+          <li>
+            <a href="#release-notes" class="toc-h1 toc-link" data-title="Release Notes">RELEASE NOTES</a>
           </li>
           <li>
             <a href="#acknowledgments" class="toc-h1 toc-link" data-title="Acknowledgments">ACKNOWLEDGMENTS</a>
@@ -828,7 +857,7 @@ make
 * You can also choose to only download one specific dataset to your local machine by stepping into the subdirectory of that dataset and typing make inside that subdirectory.</p>
 <h2 id='hardware'>Hardware</h2>
 <p><strong>Laboratory Tested Hardware:</strong> Gunrock with GTX 970, Tesla K40s, GTX 1080, Tesla P100, RTX 2070, Tesla V100 and other NVIDIA cards. We have not encountered any trouble in-house with devices with CUDA capability >= 3.0.</p>
-<h1 id='methodology-for-graph-analytics-performance'>Methodology for Graph Analytics Performance</h1>
+<h1 id='methodology'>Methodology</h1><h3 id='methodology-for-graph-analytics-performance'>Methodology for Graph Analytics Performance</h3>
 <p>We welcome comments from others on the methodology that we use for measuring Gunrock's performance.</p>
 
 <p>Currently, Gunrock is a library that requires no preprocessing. By this we mean that Gunrock inputs graphs in a "standard" format, e.g., compressed sparse row or coordinate, such as those available on common graph repositories (<a href="https://snap.stanford.edu/data/index.html">SNAP</a> or <a href="http://www.cise.ufl.edu/research/sparse/matrices/">SuiteSparse (UF)</a>). In our experiments, we use <a href="https://people.sc.fsu.edu/~jburkardt/data/mm/mm.html">MatrixMarket</a> format.</p>
@@ -840,27 +869,337 @@ make
 <p>In general, we try to report results in two ways:</p>
 
 <ul>
-<li>Throughput, measured in edges traversed per second (TEPS). We generally use millions of TEPS (MTEPS) as our figure of merit.</li>
-<li>Runtime, typically measured in ms. We measure runtime entirely on the GPU, with the expectation that the input data is already on the GPU and the output data will be stored on the GPU. This ignores transfer times (either disk to CPU or CPU to GPU), which are independent of the graph analytics system. It is our expectation that GPU graph analytics will be most effective when (a) they are run on complex primitives and/or (b) run on sequences of primitives, either of which would mitigate transfer times. GPU graph analytics are likely not well suited to running one single simple primitive; for a simple primitive like BFS, it is more expensive to transfer the graph from CPU to GPU than it is to complete the BFS.</li>
+<li><strong>Throughput</strong>, measured in edges traversed per second (TEPS). We generally use millions of TEPS (MTEPS) as our figure of merit.</li>
+<li><strong>Runtime</strong>, typically measured in ms. We measure runtime entirely on the GPU, with the expectation that the input data is already on the GPU and the output data will be stored on the GPU. This ignores transfer times (either disk to CPU or CPU to GPU), which are independent of the graph analytics system. It is our expectation that GPU graph analytics will be most effective when (a) they are run on complex primitives and/or (b) run on sequences of primitives, either of which would mitigate transfer times. GPU graph analytics are likely not well suited to running one single simple primitive; for a simple primitive like BFS, it is more expensive to transfer the graph from CPU to GPU than it is to complete the BFS.</li>
 </ul>
 
 <p>To calculate TEPS, we require the number of edges traversed (touched), which we count dynamically. For traversal primitives, we note that non-connected components will not be visited, so the number of visited edges may be fewer than the number of edges in the graph. We note that precisely counting edges during the execution of a particular primitive may have performance implications, so we may approximate (see BFS).</p>
 
 <p>Notes on some of the Gunrock primitives follow.</p>
-<h2 id='breadth-first-search-bfs'>Breadth-First Search (BFS)</h2>
+<h3 id='breadth-first-search-bfs'>Breadth-First Search (BFS)</h3>
 <p>When we count the number of edges traversed, we do so by summing the number of outbound edges for each visited vertex. For forward, non-idempotent BFS, this strategy should give us an exact count, since this strategy visits every edge incident to a visited vertex. When we enable idempotence, we may visit a node more than once and hence may visit an edge more than once. For backward (pull) BFS, when we visit a vertex, we count all edges incoming to that vertex even if we find a visited predecessor before traversing all edges (and terminate early). (To do so otherwise has performance implications.) Enterprise uses the same counting strategy.</p>
 
 <p>If a comparison library does not measure MTEPS for BFS, we compute it by the number of edges visited divided by runtime; if the former is not available, we use Gunrock's edges-visited count.</p>
-<h2 id='single-source-shortest-path-sssp'>Single Source Shortest Path (SSSP)</h2>
+<h3 id='single-source-shortest-path-sssp'>Single Source Shortest Path (SSSP)</h3>
 <p>In general we find MTEPS comparisons between different approaches to SSSP not meaningful: because an edge may be visited one or many times, there is no standard way to count edges traversed. Different algorithms may not only visit a very different number of edges (Dijkstra vs. Bellman-Ford will have very different edge visit counts) but may also have a different number of edges visited across different invocations of the same primitive.</p>
 
 <p>When we report Gunrock's SSSP MTEPS, we use the number of edges queued as the edge-traversal count.</p>
 
 <p>To have a meaningful SSSP experiment, it is critical to have varying edge weights. SSSP measured on uniform edge weights is not meaningful (it becomes BFS). In our experiments, we set edge weights randomly/uniformly between 1 and 64.</p>
-<h2 id='betweenness-centrality-bc'>Betweenness Centrality (BC)</h2>
+<h3 id='betweenness-centrality-bc'>Betweenness Centrality (BC)</h3>
 <p>If a comparison library does not measure MTEPS for BC, we compute it by twice the number of edges visited in the forward phase divided by runtime (the same computation we use for Gunrock).</p>
-<h2 id='pagerank-pr'>PageRank (PR)</h2>
+<h3 id='pagerank-pr'>PageRank (PR)</h3>
 <p>We measure PageRank elapsed time on one iteration of PageRank. (Many other engines measure results this way and it is difficult to extrapolate from this measurement to runtime of the entire algorithm.)</p>
+<h1 id='results-and-analysis'>Results and Analysis</h1>
+<p>We are gradually adding summaries of our results to these web pages (please let us know if you would like other comparisons). These summaries also include a table of results along with links to the configuration and results of each individual run. We detail our <a href="https://gunrock.github.io/docs/#methodology-for-graph-analytics-performance">methodology for our measurements here</a>.</p>
+
+<ul>
+<li><a href="https://gunrock.github.io/docs/engines_topc.html">Gunrock performance compared with other engines for graph analytics</a></li>
+<li><a href="http://gunrock.github.io/gunrock/doc/latest/md_stats_do_ab_random.html">Setting parameters for direction-optimized BFS</a></li>
+<li><a href="https://gunrock.github.io/docs/gunrock_gpus.html">Gunrock results on different GPUs</a></li>
+<li><a href="https://gunrock.github.io/docs/frontier.html">Gunrock BFS throughput as a function of frontier size</a></li>
+<li><a href="https://gunrock.github.io/docs/mgpu_speedup.html">Multi-GPU Gunrock Speedups</a> and <a href="https://gunrock.github.io/docs/mgpu_scalability.html">Multi-GPU Gunrock Scalability</a></li>
+<li><a href="https://gunrock.github.io/docs/mgpu_partition.html">Multi-GPU Gunrock Partition Performance</a></li>
+<li><a href="http://gunrock.github.io/docs/groute.html">Comparison to Groute</a></li>
+</ul>
+
+<p>For reproducibility, we maintain Gunrock configurations and results in our github <a href="https://github.com/gunrock/io/tree/master/gunrock-output">gunrock/io</a> repository.</p>
+
+<p>We are happy to run experiments with other engines, particularly if those engines output results in our JSON format / a format that can be easily parsed into JSON format.</p>
+<h1 id='preliminary-performance-results'>Preliminary Performance Results</h1>
+<p>The following are some preliminary performance results. It is meant to give a rough idea
+of how Gunrock performs with specific version, testing environment, parameters
+and datasets. The numbers may change (with very high chances in reality),
+throughout the development of the library, and / or with different environments,
+running parameters and datasets. If more accurate numbers (e.g. for comparison
+in a paper), or results with different parameters / datasets, please contact
+the developers of Gunrock.</p>
+<h2 id='general-remarks'>General remarks</h2>
+<ul>
+<li>All timings are shown in Millisecond (ms).</li>
+<li><p>Abreviation:</p>
+
+<ul>
+<li>CSR   = compressed sparse row</li>
+<li>CSC   = compressed sparse column</li>
+<li>D     = directed</li>
+<li>UD    = undirected</li>
+<li>SOC   = social graph</li>
+<li>MTEPS = million traversed edges per second</li>
+<li>MTVPS = million traversed vertices per second</li>
+<li>V     = vertex</li>
+<li>E     = edge</li>
+<li>H     = hardware</li>
+<li>S     = software</li>
+<li>G     = Gunrock</li>
+<li>P     = parameter</li>
+</ul></li>
+<li><p>Load time includes graph generation (for synthetic graphs) or raw data reading
+(for real graphs) + format conversion (to CSR and / or CSC, to UD, when necessary) time</p></li>
+<li><p>Preprocess time includes memory allocation, graph partition (for multiple GPU) and
+initial data transmission (CPU -> GPU) time</p></li>
+<li><p>Process time is the actual algorithm running time on GPU</p></li>
+<li><p>Postprocess time includes resulted data transmission (GPU -> CPU), verification and
+clean-up time</p></li>
+<li><p>The total time of our results are dominated by load / write time (our server
+is not optimized for data load / write performance). The processing time may be a better
+indicator of performance.</p></li>
+</ul>
+<h2 id='breadth-first-search-bfs'>Breadth-First Search (BFS)</h2>
+<table style="font-size: 12px;"><thead>
+<tr>
+<th>No.</th>
+<th>Dataset</th>
+<th>graph type</th>
+<th>V</th>
+<th>E</th>
+<th>root vertex</th>
+<th>iteration</th>
+<th>process time</th>
+<th>MTEPS</th>
+<th>MTVPS</th>
+<th>load time</th>
+<th>preprocess time</th>
+<th>postprocess time</th>
+<th>write time</th>
+<th>total time</th>
+<th>condition</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>friendster_edges_small_2hop</td>
+<td>SOC, CSR, D</td>
+<td>121,674,532</td>
+<td>20,509</td>
+<td>3,546,566</td>
+<td>6</td>
+<td>17.2760</td>
+<td>1.1871</td>
+<td>0.4893</td>
+<td>12,590.6990</td>
+<td>17,114.5179</td>
+<td></td>
+<td>112.5512</td>
+<td>31,016.4499</td>
+<td>H1 + S1 + G1 + P1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>friendster_edges_gte_1M</td>
+<td>SOC, CSR, D</td>
+<td>124,836,417</td>
+<td>8,361,851</td>
+<td>27,345,193</td>
+<td>10</td>
+<td>30.0791</td>
+<td>227.9951</td>
+<td>101.5078</td>
+<td>12,519.1791</td>
+<td>17,790.8509</td>
+<td></td>
+<td>2,787.5559</td>
+<td>34,283.0300</td>
+<td>H1 + S1 + G1 + P1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>friendster_edges_gte_10M</td>
+<td>SOC, CSR, D</td>
+<td>124,836,417</td>
+<td>1,342,099,766</td>
+<td>71,768,986</td>
+<td>12</td>
+<td>1,442.8939</td>
+<td>930.1573</td>
+<td>68.5219</td>
+<td>12,633.6250</td>
+<td>103,272.5029</td>
+<td></td>
+<td>42,752.1100</td>
+<td>161,598.9239</td>
+<td>H1 + S1 + G1 + P1</td>
+</tr>
+<tr>
+<td>4</td>
+<td>com_friendster</td>
+<td>SOC, CSR, D</td>
+<td>124,836,419</td>
+<td>1,806,067,135</td>
+<td>7,688,909</td>
+<td>31</td>
+<td>1,425.3568</td>
+<td>1267.0983</td>
+<td>108.0366</td>
+<td>16,707.1941</td>
+<td>145,548.2471</td>
+<td></td>
+<td>65,636.1299</td>
+<td>231,047.3258</td>
+<td>H1 + S1 + G1 + P1</td>
+</tr>
+<tr>
+<td>5</td>
+<td>com_LiveJournal</td>
+<td>SOC, CSR, D</td>
+<td>4,036,537</td>
+<td>34,681,189</td>
+<td>9,766</td>
+<td>17</td>
+<td>49.9380</td>
+<td>694.4850</td>
+<td>191.7421</td>
+<td>12,260.1349</td>
+<td>1,461.0670</td>
+<td></td>
+<td>12,260.1349</td>
+<td>18,522.2769</td>
+<td>H1 + S1 + G1 + P1</td>
+</tr>
+</tbody></table>
+<h3 id='parameters'>Parameters</h3>
+<ul>
+<li>P1 = --traversal-mode=0 --device=0,1,2,3 --src=largestdegree --mark-pred --quick --output_filename=some_valid_filename</li>
+</ul>
+<h3 id='remarks'>Remarks</h3>
+<ul>
+<li>Idempotence is disabled when --mark-pred (mark predecessors) is used.</li>
+</ul>
+<h2 id='page-rank-pr'>Page Rank (PR)</h2>
+<table style="font-size: 12px;"><thead>
+<tr>
+<th>No.</th>
+<th>Dataset</th>
+<th>graph type</th>
+<th>V</th>
+<th>E</th>
+<th>iteration</th>
+<th>process time</th>
+<th>MTEPS</th>
+<th>MTVPS</th>
+<th>load time</th>
+<th>preprocess time</th>
+<th>postprocess time</th>
+<th>write time</th>
+<th>total time</th>
+<th>condition</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>friendster_edges_small_2hop</td>
+<td>SOC, CSR, D</td>
+<td>121,674,532</td>
+<td>20,509</td>
+<td>18</td>
+<td>5,287.1938</td>
+<td>0.0698</td>
+<td>414.2352</td>
+<td>10,758.1401</td>
+<td>241.4210</td>
+<td></td>
+<td>235,052.1171</td>
+<td>251,862.2911</td>
+<td>H2 + S1 + G1 + P1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>friendster_edges_gte_1M</td>
+<td>SOC, CSR, D</td>
+<td>124,836,417</td>
+<td>8,361,851</td>
+<td>41</td>
+<td>13,322.2578</td>
+<td>25.7340</td>
+<td>384.1911</td>
+<td>10,514.4429</td>
+<td>156.9688</td>
+<td></td>
+<td>245,985.4951</td>
+<td>270,482.5490</td>
+<td>H2 + S1 + G1 + P1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>friendster_edges_gte_10M</td>
+<td>SOC, CSR, D</td>
+<td>124,836,417</td>
+<td>1,342,099,766</td>
+<td>78</td>
+<td>173,413.8281</td>
+<td>603.6646</td>
+<td>56.1503</td>
+<td>13,701.0510</td>
+<td>2,358.1159</td>
+<td></td>
+<td>222,023.1612</td>
+<td>412,033.6931</td>
+<td>H2 + S1 + G1 + P1</td>
+</tr>
+<tr>
+<td>4</td>
+<td>com_friendster</td>
+<td>SOC, CSR, D</td>
+<td>124,836,419</td>
+<td>1,806,067,135</td>
+<td>100</td>
+<td>308,233.7812</td>
+<td>585.9407</td>
+<td>40.5005</td>
+<td>14,585.0809</td>
+<td>3,117.2709</td>
+<td></td>
+<td>240,381.1152</td>
+<td>567,139.1692</td>
+<td>H2 + S1 + G1 + P1</td>
+</tr>
+<tr>
+<td>5</td>
+<td>com_LiveJournal</td>
+<td>SOC, CSR, D</td>
+<td>4,036,537</td>
+<td>34,681,189</td>
+<td>23</td>
+<td>2,333.8479</td>
+<td>341.7821</td>
+<td>369.7800</td>
+<td>8,339.2031</td>
+<td>100.7540</td>
+<td></td>
+<td>7,719.7220</td>
+<td>18,512.9559</td>
+<td>H2 + S1 + G1 + P1</td>
+</tr>
+</tbody></table>
+<h3 id='paramters'>Paramters</h3>
+<ul>
+<li>P1 = --traversal-mode=1 --device=2 --quick --delta=0.85 --error=0.001 --max-iter=100 --normalized --queue-sizing=1 --queue-sizing1=0</li>
+</ul>
+<h3 id='remarks-2'>Remarks</h3>
+<ul>
+<li>PR has two formulations, and Gunrock has both implemented. The
+unnormalized one is the one described by the original PR paper;
+it does not converge and can be called by not passing --normalized
+to the Gunrock executable. The normalized one is the one that actually
+converge, and can be called by passing --normalized to the Gunrock
+executable.</li>
+<li>No special treatment is used for 0-out degree vertices, and we use
+a directed graph, so ranks can escape from those vertices. There is a
+way to solve this by distributing the rank of those vertices to all
+vertices. This should make the total rank always equal to 1 (when using
+the normalized formula), but we have not implemented this yet.</li>
+</ul>
+<h2 id='hardware'>Hardware</h2>
+<ul>
+<li>H1 = 4 x NVIDIA Tesla K40c, 2 x Intel Xeon E5-2637 v2, 256 GB DDR3 RAM with ECC</li>
+<li>H2 = 1 x NVIDIA Telsa K40c, 2 x Intel Xeon E5-2637 v2, 256 GB DDR3 RAM with ECC</li>
+</ul>
+<h2 id='software'>Software</h2>
+<ul>
+<li>S1 = ubuntu 14.04.3 LTS (GNU/Linux 3.13.0-62-generic x86_64), NVIDIA GPU driver 352.30, CUDA 7.5, gcc 4.8.4</li>
+</ul>
+<h2 id='gunrock-version'>Gunrock version</h2>
+<p>G1 = dev, bc761f0c78ac855e33587c4be55e2cf672013de5, 2015.12.31</p>
 <h1 id='publications'>Publications</h1>
 <p>Yuechao Pan, Roger Pearce, and John D. Owens. <strong>Scalable Breadth-First Search on a GPU Cluster</strong>. In Proceedings of the 31st IEEE International Parallel and Distributed Processing Symposium, IPDPS 2018, May 2018. [<a href="https://escholarship.org/uc/item/9bd842z6">http</a>]</p>
 
@@ -916,7 +1255,7 @@ As in the other Git workflows, the Forking Workflow begins with an <strong>offic
 <br><br>Instead, they <strong>fork the official repository</strong> to create a copy of it on the server. This new copy serves as their personal public repository—no other developers are allowed to push to it, but they can <strong>pull changes</strong> from it (we’ll see why this is important in a moment). After they have created their server-side copy, the developer performs a git clone to get a copy of it onto their local machine. This serves as their private development environment, just like in the other workflows.
 <br><br> When they're ready to publish a local commit, they push the commit to their own public repository—not the official one. Then, they file a pull request with the main repository, which lets the project maintainer know that an update is ready to be integrated. The <strong>pull request also serves as a convenient discussion thread</strong> if there are issues with the contributed code.
 <br><br> To integrate the feature into the official codebase, the maintainer pulls the contributor’s changes into their local repository, checks to make sure it doesn’t break the project, merges it into his local master branch, then pushes the master branch to the official repository on the server. The contribution is now part of the project, and other developers should pull from the official repository to synchronize their local repositories.</p>
-<h2 id='gunrock-39-s-forking-workflow'>Gunrock's Forking Workflow:</h2>
+<h2 id='gunrock-39-s-forking-workflow'>Gunrock's Forking Workflow</h2>
 <p><strong>gunrock/gunrock:</strong></p>
 
 <ul>
@@ -924,7 +1263,7 @@ As in the other Git workflows, the Forking Workflow begins with an <strong>offic
 <li><strong>Dev Branch:</strong> Current working branch where all developers push their changes to. This dev branch will serve as the "next release" gunrock, eliminating the need of managing individual branches for each feature and merging them when it is time for the release.</li>
 </ul>
 
-<p><strong>personal-fork/gunrock</strong></p>
+<p><strong>(personal-fork)/gunrock</strong></p>
 
 <ul>
 <li><strong>Feature Branch:</strong> This is the developer's personal repository with their feature branch. Whatever changes they would like to contribute to gunrock must be in their own personal fork. And once it is time to create a pull request, it is done so using github pull request, a reviewer checks it and the changes are merged into gunrock/gunrock dev branch.</li>
@@ -951,19 +1290,14 @@ use codecov.io to determine what lines are not executed. This gives you a good
 idea of what needs to be in the test and what you are missing.</p>
 
 <p><strong>What is code coverage?</strong></p>
+<pre class="highlight mid-column-code plaintext"><code>Code coverage is a measurement used to express which lines of code were executed by a test suite. We use three primary terms to describe each lines executed.
 
-<blockquote>
-<p>Code coverage is a measurement used to express which lines of code were executed by a test suite. We use three primary terms to describe each lines executed.</p>
+ * hit indicates that the source code was executed by the test suite.
+ * partial indicates that the source code was not fully executed by the test suite; there are remaining branches that were not executed.
+ * miss indicates that the source code was not executed by the test suite.
 
-<ul>
-<li>hit indicates that the source code was executed by the test suite.</li>
-<li>partial indicates that the source code was not fully executed by the test suite; there are remaining branches that were not executed.</li>
-<li>miss indicates that the source code was not executed by the test suite.</li>
-</ul>
-
-<p>Coverage is the ratio of hits / (hit + partial + miss). A code base that has 5 lines executed by tests out of 12 total lines will receive a coverage ratio of 41% (rounding down).</p>
-</blockquote>
-
+Coverage is the ratio of hits / (hit + partial + miss). A code base that has 5 lines executed by tests out of 12 total lines will receive a coverage ratio of 41% (rounding down).
+</code></pre>
 <p>Below is an example of what lines are a hit and a miss; you can target the lines missed in the tests to improve coverage.</p>
 
 <p><img src="https://i.imgur.com/5QwKjcB.png" alt="Example CodeCov Stats" /></p>
@@ -1066,8 +1400,6 @@ reduction and segmented intersection. Generally we want to find the right set of
 <li>If we had a larger number of X in the hardware&mdash;e.g., more registers, more SMs, more threads/SM, more shared memory, bigger cache---how would it help performance? (Where would we want NVIDIA to spend more transistors to best help our performance?)</li>
 <li>How much locality is there in frontiers with respect to the "active" frontier vs. the entire set of vertices? Interesting visualization project, for instance: Get a list of the active vertices in a frontier as a function of iteration, so iteration 0 is vertex set A, iteration 1 is vertex set B, etc. For one iteration, visualize the vertex set as a color per chunk of vertices, say, 1024 vertices per pixel. If all 1024 vertices are part of that frontier, the pixel is white, if 0 black, and gray in between. Then each iteration makes another row of pixels. This shows three things: (a) how many vertices are in the frontier compared to not; (b) how much spatial locality there is; (c) how the frontier evolves over time. One of the goals of this effort would be to determine how useful it would be to do some reordering of vertices either statically or dynamically, and either locally (within a chunk of vertices) or globally.</li>
 </ul>
-<h1 id='release-notes'>Release Notes</h1>
-<p>Please see our <a href="https://github.com/gunrock/gunrock/releases">release notes</a> and current releases.</p>
 <h1 id='gunrock-developers'>Gunrock Developers</h1>
 <ul>
 <li><a href="http://www.idav.ucdavis.edu/~yzhwang/">Yangzihao Wang</a>,
@@ -1177,6 +1509,8 @@ to download a single dataset in its separate directory.</p>
 <h2 id='how-would-someone-use-it-with-their-own-data'>How would someone use it with their own data?</h2>
 <p>Gunrock supports Matrix Market (.mtx) file format; users need to pre-process
 the graph data into this format before running Gunrock.</p>
+<h1 id='release-notes'>Release Notes</h1>
+<p>Please see our <a href="https://github.com/gunrock/gunrock/releases">release notes</a> and current releases.</p>
 <h1 id='acknowledgments'>Acknowledgments</h1>
 <p>Thanks to the following developers who contributed code: The connected-component implementation was derived from code written by Jyothish Soman, Kothapalli Kishore, and P. J. Narayanan and described in their IPDPSW '10 paper <em>A Fast GPU Algorithm for Graph Connectivity</em> (<a href="http://dx.doi.org/10.1109/IPDPSW.2010.5470817">DOI</a>). The breadth-first search implementation and many of the utility functions in Gunrock are derived from the <a href="http://code.google.com/p/back40computing/">b40c</a> library of <a href="https://sites.google.com/site/duanemerrill/">Duane Merrill</a>. The algorithm is described in his PPoPP '12 paper <em>Scalable GPU Graph Traversal</em> (<a href="http://dx.doi.org/10.1145/2370036.2145832">DOI</a>). Thanks to Erich Elsen and Vishal Vaidyanathan from <a href="http://www.royal-caliber.com/">Royal Caliber</a> and the <a href="http://www.onu.io/">Onu</a> Team for their discussion on library development and the dataset auto-generating code. Thanks to Adam McLaughlin for his technical discussion. Thanks to Oded Green for his technical discussion and an optimization in the CC primitive. Thanks to the <a href="https://altair-viz.github.io/">Altair</a> and <a href="https://vega.github.io/vega-lite/">Vega-lite</a> teams in the <a href="http://idl.cs.washington.edu/">Interactive Data Lab</a> at the University of Washington for graphing help. We appreciate the technical assistance, advice, and machine access from many colleagues at NVIDIA: Chandra Cheij, Joe Eaton, Michael Garland, Mark Harris, Ujval Kapasi, David Luebke, Duane Merrill, Josh Patterson, Nikolai Sakharnykh, and Cliff Woolley.</p>
 
