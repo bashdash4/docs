@@ -304,16 +304,16 @@
             <a href="#methodology-for-graph-analytics-performance" class="toc-h1 toc-link" data-title="Methodology for Graph Analytics Performance">METHODOLOGY FOR GRAPH ANALYTICS PERFORMANCE</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#bfs" class="toc-h2 toc-link" data-title="BFS">BFS</a>
+                    <a href="#breadth-first-search-bfs" class="toc-h2 toc-link" data-title="Breadth-First Search (BFS)">Breadth-First Search (BFS)</a>
                   </li>
                   <li>
-                    <a href="#sssp" class="toc-h2 toc-link" data-title="SSSP">SSSP</a>
+                    <a href="#single-source-shortest-path-sssp" class="toc-h2 toc-link" data-title="Single Source Shortest Path (SSSP)">Single Source Shortest Path (SSSP)</a>
                   </li>
                   <li>
-                    <a href="#bc" class="toc-h2 toc-link" data-title="BC">BC</a>
+                    <a href="#betweenness-centrality-bc" class="toc-h2 toc-link" data-title="Betweenness Centrality (BC)">Betweenness Centrality (BC)</a>
                   </li>
                   <li>
-                    <a href="#pagerank" class="toc-h2 toc-link" data-title="PageRank">PageRank</a>
+                    <a href="#pagerank-pr" class="toc-h2 toc-link" data-title="PageRank (PR)">PageRank (PR)</a>
                   </li>
               </ul>
           </li>
@@ -360,21 +360,10 @@
               </ul>
           </li>
           <li>
-            <a href="#gunrock-release-notes" class="toc-h1 toc-link" data-title="Gunrock Release Notes">GUNROCK RELEASE NOTES</a>
-              <ul class="toc-list-h2">
-                  <li>
-                    <a href="#v0-5-changelog" class="toc-h2 toc-link" data-title="v0.5 Changelog">v0.5 Changelog</a>
-                  </li>
-                  <li>
-                    <a href="#known-issues" class="toc-h2 toc-link" data-title="Known Issues:">Known Issues:</a>
-                  </li>
-              </ul>
+            <a href="#release-notes" class="toc-h1 toc-link" data-title="Release Notes">RELEASE NOTES</a>
           </li>
           <li>
             <a href="#gunrock-developers" class="toc-h1 toc-link" data-title="Gunrock Developers">GUNROCK DEVELOPERS</a>
-          </li>
-          <li>
-            <a href="#acknowledgments" class="toc-h1 toc-link" data-title="Acknowledgments">ACKNOWLEDGMENTS</a>
           </li>
           <li>
             <a href="#frequently-asked-questions" class="toc-h1 toc-link" data-title="Frequently Asked Questions">FREQUENTLY ASKED QUESTIONS</a>
@@ -428,6 +417,9 @@
                     <a href="#how-would-someone-use-it-with-their-own-data" class="toc-h2 toc-link" data-title="How would someone use it with their own data?">How would someone use it with their own data?</a>
                   </li>
               </ul>
+          </li>
+          <li>
+            <a href="#acknowledgments" class="toc-h1 toc-link" data-title="Acknowledgments">ACKNOWLEDGMENTS</a>
           </li>
       </div>
         <ul class="toc-footer">
@@ -743,16 +735,17 @@ make test</code></pre>
 <p><strong>Required Dependencies:</strong></p>
 
 <ul>
+<li><p>GCC &amp; G++</p></li>
 <li><p><a href="https://developer.nvidia.com/cuda-zone">CUDA</a> (7.5 or higher) is used to implement Gunrock. Recommended CUDA version is CUDA 9 or higher, with some features such as Cooperative Groups and CUDA graphs only available in CUDA 10 or higher.</p>
 
 <ul>
 <li>Refer to NVIDIA's <a href="https://developer.nvidia.com/cuda-downloads">CUDA</a> homepage to download and install CUDA.</li>
 <li>Refer to NVIDIA <a href="http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html">CUDA C Programming Guide</a> for detailed information and examples on programming CUDA.</li>
 </ul></li>
-<li><p><a href="https://github.com/moderngpu/moderngpu">ModernGPU</a> and <a href="http://nvlabs.github.io/cub/">CUB</a> used as external submodules for Gunrock's APIs.</p>
+<li><p><a href="https://github.com/moderngpu/moderngpu">ModernGPU</a>, <a href="http://nvlabs.github.io/cub/">CUB</a> and RapidJSON used as external submodules for Gunrock's APIs.</p>
 
 <ul>
-<li>You will need to download or clone ModernGPU and CUB, and place them to <code>gunrock/externals</code></li>
+<li>You will need to download or clone ModernGPU, CUB and RapidJSON, and place them to <code>gunrock/externals</code></li>
 <li>Alternatively, you can clone gunrock recursively with <code>git clone --recursive https://github.com/gunrock/gunrock</code></li>
 <li>or if you already cloned gunrock, under <code>gunrock/</code> directory: run <code>git submodule init</code> and
 <code>git submodule update</code></li>
@@ -762,6 +755,8 @@ make test</code></pre>
 <p><strong>Optional Dependencies:</strong></p>
 
 <ul>
+<li><p>lcov</p></li>
+<li><p>googletest</p></li>
 <li><p><a href="http://www.boost.org/users/history/version_1_58_0.html">Boost</a> (version 1.58) is used for for the CPU reference implementations of Connected Component, Betweenness Centrality, PageRank, Single-Source Shortest Path, and Minimum Spanning Tree.</p>
 
 <ul>
@@ -772,21 +767,18 @@ make test</code></pre>
 <ul>
 <li>Refer to METIS <a href="http://glaros.dtc.umn.edu/gkhome/metis/metis/download">Installation Guide</a>. If the build cannot find your METIS library, please set the <code>METIS_DLL</code> environment variable to the full path of the library.</li>
 </ul></li>
+<li><p>doxygen</p></li>
 </ul>
 <h2 id='compilation'>Compilation</h2>
 <p><strong>Simple Gunrock Compilation:</strong></p>
 
-<blockquote>
 <p>Downloading gunrock</p>
-</blockquote>
 <pre class="highlight mid-column-code shell tab-shell"><code><span class="c"># Using git (recursively) download gunrock</span>
 git clone --recursive https://github.com/gunrock/gunrock
 <span class="c"># Using wget to download gunrock</span>
 wget --no-check-certificate https://github.com/gunrock/gunrock/archive/master.zip
 </code></pre>
-<blockquote>
 <p>Compiling gunrock</p>
-</blockquote>
 <pre class="highlight mid-column-code shell tab-shell"><code><span class="nb">cd </span>gunrock
 mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd </span>build
 cmake ..
@@ -811,14 +803,12 @@ make
 <li><strong>CUDA_VERBOSE_PTXAS</strong> (default: OFF) - ON to enable verbose output from the PTXAS assembler.</li>
 <li><strong>GUNROCK_GOOGLE_TESTS</strong> (default: OFF) - ON to build unit tests using googletest.</li>
 <li><strong>GUNROCK_CODE_COVERAGE</strong> (default: OFF) - ON to run code coverage on Gunrock's source code. Requires <code>lcov</code> to be installed on the system.</li>
-<li><p><strong>GUNROCK_BUILD_APPLICATIONS</strong> (default: ON) - Set off to only build one of the following primitive (GUNROCK_APP_* must be set on to build if this option is turned off.) Example for compiling gunrock with only <em>Breadth First Search (BFS)</em> primitive, and list of some of the other applications that can be compiled using <code>cmake</code> (note: for the full list, see the <code>CMakeLists.txt</code> file).
-<pre class="highlight mid-column-code mid-column-code shell tab-shell">
-<code>mkdir build &amp;&amp; cd build
-cmake -DGUNROCK_BUILD_APPLICATIONS=OFF -DGUNROCK_APP_BFS=ON ..
+<li><strong>GUNROCK_BUILD_APPLICATIONS</strong> (default: ON) - Set off to only build one of the following primitive (GUNROCK_APP_* must be set on to build if this option is turned off.) Example for compiling gunrock with only <em>Breadth First Search (BFS)</em> primitive, and list of some of the other applications that can be compiled using <code>cmake</code> (note: for the full list, see the <code>CMakeLists.txt</code> file).</li>
+</ul>
+<pre class="highlight mid-column-code shell tab-shell"><code>mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd </span>build
+cmake -DGUNROCK_BUILD_APPLICATIONS<span class="o">=</span>OFF -DGUNROCK_APP_BFS<span class="o">=</span>ON ..
 make
-</code>
-</pre></p>
-
+</code></pre>
 <ul>
 <li><strong>GUNROCK_APP_BC</strong> (default: OFF)</li>
 <li><strong>GUNROCK_APP_BFS</strong> (default: OFF)</li>
@@ -831,7 +821,6 @@ make
 <li><strong>GUNROCK_APP_MST</strong> (default: OFF)</li>
 <li><strong>GUNROCK_APP_WTF</strong> (default: OFF)</li>
 <li><strong>GUNROCK_APP_TOPK</strong> (default: OFF)</li>
-</ul></li>
 </ul>
 <h2 id='generating-datasets'>Generating Datasets</h2>
 <p>All dataset-related code is under the <code>dataset</code> subdirectory. The current version of Gunrock only supports <a href="http://math.nist.gov/MatrixMarket/formats.html">Matrix-market coordinate-formatted graph</a> format. The datasets are divided into two categories according to their scale. Under the <code>dataset/small/</code> subdirectory, there are trivial graph datasets for testing the correctness of the graph primitives. All of them are ready to use. Under the <code>dataset/large/</code> subdirectory, there are large graph datasets for doing performance regression tests.
@@ -857,20 +846,20 @@ make
 
 <p>To calculate TEPS, we require the number of edges traversed (touched), which we count dynamically. For traversal primitives, we note that non-connected components will not be visited, so the number of visited edges may be fewer than the number of edges in the graph. We note that precisely counting edges during the execution of a particular primitive may have performance implications, so we may approximate (see BFS).</p>
 
-<p>Notes on specific primitives follow.</p>
-<h2 id='bfs'>BFS</h2>
+<p>Notes on some of the Gunrock primitives follow.</p>
+<h2 id='breadth-first-search-bfs'>Breadth-First Search (BFS)</h2>
 <p>When we count the number of edges traversed, we do so by summing the number of outbound edges for each visited vertex. For forward, non-idempotent BFS, this strategy should give us an exact count, since this strategy visits every edge incident to a visited vertex. When we enable idempotence, we may visit a node more than once and hence may visit an edge more than once. For backward (pull) BFS, when we visit a vertex, we count all edges incoming to that vertex even if we find a visited predecessor before traversing all edges (and terminate early). (To do so otherwise has performance implications.) Enterprise uses the same counting strategy.</p>
 
 <p>If a comparison library does not measure MTEPS for BFS, we compute it by the number of edges visited divided by runtime; if the former is not available, we use Gunrock's edges-visited count.</p>
-<h2 id='sssp'>SSSP</h2>
+<h2 id='single-source-shortest-path-sssp'>Single Source Shortest Path (SSSP)</h2>
 <p>In general we find MTEPS comparisons between different approaches to SSSP not meaningful: because an edge may be visited one or many times, there is no standard way to count edges traversed. Different algorithms may not only visit a very different number of edges (Dijkstra vs. Bellman-Ford will have very different edge visit counts) but may also have a different number of edges visited across different invocations of the same primitive.</p>
 
 <p>When we report Gunrock's SSSP MTEPS, we use the number of edges queued as the edge-traversal count.</p>
 
 <p>To have a meaningful SSSP experiment, it is critical to have varying edge weights. SSSP measured on uniform edge weights is not meaningful (it becomes BFS). In our experiments, we set edge weights randomly/uniformly between 1 and 64.</p>
-<h2 id='bc'>BC</h2>
+<h2 id='betweenness-centrality-bc'>Betweenness Centrality (BC)</h2>
 <p>If a comparison library does not measure MTEPS for BC, we compute it by twice the number of edges visited in the forward phase divided by runtime (the same computation we use for Gunrock).</p>
-<h2 id='pagerank'>PageRank</h2>
+<h2 id='pagerank-pr'>PageRank (PR)</h2>
 <p>We measure PageRank elapsed time on one iteration of PageRank. (Many other engines measure results this way and it is difficult to extrapolate from this measurement to runtime of the entire algorithm.)</p>
 <h1 id='publications'>Publications</h1>
 <p>Yuechao Pan, Roger Pearce, and John D. Owens. <strong>Scalable Breadth-First Search on a GPU Cluster</strong>. In Proceedings of the 31st IEEE International Parallel and Distributed Processing Symposium, IPDPS 2018, May 2018. [<a href="https://escholarship.org/uc/item/9bd842z6">http</a>]</p>
@@ -1077,85 +1066,8 @@ reduction and segmented intersection. Generally we want to find the right set of
 <li>If we had a larger number of X in the hardware&mdash;e.g., more registers, more SMs, more threads/SM, more shared memory, bigger cache---how would it help performance? (Where would we want NVIDIA to spend more transistors to best help our performance?)</li>
 <li>How much locality is there in frontiers with respect to the "active" frontier vs. the entire set of vertices? Interesting visualization project, for instance: Get a list of the active vertices in a frontier as a function of iteration, so iteration 0 is vertex set A, iteration 1 is vertex set B, etc. For one iteration, visualize the vertex set as a color per chunk of vertices, say, 1024 vertices per pixel. If all 1024 vertices are part of that frontier, the pixel is white, if 0 black, and gray in between. Then each iteration makes another row of pixels. This shows three things: (a) how many vertices are in the frontier compared to not; (b) how much spatial locality there is; (c) how the frontier evolves over time. One of the goals of this effort would be to determine how useful it would be to do some reordering of vertices either statically or dynamically, and either locally (within a chunk of vertices) or globally.</li>
 </ul>
-<h1 id='gunrock-release-notes'>Gunrock Release Notes</h1>
-<p>Gunrock release 0.5 is a feature (minor) release that adds:</p>
-
-<ul>
-<li>New primitives and better support for existing primitives.</li>
-<li>New operator: Intersection.</li>
-<li>Unit-testing support through <a href="https://github.com/google/googletest">Googletest </a> infrastructure.</li>
-<li>CPU reference code for correctness checking for some of the primitives.</li>
-<li>Support for central integration (Jenkins) and code-coverage.</li>
-<li>Overall bug fixes and support for new CUDA architectures.</li>
-</ul>
-<h2 id='v0-5-changelog'>v0.5 Changelog</h2>
-<p>All notable changes to gunrock for v0.5 are documented below:</p>
-<h3 id='added'>Added</h3>
-<ul>
-<li>New primitives:
-
-<ul>
-<li>A* </li>
-<li>Weighted Label Propagation (LP) </li>
-<li>Minimum Spanning Tree (MST)</li>
-<li>Random Walk (RW)</li>
-<li>Triangle Counting (TC)</li>
-</ul></li>
-<li>Operator:
-
-<ul>
-<li>Intersection operator (for example, see TC)</li>
-</ul></li>
-<li>Unit-testing:
-
-<ul>
-<li>Googletest support (see <code>unittests</code> directory)</li>
-</ul></li>
-<li>Docs
-
-<ul>
-<li>Support using Slate (see https://github.com/gunrock/docs)</li>
-</ul></li>
-<li>CPU reference code</li>
-<li>Run scripts for all primitives</li>
-<li>Clang-format based on Google style
-
-<ul>
-<li>see commit aac9add (revert for diff)</li>
-</ul></li>
-<li>Support for Volta and Turing architectures</li>
-<li>Regression tests to <code>ctest</code> for better code-coverage</li>
-<li>Memset kernels</li>
-<li>Multi-gpu testing through Jenkins</li>
-</ul>
-<h3 id='removed'>Removed</h3>
-<ul>
-<li>Subgraph matching and join operator removed due to race conditions (SM is not added to the future release)</li>
-<li>Plots generation python scripts removed (see https://github.com/gunrock/io)</li>
-<li>MaxFlow primitive removed, wasn't fully implemented for a release (implementation exists in the new API for future release)</li>
-<li>Outdated documentation</li>
-</ul>
-<h3 id='fixed'>Fixed</h3>
-<ul>
-<li>HITS now produces correct results</li>
-<li>Illegal memory access fixed for label propagation (LP) primitive</li>
-<li>WTF Illegal memory access fixed for frontier queue (see known issues for problems with this)</li>
-<li>Other minor bug fixes</li>
-</ul>
-<h3 id='changed'>Changed</h3>
-<ul>
-<li>Updated README and other docs</li>
-<li>Moved previously <code>tests</code> directory to <code>examples</code></li>
-<li>Doesn't require <code>CMakeLists.txt</code> (or <code>cmake</code>) to run <code>make</code></li>
-<li>Moved all docs to Slate</li>
-</ul>
-<h2 id='known-issues'>Known Issues:</h2>
-<ul>
-<li>WTF has illegal memory access (https://github.com/gunrock/gunrock/issues/503).</li>
-<li>A* sometimes outputs the wrong path randomly (https://github.com/gunrock/gunrock/issues/502).</li>
-<li>Random Walk uses custom kernels within gunrock, this is resolved for future releases.</li>
-<li>CPU Reference code not implemented for SALSA, TC and LP (https://github.com/gunrock/gunrock/issues/232).</li>
-</ul>
+<h1 id='release-notes'>Release Notes</h1>
+<p>Please see our <a href="https://github.com/gunrock/gunrock/releases">release notes</a> and current releases.</p>
 <h1 id='gunrock-developers'>Gunrock Developers</h1>
 <ul>
 <li><a href="http://www.idav.ucdavis.edu/~yzhwang/">Yangzihao Wang</a>,
@@ -1177,10 +1089,6 @@ University of California, Davis</li>
 <li><a href="http://www.ece.ucdavis.edu/~jowens/">John Owens</a>,
 University of California, Davis</li>
 </ul>
-<h1 id='acknowledgments'>Acknowledgments</h1>
-<p>Thanks to the following developers who contributed code: The connected-component implementation was derived from code written by Jyothish Soman, Kothapalli Kishore, and P. J. Narayanan and described in their IPDPSW '10 paper <em>A Fast GPU Algorithm for Graph Connectivity</em> (<a href="http://dx.doi.org/10.1109/IPDPSW.2010.5470817">DOI</a>). The breadth-first search implementation and many of the utility functions in Gunrock are derived from the <a href="http://code.google.com/p/back40computing/">b40c</a> library of <a href="https://sites.google.com/site/duanemerrill/">Duane Merrill</a>. The algorithm is described in his PPoPP '12 paper <em>Scalable GPU Graph Traversal</em> (<a href="http://dx.doi.org/10.1145/2370036.2145832">DOI</a>). Thanks to Erich Elsen and Vishal Vaidyanathan from <a href="http://www.royal-caliber.com/">Royal Caliber</a> and the <a href="http://www.onu.io/">Onu</a> Team for their discussion on library development and the dataset auto-generating code. Thanks to Adam McLaughlin for his technical discussion. Thanks to Oded Green for his technical discussion and an optimization in the CC primitive. Thanks to the <a href="https://altair-viz.github.io/">Altair</a> and <a href="https://vega.github.io/vega-lite/">Vega-lite</a> teams in the <a href="http://idl.cs.washington.edu/">Interactive Data Lab</a> at the University of Washington for graphing help. We appreciate the technical assistance, advice, and machine access from many colleagues at NVIDIA: Chandra Cheij, Joe Eaton, Michael Garland, Mark Harris, Ujval Kapasi, David Luebke, Duane Merrill, Josh Patterson, Nikolai Sakharnykh, and Cliff Woolley.</p>
-
-<p>This work was funded by the DARPA HIVE program under AFRL Contract FA8650-18-2-7835, the DARPA XDATA program under AFRL Contract FA8750-13-C-0002, by NSF awards OAC-1740333, CCF-1629657, OCI-1032859, and CCF-1017399, by DARPA STTR award D14PC00023, and by DARPA SBIR award W911NF-16-C-0020. Our XDATA principal investigator was Eric Whyne of <a href="http://www.data-tactics.com/">Data Tactics Corporation</a> and our DARPA program manager is <a href="http://www.darpa.mil/staff/mr-wade-shen">Mr. Wade Shen</a> (since 2015), and before that Dr. Christopher White (2012&ndash;2014). Thanks to Chris, Wade, and DARPA business manager Gabriela Araujo for their support during the XDATA program.</p>
 <h1 id='frequently-asked-questions'>Frequently Asked Questions</h1>
 <p>Some of the most common questions we have come across during the life of Gunrock project. If your question isn't already answered below, feel free to create an <a href="https://github.com/gunrock/gunrock/issues">issue</a> on GitHub.</p>
 <h2 id='what-does-it-do'>What does it do?</h2>
@@ -1269,6 +1177,10 @@ to download a single dataset in its separate directory.</p>
 <h2 id='how-would-someone-use-it-with-their-own-data'>How would someone use it with their own data?</h2>
 <p>Gunrock supports Matrix Market (.mtx) file format; users need to pre-process
 the graph data into this format before running Gunrock.</p>
+<h1 id='acknowledgments'>Acknowledgments</h1>
+<p>Thanks to the following developers who contributed code: The connected-component implementation was derived from code written by Jyothish Soman, Kothapalli Kishore, and P. J. Narayanan and described in their IPDPSW '10 paper <em>A Fast GPU Algorithm for Graph Connectivity</em> (<a href="http://dx.doi.org/10.1109/IPDPSW.2010.5470817">DOI</a>). The breadth-first search implementation and many of the utility functions in Gunrock are derived from the <a href="http://code.google.com/p/back40computing/">b40c</a> library of <a href="https://sites.google.com/site/duanemerrill/">Duane Merrill</a>. The algorithm is described in his PPoPP '12 paper <em>Scalable GPU Graph Traversal</em> (<a href="http://dx.doi.org/10.1145/2370036.2145832">DOI</a>). Thanks to Erich Elsen and Vishal Vaidyanathan from <a href="http://www.royal-caliber.com/">Royal Caliber</a> and the <a href="http://www.onu.io/">Onu</a> Team for their discussion on library development and the dataset auto-generating code. Thanks to Adam McLaughlin for his technical discussion. Thanks to Oded Green for his technical discussion and an optimization in the CC primitive. Thanks to the <a href="https://altair-viz.github.io/">Altair</a> and <a href="https://vega.github.io/vega-lite/">Vega-lite</a> teams in the <a href="http://idl.cs.washington.edu/">Interactive Data Lab</a> at the University of Washington for graphing help. We appreciate the technical assistance, advice, and machine access from many colleagues at NVIDIA: Chandra Cheij, Joe Eaton, Michael Garland, Mark Harris, Ujval Kapasi, David Luebke, Duane Merrill, Josh Patterson, Nikolai Sakharnykh, and Cliff Woolley.</p>
+
+<p>This work was funded by the DARPA HIVE program under AFRL Contract FA8650-18-2-7835, the DARPA XDATA program under AFRL Contract FA8750-13-C-0002, by NSF awards OAC-1740333, CCF-1629657, OCI-1032859, and CCF-1017399, by DARPA STTR award D14PC00023, and by DARPA SBIR award W911NF-16-C-0020. Our XDATA principal investigator was Eric Whyne of <a href="http://www.data-tactics.com/">Data Tactics Corporation</a> and our DARPA program manager is <a href="http://www.darpa.mil/staff/mr-wade-shen">Mr. Wade Shen</a> (since 2015), and before that Dr. Christopher White (2012&ndash;2014). Thanks to Chris, Wade, and DARPA business manager Gabriela Araujo for their support during the XDATA program.</p>
 
       </div>
 
