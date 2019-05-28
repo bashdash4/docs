@@ -49,7 +49,7 @@ make test</code></pre>
 <li>To learn more about Gunrock and its programming model, see <a href="http://gunrock.github.io/docs/#overview">Gunrock&#39;s Overview</a>.</li>
 <li>For information on building Gunrock, see <a href="http://gunrock.github.io/docs/#building-gunrock">Building Gunrock</a>.</li>
 <li>Tutorial: <a href="#">How to write a graph primitive within Gunrock?</a></li>
-<li>The <code>examples</code> subdirectory has a comprehensive list of test applications for most the functionality of Gunrock.</li>
+<li>Comprehensive <a href="https://gunrock.github.io/docs/#gunrock-39-s-application-cases">list</a> of test applications and primitives for most the functionality of Gunrock.</li>
 <li><a href="http://gunrock.github.io/gunrock">API Reference documentation</a> (generated using doxygen).</li>
 <li>Find our <a href="http://gunrock.github.io/docs/#publications">publications</a>, <a href="http://gunrock.github.io/docs/#presentations">presentations</a>, and <a href="http://gunrock.github.io/docs/#results-and-analysis">results and analysis</a>.</li>
 </ul>
