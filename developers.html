@@ -324,14 +324,19 @@ use codecov.io to determine what lines are not executed. This gives you a good
 idea of what needs to be in the test and what you are missing.</p>
 
 <p><strong>What is code coverage?</strong></p>
-<pre class="highlight plaintext"><code>Code coverage is a measurement used to express which lines of code were executed by a test suite. We use three primary terms to describe each lines executed.
 
- * hit indicates that the source code was executed by the test suite.
- * partial indicates that the source code was not fully executed by the test suite; there are remaining branches that were not executed.
- * miss indicates that the source code was not executed by the test suite.
+<blockquote>
+<p>Code coverage is a measurement used to express which lines of code were executed by a test suite. We use three primary terms to describe each lines executed.</p>
 
-Coverage is the ratio of hits / (hit + partial + miss). A code base that has 5 lines executed by tests out of 12 total lines will receive a coverage ratio of 41% (rounding down).
-</code></pre>
+<ul>
+<li>hit indicates that the source code was executed by the test suite.</li>
+<li>partial indicates that the source code was not fully executed by the test suite; there are remaining branches that were not executed.</li>
+<li>miss indicates that the source code was not executed by the test suite.</li>
+</ul>
+
+<p>Coverage is the ratio of hits / (hit + partial + miss). A code base that has 5 lines executed by tests out of 12 total lines will receive a coverage ratio of 41% (rounding down).</p>
+</blockquote>
+
 <p>Below is an example of what lines are a hit and a miss; you can target the lines missed in the tests to improve coverage.</p>
 
 <p><img src="https://i.imgur.com/5QwKjcB.png" alt="Example CodeCov Stats" /></p>
