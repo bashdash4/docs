@@ -1,0 +1,419 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="icon" type="image/ico" href="images/favicon.ico">
+    <title>Developers</title>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight .gh {
+  color: #999999;
+}
+.highlight .sr {
+  color: #f6aa11;
+}
+.highlight .go {
+  color: #888888;
+}
+.highlight .gp {
+  color: #555555;
+}
+.highlight .gs {
+}
+.highlight .gu {
+  color: #aaaaaa;
+}
+.highlight .nb {
+  color: #f6aa11;
+}
+.highlight .cm {
+  color: #75715e;
+}
+.highlight .cp {
+  color: #75715e;
+}
+.highlight .c1 {
+  color: #75715e;
+}
+.highlight .cs {
+  color: #75715e;
+}
+.highlight .c, .highlight .cd {
+  color: #75715e;
+}
+.highlight .err {
+  color: #960050;
+}
+.highlight .gr {
+  color: #960050;
+}
+.highlight .gt {
+  color: #960050;
+}
+.highlight .gd {
+  color: #49483e;
+}
+.highlight .gi {
+  color: #49483e;
+}
+.highlight .ge {
+  color: #49483e;
+}
+.highlight .kc {
+  color: #66d9ef;
+}
+.highlight .kd {
+  color: #66d9ef;
+}
+.highlight .kr {
+  color: #66d9ef;
+}
+.highlight .no {
+  color: #66d9ef;
+}
+.highlight .kt {
+  color: #66d9ef;
+}
+.highlight .mf {
+  color: #ae81ff;
+}
+.highlight .mh {
+  color: #ae81ff;
+}
+.highlight .il {
+  color: #ae81ff;
+}
+.highlight .mi {
+  color: #ae81ff;
+}
+.highlight .mo {
+  color: #ae81ff;
+}
+.highlight .m, .highlight .mb, .highlight .mx {
+  color: #ae81ff;
+}
+.highlight .sc {
+  color: #ae81ff;
+}
+.highlight .se {
+  color: #ae81ff;
+}
+.highlight .ss {
+  color: #ae81ff;
+}
+.highlight .sd {
+  color: #e6db74;
+}
+.highlight .s2 {
+  color: #e6db74;
+}
+.highlight .sb {
+  color: #e6db74;
+}
+.highlight .sh {
+  color: #e6db74;
+}
+.highlight .si {
+  color: #e6db74;
+}
+.highlight .sx {
+  color: #e6db74;
+}
+.highlight .s1 {
+  color: #e6db74;
+}
+.highlight .s {
+  color: #e6db74;
+}
+.highlight .na {
+  color: #a6e22e;
+}
+.highlight .nc {
+  color: #a6e22e;
+}
+.highlight .nd {
+  color: #a6e22e;
+}
+.highlight .ne {
+  color: #a6e22e;
+}
+.highlight .nf {
+  color: #a6e22e;
+}
+.highlight .vc {
+  color: #ffffff;
+}
+.highlight .nn {
+  color: #ffffff;
+}
+.highlight .nl {
+  color: #ffffff;
+}
+.highlight .ni {
+  color: #ffffff;
+}
+.highlight .bp {
+  color: #ffffff;
+}
+.highlight .vg {
+  color: #ffffff;
+}
+.highlight .vi {
+  color: #ffffff;
+}
+.highlight .nv {
+  color: #ffffff;
+}
+.highlight .w {
+  color: #ffffff;
+}
+.highlight {
+  color: #ffffff;
+}
+.highlight .n, .highlight .py, .highlight .nx {
+  color: #ffffff;
+}
+.highlight .ow {
+  color: #f92672;
+}
+.highlight .nt {
+  color: #f92672;
+}
+.highlight .k, .highlight .kv {
+  color: #f92672;
+}
+.highlight .kn {
+  color: #f92672;
+}
+.highlight .kp {
+  color: #f92672;
+}
+.highlight .o {
+  color: #f92672;
+}
+    </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vega@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+    });
+    </script>
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <style media="screen">
+      /* Add space between vega-embed links */
+      /* http://vega.github.io/vega-tutorials/airports/ */
+      .vega-embed .vega-actions a {
+        margin-left: 1em;
+        visibility: hidden;
+      }
+      .vega-embed:hover .vega-actions a {
+        visibility: visible;
+      }
+    </style>
+  </head>
+
+  <body class="developers" data-languages="[]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" alt="Navbar" />
+      </span>
+    </a>
+    <div class="toc-wrapper">
+      <a href="https://gunrock.github.io/">
+        <img src="images/logo.png" class="logo" alt="Logo" />
+      </a>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <div id="toc" class="toc-list-h1">
+          <li>
+            <a href="#developers" class="toc-h1 toc-link" data-title="Developers">DEVELOPERS</a>
+          </li>
+          <li>
+            <a href="#git-forking-workflow" class="toc-h1 toc-link" data-title="Git Forking Workflow">GIT FORKING WORKFLOW</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#how-forking-workflow-works" class="toc-h2 toc-link" data-title="How Forking Workflow Works?">How Forking Workflow Works?</a>
+                  </li>
+                  <li>
+                    <a href="#gunrock-39-s-forking-workflow" class="toc-h2 toc-link" data-title="Gunrock's Forking Workflow">Gunrock's Forking Workflow</a>
+                  </li>
+                  <li>
+                    <a href="#how-to-contribute" class="toc-h2 toc-link" data-title="How to contribute?">How to contribute?</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#googletest-for-gunrock" class="toc-h1 toc-link" data-title="GoogleTest for Gunrock">GOOGLETEST FOR GUNROCK</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#example-test-using-googletest" class="toc-h2 toc-link" data-title="Example Test Using GoogleTest">Example Test Using GoogleTest</a>
+                  </li>
+              </ul>
+          </li>
+      </div>
+        <ul class="toc-footer">
+            <li><a href='https://github.com/gunrock/gunrock'>Gunrock; GPU Graph Analytics</a></li>
+            <li>Gunrock © 2019 The Regents of the University of California.</li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+
+        <div class="dark-box"></div>
+
+      <div class="content">
+        <h1 id='developers'>Developers</h1>
+<p>This is a developers guide for Gunrock. (TODO)</p>
+<h1 id='git-forking-workflow'>Git Forking Workflow</h1>
+<p>Transitioning over from <a href="http://nvie.com/posts/a-successful-git-branching-model/">Git Branching Workflow</a> suggested by Vincent Driessen at nvie to <a href="https://www.atlassian.com/git/tutorials/comparing-workflows#forking-workflow">Git Forking Workflow</a> for Gunrock.</p>
+<h2 id='how-forking-workflow-works'>How Forking Workflow Works?</h2>
+<p><img src="https://wac-cdn.atlassian.com/dam/jcr:5c0941ff-a8b5-435b-a092-2167705f1e97/01.svg?cdnVersion=hp" alt="Forking Workflow" />
+As in the other Git workflows, the Forking Workflow begins with an <strong>official public repository</strong> stored on a server. But when a new developer wants to start working on the project, they do not directly clone the official repository.
+<br><br>Instead, they <strong>fork the official repository</strong> to create a copy of it on the server. This new copy serves as their personal public repository—no other developers are allowed to push to it, but they can <strong>pull changes</strong> from it (we’ll see why this is important in a moment). After they have created their server-side copy, the developer performs a git clone to get a copy of it onto their local machine. This serves as their private development environment, just like in the other workflows.
+<br><br> When they're ready to publish a local commit, they push the commit to their own public repository—not the official one. Then, they file a pull request with the main repository, which lets the project maintainer know that an update is ready to be integrated. The <strong>pull request also serves as a convenient discussion thread</strong> if there are issues with the contributed code.
+<br><br> To integrate the feature into the official codebase, the maintainer pulls the contributor’s changes into their local repository, checks to make sure it doesn’t break the project, merges it into his local master branch, then pushes the master branch to the official repository on the server. The contribution is now part of the project, and other developers should pull from the official repository to synchronize their local repositories.</p>
+<h2 id='gunrock-39-s-forking-workflow'>Gunrock's Forking Workflow</h2>
+<p><strong>gunrock/gunrock:</strong></p>
+
+<ul>
+<li><strong>Master Branch:</strong> Reserved only for final releases or some bug fixes/patched codes.</li>
+<li><strong>Dev Branch:</strong> Current working branch where all developers push their changes to. This dev branch will serve as the "next release" gunrock, eliminating the need of managing individual branches for each feature and merging them when it is time for the release.</li>
+</ul>
+
+<p><strong>(personal-fork)/gunrock</strong></p>
+
+<ul>
+<li><strong>Feature Branch:</strong> This is the developer's personal repository with their feature branch. Whatever changes they would like to contribute to gunrock must be in their own personal fork. And once it is time to create a pull request, it is done so using github pull request, a reviewer checks it and the changes are merged into gunrock/gunrock dev branch.</li>
+</ul>
+
+<p>Note that transitioning to this type of workflow from branching model doesn't require much effort, we will just have to start working on our forks and start creating pull requests to one dev branch.</p>
+<h2 id='how-to-contribute'>How to contribute?</h2>
+<ul>
+<li>Fork using GitHub; https://github.com/gunrock/gunrock</li>
+<li><code>git clone --recursive https://github.com/gunrock/gunrock.git</code></li>
+<li><code>git remote set-url --push origin https://github.com/username/gunrock.git</code> This insures that you are pulling from <code>gunrock/gunrock</code> (staying updated with the main repository) but pushing to your own fork <code>username/gunrock</code>.</li>
+<li><code>git add <filename></code></li>
+<li><code>git commit -m "Describe your changes."</code></li>
+<li><code>git push</code></li>
+<li>Once you've pushed the changes on your fork, you can create a <strong>pull request</strong> on Github to merge the changes.</li>
+<li>Pull request will then be reviewed and merged into the <code>dev</code> branch.</li>
+</ul>
+<h1 id='googletest-for-gunrock'>GoogleTest for Gunrock</h1>
+<p><strong>Recommended Read:</strong> <a href="https://github.com/google/googletest/blob/master/googletest/docs/Primer.md">Introduction: Why Google C++ Testing Framework?</a></p>
+
+<p>When writing a good test, we would like to cover all possible functions (or execute all code lines),
+what I will recommend to do is write a simple test, run code coverage on it, and
+use codecov.io to determine what lines are not executed. This gives you a good
+idea of what needs to be in the test and what you are missing.</p>
+
+<p><strong>What is code coverage?</strong></p>
+<pre class="highlight plaintext"><code>Code coverage is a measurement used to express which lines of code were executed by a test suite. We use three primary terms to describe each lines executed.
+
+ * hit indicates that the source code was executed by the test suite.
+ * partial indicates that the source code was not fully executed by the test suite; there are remaining branches that were not executed.
+ * miss indicates that the source code was not executed by the test suite.
+
+Coverage is the ratio of hits / (hit + partial + miss). A code base that has 5 lines executed by tests out of 12 total lines will receive a coverage ratio of 41% (rounding down).
+</code></pre>
+<p>Below is an example of what lines are a hit and a miss; you can target the lines missed in the tests to improve coverage.</p>
+
+<p><img src="https://i.imgur.com/5QwKjcB.png" alt="Example CodeCov Stats" /></p>
+<h2 id='example-test-using-googletest'>Example Test Using GoogleTest</h2><pre class="highlight c tab-c"><code><span class="cm">/**
+ * @brief BFS test for shared library advanced interface
+ * @file test_lib_bfs.h
+ */</span>
+
+<span class="c1">// Includes required for the test
+</span>
+<span class="cp">#include "stdio.h"
+#include "gunrock/gunrock.h"
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
+</span>
+<span class="c1">// Add to gunrock's namespace
+</span><span class="n">namespace</span> <span class="n">gunrock</span> <span class="p">{</span>
+
+<span class="cm">/* Test function, test suite in this case is
+ * sharedlibrary and the test itself is breadthfirstsearch
+ */</span>
+<span class="n">TEST</span><span class="p">(</span><span class="n">sharedlibrary</span><span class="p">,</span> <span class="n">breadthfirstsearch</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">GRTypes</span> <span class="n">data_t</span><span class="p">;</span>                 <span class="c1">// data type structure
+</span>    <span class="n">data_t</span><span class="p">.</span><span class="n">VTXID_TYPE</span> <span class="o">=</span> <span class="n">VTXID_INT</span><span class="p">;</span>         <span class="c1">// vertex identifier
+</span>    <span class="n">data_t</span><span class="p">.</span><span class="n">SIZET_TYPE</span> <span class="o">=</span> <span class="n">SIZET_INT</span><span class="p">;</span>         <span class="c1">// graph size type
+</span>    <span class="n">data_t</span><span class="p">.</span><span class="n">VALUE_TYPE</span> <span class="o">=</span> <span class="n">VALUE_INT</span><span class="p">;</span>         <span class="c1">// attributes type
+</span>    <span class="kt">int</span> <span class="n">srcs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">};</span>
+
+    <span class="k">struct</span> <span class="n">GRSetup</span> <span class="o">*</span><span class="n">config</span> <span class="o">=</span> <span class="n">InitSetup</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">srcs</span><span class="p">);</span>   <span class="c1">// gunrock configurations
+</span>
+    <span class="kt">int</span> <span class="n">num_nodes</span> <span class="o">=</span> <span class="mi">7</span><span class="p">,</span> <span class="n">num_edges</span> <span class="o">=</span> <span class="mi">15</span><span class="p">;</span>  <span class="c1">// number of nodes and edges
+</span>    <span class="kt">int</span> <span class="n">row_offsets</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span>  <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">};</span>
+    <span class="kt">int</span> <span class="n">col_indices</span><span class="p">[</span><span class="mi">15</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">};</span>
+
+    <span class="k">struct</span> <span class="n">GRGraph</span> <span class="o">*</span><span class="n">grapho</span> <span class="o">=</span> <span class="p">(</span><span class="k">struct</span> <span class="n">GRGraph</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">GRGraph</span><span class="p">));</span>
+    <span class="k">struct</span> <span class="n">GRGraph</span> <span class="o">*</span><span class="n">graphi</span> <span class="o">=</span> <span class="p">(</span><span class="k">struct</span> <span class="n">GRGraph</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">GRGraph</span><span class="p">));</span>
+    <span class="n">graphi</span><span class="o">-></span><span class="n">num_nodes</span>   <span class="o">=</span> <span class="n">num_nodes</span><span class="p">;</span>
+    <span class="n">graphi</span><span class="o">-></span><span class="n">num_edges</span>   <span class="o">=</span> <span class="n">num_edges</span><span class="p">;</span>
+    <span class="n">graphi</span><span class="o">-></span><span class="n">row_offsets</span> <span class="o">=</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">row_offsets</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="n">graphi</span><span class="o">-></span><span class="n">col_indices</span> <span class="o">=</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">col_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+
+    <span class="n">gunrock_bfs</span><span class="p">(</span><span class="n">grapho</span><span class="p">,</span> <span class="n">graphi</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">data_t</span><span class="p">);</span>
+
+    <span class="kt">int</span> <span class="o">*</span><span class="n">labels</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="o">*</span> <span class="n">graphi</span><span class="o">-></span><span class="n">num_nodes</span><span class="p">);</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">grapho</span><span class="o">-></span><span class="n">node_value1</span><span class="p">;</span>
+
+    <span class="c1">// IMPORTANT: Expected output is stored in an array to compare against determining if the test passed or failed
+</span>    <span class="kt">int</span> <span class="n">result</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2147483647</span><span class="p">,</span> <span class="mi">2147483647</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">};</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o"><</span> <span class="n">graphi</span><span class="o">-></span><span class="n">num_nodes</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// IMPORTANT: Compare expected result with the generated labels
+</span>      <span class="n">EXPECT_EQ</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o"><<</span> <span class="s">"Vectors x and y differ at index "</span> <span class="o"><<</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">graphi</span><span class="p">)</span> <span class="n">free</span><span class="p">(</span><span class="n">graphi</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">grapho</span><span class="p">)</span> <span class="n">free</span><span class="p">(</span><span class="n">grapho</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="n">free</span><span class="p">(</span><span class="n">labels</span><span class="p">);</span>
+
+<span class="p">}</span>
+<span class="p">}</span> <span class="c1">// namespace gunrock
+</span></code></pre>
+<ol>
+<li><p>Create a <code>test_<test-name>.h</code> file and place it in the appropriate directory inside <code>/path/to/gunrock/tests/</code>. I will be using <code>test_bfs_lib.h</code> as an example.</p></li>
+<li><p>In the <code>tests/test.cpp</code> file, add your test file as an include: <code>#include "bfs/test_lib_bfs.h"</code>.</p></li>
+<li><p>In your <code>test_<test-name>.h</code> file, create a <code>TEST()</code> function, which takes two parameters: <code>TEST(<nameofthesuite>, <nameofthetest>)</code>.</p></li>
+<li><p>Use <code>EXPECT</code> and <code>ASSERT</code> to write the actual test itself. I have provided a commented example below:</p></li>
+<li><p>Now when you run the binary called <code>unit_test</code>, it will automatically run your test suite along with all other google tests as well.
+This binary it automatically compiled when gunrock is built, and is found in <code>/path/to/builddir/bin/unit_test</code>.</p></li>
+</ol>
+
+<p><strong>Final Remarks:</strong></p>
+
+<ul>
+<li>I highly recommend reading the Primer document mentioned at the start of this tutorial. It explains in detail how to write a unit test using google test. My tutorial has more been about how to incorporate it into Gunrock.</li>
+<li>Another interesting read is <a href="https://testing.googleblog.com/2014/07/measuring-coverage-at-google.html">Measuring Coverage at Google</a>.</li>
+</ul>
+
+      </div>
+
+      <div class="dark-box">
+      </div>
+    </div>
+  </body>
+</html>

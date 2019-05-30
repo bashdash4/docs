@@ -1,7 +1,7 @@
 <h1 id='gunrock-39-s-application-cases'>Gunrock&#39;s Application Cases</h1>
 <p>The following is are a wide variety of graph primitives, including traversal-based (breadth-first search, single-source shortest path); node-ranking (HITS, SALSA, PageRank); and global (connected component, minimum spanning tree) implemented within Gunrock.</p>
 
-<p>The &quot;Directory&quot; column in the table below shows, which subdirectory within <code>gunrock/app</code> and <code>examples</code> these applications&#39; implementations are. The version number in the &quot;Single GPU&quot; and &quot;Multi-GPU&quot; columns show which API abstraction of gunrock supports the respective application. If you are interested in helping us port an application in the older abstraction (<code>v0.5.x</code>) to a newer, much cleaner abstraction (<code>v1.x.x</code>), please see our <a href="https://gunrock.github.io/docs/#porting_guide">Porting Guide</a>.</p>
+<p>The &quot;Directory&quot; column in the table below shows, which subdirectory within <code>gunrock/app</code> and <code>examples</code> these applications&#39; implementations are. The version number in the &quot;Single GPU&quot; and &quot;Multi-GPU&quot; columns show which API abstraction of gunrock supports the respective application. If you are interested in helping us port an application in the older abstraction (<code>v0.5.x</code>) to a newer, much cleaner abstraction (<code>v1.x.x</code>), please see our <a href="https://gunrock.github.io/docs/developers.html#porting_guide">Porting Guide</a>.</p>
 
 <table><thead>
 <tr>
