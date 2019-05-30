@@ -462,14 +462,12 @@
 </tbody></table>
 <h2 id='quick-start-guide'>Quick Start Guide</h2>
 <p>Before building Gunrock make sure you have <strong>CUDA 7.5 or higher</strong> (recommended CUDA 9 or higher) installed on your Linux system. We also support building Gunrock on docker images using the provided docker files under <code>docker</code> subdirectory. For complete build guide, see <a href="https://gunrock.github.io/docs/#building-gunrock">Building Gunrock</a>.</p>
-
-<pre class="highlight mid-column-code mid-column-code shell tab-shell">
-<code>git clone --recursive https://github.com/gunrock/gunrock/
-cd gunrock
-mkdir build && cd build
-cmake .. && make -j$(nproc)
-make test</code></pre>
-<h2 id='getting-started-with-gunrock'>Getting Started with Gunrock</h2>
+<pre class="highlight mid-column-code shell tab-shell"><code>git clone --recursive https://github.com/gunrock/gunrock/
+<span class="nb">cd </span>gunrock
+mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd </span>build
+cmake .. <span class="o">&amp;&amp;</span> make -j<span class="k">$(</span>nproc<span class="k">)</span>
+make <span class="nb">test</span>
+</code></pre><h2 id='getting-started-with-gunrock'>Getting Started with Gunrock</h2>
 <ul>
 <li>To learn more about Gunrock and its programming model, see <a href="http://gunrock.github.io/docs/#overview">Gunrock's Overview</a>.</li>
 <li>For information on building Gunrock, see <a href="http://gunrock.github.io/docs/#building-gunrock">Building Gunrock</a>.</li>
