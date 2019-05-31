@@ -1,0 +1,76 @@
+<h1 id='directory-structure'>Directory Structure</h1>
+<p>Regardless of the level of contribution you would like to make, or develop towards, it is essential to understand the source directory structure of Gunrock. Knowing where things are will help decide the best place to invest your time in, and make the changes needed for your particular problem.</p>
+
+<p>[gunrock&#39;s root]
+  - <strong>.github</strong> --
+  GitHub related files and folders, such as issue and pull request templates can be found here.</p>
+
+<ul>
+<li><p><strong>cmake</strong> --
+CMake modules are located here, allowing us to download googletest source code on the fly during cmake build, and other modules to look for the respective libraries and prerequisites.</p></li>
+<li><p><strong>dataset</strong> --
+Important gunrock datasets used in the publications, performance testing, correctness checking and unit tests are located here.</p>
+
+<ul>
+<li><strong>large</strong> --
+Large datasets are not stored in the github repository, we instead provide a Makefile to download the required dataset (or the entire collection) by simply running <code>make</code> in the respective subdirectory (or large directory for the whole collection).
+
+<ul>
+<li>[dataset]</li>
+</ul></li>
+<li><strong>small</strong> --
+Generally less than a 100 nodes (or a few 100s of nodes), these datasets are good candidates for correctness checking and quick tests. If you are developing a primitive within gunrock, it is recommended to use these for testing purposes and conduct a much more comprehensive tests/correctness check using the dataset under <code>large</code> directory.</li>
+</ul></li>
+<li><p><strong>docker</strong> --
+Docker files for different configurations, simply run <code>docker build . -t gunrock</code> in one of the subdirectories, and start the docker session using <code>nvidia-docker run -it gunrock /bin/bash</code>.</p></li>
+<li><p><strong>docs</strong> --
+Documentation repository (https://github.com/gunrock/docs) used for the main gunrock&#39;s website available at https://gunrock.github.io/docs/</p></li>
+<li><p><strong>doxygen</strong> --
+Doxygen generated API docs.</p></li>
+<li><p><strong>examples</strong> --
+Application test driver are located here in the subdirectory of the respective application. The <code>main()</code> function in each <code>test_&lt;app&gt;.cu</code> file in the subdirectories is responsible for setting the templated types and calling the CPU reference implementation as well as the Gunrock GPU implementation for the respective application.</p>
+
+<ul>
+<li>[example application]</li>
+</ul></li>
+<li><p><strong>externals</strong> --
+External modules used by gunrock, perform <code>git submodule init &amp;&amp; git submodule update</code> to fetch the modules; these include moderngpu, CUB and rapidJSON.</p></li>
+<li><p><strong>gunrock</strong> --
+Core of gunrock&#39;s source code is located here, this includes implementation of different algorithms/primitives, graph data structure, graph loader, operators, partitioner, other useful utlities, etc.</p>
+
+<ul>
+<li><p><strong>app</strong> --
+Implementations of each applications are located here (the driver is located under [root]/examples/[application name]).</p>
+
+<ul>
+<li><strong>hello</strong> --
+A sample application used to guide developers through writing their own application within gunrock.</li>
+<li>hello_app.cu : High level view of the application, used to call the problem initialization and reset, enactor initialization and reset, and the validation routine. The external c-interface for the respective application is also located within the <code>&lt;app_name&gt;_app.cu</code> file.</li>
+<li>hello_test.cuh : CPU reference code, validation routine and a display/output function are all located in the <code>&lt;app_name&gt;_test.cuh</code> file. Mainly used for correctness checking of the parallel implementation within gunrock and gunrock&#39;s programming model.</li>
+<li>hello_problem.cuh : An application&#39;s data goes here. Declaration, initialization, reset and extraction of the data happens in the <code>&lt;app_name&gt;_problem.cuh</code> file.</li>
+<li>hello_enactor.cuh : Iteration loop, operators and the actual algorithm implementation goes in the <code>&lt;app_name&gt;_enactor.cuh</code> file.</li>
+</ul></li>
+<li><p><strong>graph</strong> --
+Supported graph data structures and their helper functions can be found here. An example of such data structure is the Compressed Sparse Row format (CSR), and an example of a helper function for CSR format will be <code>GetNeighborListLength()</code>, which returns the number of neighbors for a given node.</p></li>
+<li><p><strong>graphio</strong> --
+Graph loader, labels loader, matrix market reader, randomly generated graphs (rgg) generator, etc.</p></li>
+<li><p><strong>oprtr</strong> --
+Gunrock&#39;s operators, such as advance (visiting neighbors), filter (removing nodes), for, neighborreduce, intersection are all located here in their respective folders. Load-balancing for these operators are also done within this directory as part of the operator kernels. See <code>oprtr_parameters.cuh</code> for the available parameters for the operators, and <code>oprtr.cuh</code> for the API for these operators.</p></li>
+<li><p><strong>partitioner</strong> --
+Graph partitioners such as metis, random, biased random partitioner are located here.</p></li>
+<li><p><strong>util</strong> --
+Extensive list of supporting utilities for gunrock. Device intrinsic primitives, array utilities, scan, reduction, and a lot more!</p></li>
+</ul></li>
+<li><p><strong>python</strong> --
+Simple Python bindings to the application&#39;s C Interfaces are located here as examples that can be built on. Feel free to create a python interface for an application that you would need.</p></li>
+<li><p><strong>scripts</strong> --
+Scripts for published papers, presentations and a for general performance testing are all located in the subdirectories.</p></li>
+<li><p><strong>tools</strong> --
+Useful scripts and tools to convert other graph file formats, such as snap or gr to matrix market format (mtx).</p></li>
+<li><p><strong>unittests</strong> --
+Googletest based unit testing framework for gunrock.</p>
+
+<ul>
+<li>[unittest]</li>
+</ul></li>
+</ul>
