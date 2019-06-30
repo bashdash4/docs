@@ -198,13 +198,13 @@
   color: #f92672;
 }
     </style>
-    <link href="../stylesheets/screen.css" rel="stylesheet" media="screen" />
-    <link href="../stylesheets/print.css" rel="stylesheet" media="print" />
-      <script src="../javascripts/all.js"></script>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/vega@3"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@4"></script>
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
@@ -227,17 +227,15 @@
     </style>
   </head>
 
-  <body class="hive hive_hive_sgm" data-languages="[]">
+  <body class="hive_sgm" data-languages="[]">
     <a href="#" id="nav-button">
       <span>
         NAV
-        <img src="../images/navbar.png" alt="Navbar" />
+        <img src="images/navbar.png" alt="Navbar" />
       </span>
     </a>
     <div class="toc-wrapper">
-      <a href="https://gunrock.github.io/">
-        <img src="../images/logo.png" class="logo" alt="Logo" />
-      </a>
+      <img src="images/logo.png" class="logo" alt="Logo" />
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
@@ -410,7 +408,7 @@ total_timer=170.153473 | num_diff=0
 
 <p>The size of the connectome graphs we consider are as follows:</p>
 
-<table style="font-size: 12px;"><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>name</th>
 <th>num_nodes</th>
@@ -456,7 +454,7 @@ total_timer=170.153473 | num_diff=0
 
 <p>In the tables below, <code>orig_dist</code> indicates the number of adjacency disagreements between <code>A</code> and <code>B</code>, and <code>final_dist</code> indicates the number of adjacency disagreements between <code>A</code> and <code>P * B * P.T</code> w/ <code>P</code> found by SGM.  We run CSGM w/ two values of <code>eps</code>, which controls the precision of the auction algorithm (lower values = more precise but slower).</p>
 <h6 id='python-runtimes'>Python runtimes</h6>
-<table style="font-size: 12px;"><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>name</th>
 <th>orig_dist</th>
@@ -502,7 +500,7 @@ total_timer=170.153473 | num_diff=0
 </tr>
 </tbody></table>
 <h6 id='csgm-runtimes'>CSGM runtimes</h6>
-<table style="font-size: 12px;"><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>eps</th>
 <th>name</th>
@@ -630,7 +628,7 @@ total_timer=170.153473 | num_diff=0
 <h5 id='kasios'>Kasios</h5>
 <p>The Kasios call graph shows the communication pattern inside of a corporation -- nodes represent a person and edges indicate that two people spoke on the phone.  The whole graph has 10M edges and 500K nodes, which is too large for any of our SGM implementations to handle.  Thus, we sample subgraphs of size 2**10 - 2**15 by running a random walk until the desired number of nodes are observed, and then extracting the subgraph induced by those nodes.  We generate pairs of graphs by random permutations (except for the first <code>num_seeds=100</code> nodes).  Interestingly, with 100 seeds, SGM can almost always perfectly "reidentify" the permuted graph.</p>
 <h6 id='python-runtimes-2'>Python runtimes</h6>
-<table style="font-size: 12px;"><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>num_nodes</th>
 <th>orig_dist</th>
@@ -676,7 +674,7 @@ total_timer=170.153473 | num_diff=0
 </tr>
 </tbody></table>
 <h6 id='csgm-runtimes-eps-1'>CSGM runtimes (<code>eps=1</code>)</h6>
-<table style="font-size: 12px;"><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>num_nodes</th>
 <th>orig_dist</th>

@@ -198,13 +198,13 @@
   color: #f92672;
 }
     </style>
-    <link href="../stylesheets/screen.css" rel="stylesheet" media="screen" />
-    <link href="../stylesheets/print.css" rel="stylesheet" media="print" />
-      <script src="../javascripts/all.js"></script>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/vega@3"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@4"></script>
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
@@ -227,17 +227,15 @@
     </style>
   </head>
 
-  <body class="hive hive_hive_application_classification" data-languages="[]">
+  <body class="hive_application_classification" data-languages="[]">
     <a href="#" id="nav-button">
       <span>
         NAV
-        <img src="../images/navbar.png" alt="Navbar" />
+        <img src="images/navbar.png" alt="Navbar" />
       </span>
     </a>
     <div class="toc-wrapper">
-      <a href="https://gunrock.github.io/">
-        <img src="../images/logo.png" class="logo" alt="Logo" />
-      </a>
+      <img src="images/logo.png" class="logo" alt="Logo" />
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
@@ -438,7 +436,7 @@ make
 
 <p>For the first two, we use the <code>georgiyPattern</code> pattern graph included in the PNNL repo.  For the latter, we generate a pattern graph using the neighborhood induction mentioned above.</p>
 <h4 id='georgiydata-2'>georgiyData</h4>
-<table style="font-size: 12px;"><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>implementation</th>
 <th>threads</th>
@@ -489,7 +487,7 @@ make
 
 <p><strong>Takeaway:</strong> Our CUDA implementation is approximately 12.8x faster than the fastest OpenMP run (32 threads).  However, this problem is quite small and both implementations run in under 1 second.</p>
 <h4 id='rmat18-2'>rmat18</h4>
-<table style="font-size: 12px;"><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>implementation</th>
 <th>threads</th>
@@ -540,7 +538,7 @@ make
 
 <p><strong>Takeaway:</strong> Our CUDA implementation is approximately 99x faster than the fastest PNNL run (64 threads).  The absolute magnitude of the differences is much more substantial here --  the CUDA implementation runs in < 1 second while the OpenMP version runs in ~ 1.5 minutes.</p>
 <h4 id='johnshopkins_random-2'>JohnsHopkins_random</h4>
-<table style="font-size: 12px;"><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>implementation</th>
 <th>threads</th>

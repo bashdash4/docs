@@ -1,0 +1,338 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="icon" type="image/ico" href="images/favicon.ico">
+    <title>Notes to DARPA from after the year-1 review, November 2018</title>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight .gh {
+  color: #999999;
+}
+.highlight .sr {
+  color: #f6aa11;
+}
+.highlight .go {
+  color: #888888;
+}
+.highlight .gp {
+  color: #555555;
+}
+.highlight .gs {
+}
+.highlight .gu {
+  color: #aaaaaa;
+}
+.highlight .nb {
+  color: #f6aa11;
+}
+.highlight .cm {
+  color: #75715e;
+}
+.highlight .cp {
+  color: #75715e;
+}
+.highlight .c1 {
+  color: #75715e;
+}
+.highlight .cs {
+  color: #75715e;
+}
+.highlight .c, .highlight .cd {
+  color: #75715e;
+}
+.highlight .err {
+  color: #960050;
+}
+.highlight .gr {
+  color: #960050;
+}
+.highlight .gt {
+  color: #960050;
+}
+.highlight .gd {
+  color: #49483e;
+}
+.highlight .gi {
+  color: #49483e;
+}
+.highlight .ge {
+  color: #49483e;
+}
+.highlight .kc {
+  color: #66d9ef;
+}
+.highlight .kd {
+  color: #66d9ef;
+}
+.highlight .kr {
+  color: #66d9ef;
+}
+.highlight .no {
+  color: #66d9ef;
+}
+.highlight .kt {
+  color: #66d9ef;
+}
+.highlight .mf {
+  color: #ae81ff;
+}
+.highlight .mh {
+  color: #ae81ff;
+}
+.highlight .il {
+  color: #ae81ff;
+}
+.highlight .mi {
+  color: #ae81ff;
+}
+.highlight .mo {
+  color: #ae81ff;
+}
+.highlight .m, .highlight .mb, .highlight .mx {
+  color: #ae81ff;
+}
+.highlight .sc {
+  color: #ae81ff;
+}
+.highlight .se {
+  color: #ae81ff;
+}
+.highlight .ss {
+  color: #ae81ff;
+}
+.highlight .sd {
+  color: #e6db74;
+}
+.highlight .s2 {
+  color: #e6db74;
+}
+.highlight .sb {
+  color: #e6db74;
+}
+.highlight .sh {
+  color: #e6db74;
+}
+.highlight .si {
+  color: #e6db74;
+}
+.highlight .sx {
+  color: #e6db74;
+}
+.highlight .s1 {
+  color: #e6db74;
+}
+.highlight .s {
+  color: #e6db74;
+}
+.highlight .na {
+  color: #a6e22e;
+}
+.highlight .nc {
+  color: #a6e22e;
+}
+.highlight .nd {
+  color: #a6e22e;
+}
+.highlight .ne {
+  color: #a6e22e;
+}
+.highlight .nf {
+  color: #a6e22e;
+}
+.highlight .vc {
+  color: #ffffff;
+}
+.highlight .nn {
+  color: #ffffff;
+}
+.highlight .nl {
+  color: #ffffff;
+}
+.highlight .ni {
+  color: #ffffff;
+}
+.highlight .bp {
+  color: #ffffff;
+}
+.highlight .vg {
+  color: #ffffff;
+}
+.highlight .vi {
+  color: #ffffff;
+}
+.highlight .nv {
+  color: #ffffff;
+}
+.highlight .w {
+  color: #ffffff;
+}
+.highlight {
+  color: #ffffff;
+}
+.highlight .n, .highlight .py, .highlight .nx {
+  color: #ffffff;
+}
+.highlight .ow {
+  color: #f92672;
+}
+.highlight .nt {
+  color: #f92672;
+}
+.highlight .k, .highlight .kv {
+  color: #f92672;
+}
+.highlight .kn {
+  color: #f92672;
+}
+.highlight .kp {
+  color: #f92672;
+}
+.highlight .o {
+  color: #f92672;
+}
+    </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@4"></script>
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+    });
+    </script>
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <style media="screen">
+      /* Add space between vega-embed links */
+      /* http://vega.github.io/vega-tutorials/airports/ */
+      .vega-embed .vega-actions a {
+        margin-left: 1em;
+        visibility: hidden;
+      }
+      .vega-embed:hover .vega-actions a {
+        visibility: visible;
+      }
+    </style>
+  </head>
+
+  <body class="to_darpa_nov18" data-languages="[]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" alt="Navbar" />
+      </span>
+    </a>
+    <div class="toc-wrapper">
+      <img src="images/logo.png" class="logo" alt="Logo" />
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <div id="toc" class="toc-list-h1">
+          <li>
+            <a href="#notes-to-darpa-from-after-the-year-1-review-november-2018" class="toc-h1 toc-link" data-title="Notes to DARPA from after the year-1 review, November 2018">NOTES TO DARPA FROM AFTER THE YEAR-1 REVIEW, NOVEMBER 2018</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#areas-to-improve-gunrock" class="toc-h2 toc-link" data-title="Areas to improve Gunrock">Areas to improve Gunrock</a>
+                  </li>
+                  <li>
+                    <a href="#possibilities" class="toc-h2 toc-link" data-title="Possibilities">Possibilities</a>
+                  </li>
+              </ul>
+          </li>
+      </div>
+        <ul class="toc-footer">
+            <li><a href='https://github.com/gunrock/gunrock'>Gunrock&colon; GPU Graph Analytics</a></li>
+            <li>Gunrock &copy; 2018 The Regents of the University of California.</li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+
+        <!-- <div class="dark-box"></div> -->
+
+      <div class="content">
+        <h1 id='notes-to-darpa-from-after-the-year-1-review-november-2018'>Notes to DARPA from after the year-1 review, November 2018</h1>
+<p>Wade, thank you for your feedback on our Year 1 results, and your time in talking to us about what comes next. I wanted to write down some thoughts before we talked this week about what might come next.</p>
+
+<p>My principal concern is that what I selfishly want for the students in my research group, and for the future of our research program, may not be entirely aligned with what I expect DARPA will want and need. We want to make sure DARPA's needs are met, and hope that we can do so while still allowing us to fulfill our research goals.</p>
+
+<p>Working on applications over the past year has been a tremendous benefit for Gunrock as a framework. The v0 applications have been challenging in different ways than the applications we had previously developed. As the DARPA applications are much more indicative of real-world workloads than the traditional collection of breadth-first-search, single-source shortest-path, PageRank, connected components, etc., the lessons from them allowed us to significantly improve Gunrock's programmability and ability to target a wider range of applications.</p>
+
+<p>However, concentrating on applications has diminishing returns:</p>
+
+<ul>
+<li>As we see more and more applications, we gain less and less from them in terms of influencing Gunrock's development; we see fewer new things.</li>
+<li>Writing applications is unlikely to be a path from which a student can eventually get a dissertation. Despite a lot of time invested among a large group of students over the past year, we're going to get very few papers published from this work. To be clear, I wouldn't change anything about the past year because it really did help us improve Gunrock's core, even if we can't publish it.</li>
+</ul>
+
+<p>So here's our goal: <strong>We would like to continue to build Gunrock to make it the framework for choice for scalable, high-performance graph analytics.</strong> There are many people/groups who can write applications atop Gunrock; we aim to design it so that non-ninjas can do that (though we have more work to do to allow this to happen easily). But very few people can build the framework itself, so that's where we think our effort is best spent.</p>
+<h2 id='areas-to-improve-gunrock'>Areas to improve Gunrock</h2>
+<p>We see numerous areas where we can improve Gunrock. What follows is the list that I presented at the review, with annotations, and with the rough guess that each of these topics is roughly the size of a PhD dissertation. We realistically can't do all of them, but we hope some of them will match your needs and will be directions we can pursue over the lifetime of HIVE (with your blessing).</p>
+
+<ul>
+<li>Scalability.
+
+<ul>
+<li>Within a node. Our current application development was single-GPU only. We expect NVIDIA will make multi-GPU, single-node configurations a cornerstone of their future platforms (e.g., the DGX machines). We have published <a href="https://escholarship.org/uc/item/39r145g1">work</a> that demonstrates that Gunrock's programming model scales to multiple GPUs on one node, but we have not integrated this work into the v0 applications or into the latest version of Gunrock's APIs/programming model.</li>
+<li>Across nodes. We have done no work in this area at all. We benefit from any DARPA guidance on problems that do not fit onto a single node. We have collaborated with <a href="https://people.llnl.gov/pearce7">Dr. Roger Pearce</a> at LLNL and would be eager to continue to do so in the context of the largest graphs.</li>
+<li>Streaming/out-of-core. Other projects (e.g., <a href="http://netsyslab.ece.ubc.ca/wiki/index.php/Totem">Totem</a>) have attempted to use CPUs and CPU memory together with GPUs to accelerate graph computation; Hornet was designed in large part to address streaming workloads. We have made no research effort in this direction to date.</li>
+</ul></li>
+<li>Programmability.
+
+<ul>
+<li>Gunrock native. I personally believe that the single most important thing we can do to make Gunrock successful is to make it as easy as possible for others to write Gunrock applications. To do that takes significant effort on our part. The v0 applications were written with a new version (<code>dev-refactor</code>) of our APIs and certainly helped inform our API development. We're not done. Ben Johnson has promised some feedback about our APIs and how we can continue to improve them (it was highly valuable for us to have Ben in the role of "talented programmer but no GPU experience"). We also saw that v0 apps had a much more fine-grained interleaving between graph operations and non-graph operations, and need to fully support this with future design decisions.</li>
+<li>MIT <a href="http://graphit-lang.org/">GraphIt</a>. We collaborate with the GraphIt team under our SDH effort. I am very impressed by their work here. Currently they have a prototype implementation that uses GraphIt on the front end and generates Gunrock code on the back end. It is an interesting research question whether GraphIt should target the Gunrock API or instead Gunrock lower-level internals; that is a major task under the SDH project.</li>
+<li>pygunrock. Ben wrote a simple python-Gunrock implementation that he used for prototyping. It doesn't call Gunrock. Having a robust python simulator would be great; having a python interface to Gunrock would also be great.</li>
+</ul></li>
+<li>Internals.
+
+<ul>
+<li>Better software architecture. One key goal is to refactor Gunrock into modules; this is my biggest architectural regret. It is rather a monolith of code. We've made some headway---for instance, graph data structures are separated by a clean API from the rest of Gunrock, so we can use new data structures without changing internal Gunrock code. But we need to separate out modules like, say, load-balancing as a first-class primitive so those modules can also be used in other places (like as GraphIt targets or in non-graph workloads like linear algebra).</li>
+<li>Operator performance. We can improve the performance of individual Gunrock operators. We did not focus on that at all over the past year.</li>
+<li>Asynchrony. Gunrock follows a bulk-synchronous programming model: compute in parallel, wait for all computation to finish with a global barrier, communicate, and wait for all communication to finish with a global barrier. Barriers are expensive and necessarily imperfect load-balancing across nodes means some nodes will be idle while others finish. Some graph algorithms are suitable for a more asynchronous communication style that does not require global synchronization. We expect this will deliver increasing performance as GPU count increases. This is closely tied to a (funded) research project we have from NSF with co-PIs Kathy Yelick and Aydin Buluc (LBNL).</li>
+<li>Performance tuning. Gunrock performs worse on the newer "Volta" GPU microarchitecture than the "Kepler" one on which we originally designed it. We did not expect this. We don't know why; we just haven't had time to look into it.</li>
+<li>More operators. We can also go through v0 apps and abstract some of the patterns we saw into new operators, and optimize those.</li>
+</ul></li>
+<li>Applications.
+
+<ul>
+<li>More. We expect DARPA will want Gunrock benchmarks for v1 applications.</li>
+<li>Better. We can improve the v0 applications, and noted multiple areas in our report where they can improve (these areas are not just application optimizations but also lower-level Gunrock optimizations where we noted deficiencies during our performance characterization). We also noted numerous research projects within those applications in our report, e.g., maxflow.</li>
+<li>More integration with data/"network" science applications. The more social-science field of "network science" uses graph computation heavily (though python-ish interfaces like NetworkX and GraphX), but in general our community knows little about the kind of applications they run.</li>
+</ul></li>
+<li>Interoperability.
+
+<ul>
+<li>Gunrock+X. We wish to work with NVIDIA (the RAPIDS project, and its Apache Arrow interoperability data structures) on Gunrock+X interoperability, where "X" is linear algebra, optimization, machine learning, etc. We expect they will have numerous workloads like this; we know DARPA does.</li>
+<li>More work on X pieces. Our charter is currently "work on only the graph components of applications" but for any good baseline, one would also need GPU implementations of the non-graph components. Some of these are almost certainly already available in optimized form (e.g., linear algebra, machine learning). Some are not at all (e.g., optimization). Working on these would broaden the scope of our work but would be globally useful.</li>
+</ul></li>
+</ul>
+<h2 id='possibilities'>Possibilities</h2><h3 id='nvidia-collaboration'>NVIDIA collaboration</h3>
+<p>First, we expect that under the RAPIDS umbrella, NVIDIA will work with us and possibly give some support for us to continue to do our work. However, we are not quite on the same page in terms of what we would do. Their original proposal to us was that Gunrock would be their substrate for future work, but they are now thinking more about starting from scratch. We are still working this out. We have been clear, and have vocal support from NVIDIA Research, that we should continue to do research and innovate and they should be doing more short-term, engineering-focused work. Their initial proposal was that they should write the core and we should write apps on top of that, but for the reasons we've already discussed, that's not the ideal situation for our research program.</p>
+
+<p>They would like us to put our source control under their github umbrella, which we can work with; we can always pull it back if things don't work out.</p>
+<h3 id='app-development-army-of-ms-students-or-a-ben-like-person'>App development: Army of MS students, or a Ben-like person</h3>
+<p>If large-scale application development is a high priority, the best option is likely an army of MS students working under the direction of my senior graduate students and postdoc. These students would need to be trained (which we can do), and we run the risk that some of them just might not be able to complete their applications. In general the PhD students I recruit are outstanding, but MS students have varying quality; we have not been overall impressed with the ones we've met this fall.</p>
+
+<p>Another option is to hire a developer like Ben Johnson. Ben wrote a substantial fraction of our v0 applications, with equally substantial help from the Gunrock-core team who offered guidance, fixed issues, etc.; Ben, a truly tremendous programmer, was able to quickly produce Gunrock programs with our APIs and with the help of our knowledgeable team. A great programmer like Ben is ideal for quickly producing high-quality applications, but our access to programmers like that is slim; they're not hiding in the guise of rather-inexperienced 23-year-old graduate students.</p>
+
+<p>We understand that research</p>
+
+      </div>
+
+        <!-- <div class="dark-box"></div> -->
+    </div>
+  </body>
+</html>

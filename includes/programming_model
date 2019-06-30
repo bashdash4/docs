@@ -3,31 +3,40 @@
 
 <p>Gunrock targets graph computations that are generally expressed as &quot;iterative convergent processes&quot;. By &quot;iterative,&quot; we mean operations that may require running a series of steps repeatedly; by &quot;convergent,&quot; we mean that these iterations allow us to approach the correct answer and terminate when that answer is reached. Many graph-computation programming models target a similar goal.</p>
 
-<p>Many of these programming models focus on sequencing steps of <em>computation</em>.  Gunrock differs from these programming models in its focus on <em>manipulating a data structure</em>. We call this data structure a <em>frontier</em> of vertices or edges. <strong>The frontier represents the subset of vertices or edges that is actively participating in the computation.</strong> Gunrock operators input one or more frontiers and output one or more frontiers.</p>
+<p>Many of these programming models focus on sequencing steps of <em>computation</em>.  Gunrock differs from these programming models in its focus on <em>manipulating a data structure</em>. We call this data structure a <em>frontier</em> of vertices or edges. The frontier represents the subset of vertices or edges that is actively participating in the computation. Gunrock operators input one or more frontiers and output one or more frontiers.</p>
 
-<p>Generically, graph operations can often be expressed via a <em>push</em> abstraction (graph elements &quot;push&quot; local private updates into a shared state) or a <em>pull</em> abstraction (graph elements &quot;pull&quot; updates into their local private state) (<a href="https://htor.inf.ethz.ch/publications/index.php?pub=281">Besta et al. publication on push-vs.-pull, HPDC &#39;17</a>). Gunrock&#39;s programming model supports both of these abstractions. (For instance, Gunrock&#39;s direction-optimized Breadth-First Search (BFS) and PageRank (PR) supports both push and pull BFS phases. <a href="https://github.com/gunrock/mini">Mini-Gunrock</a> supports pull-based BFS and PR.) Push-based approaches may or may not require synchronization (such as atomics) for correct operation; this depends on the primitive. Gunrock&#39;s idempotence optimization (within its BFS implementation) is an example of a push-based primitive that does not require atomics.</p>
+<p>Generically, graph operations can often be expressed via a <em>push</em> abstraction (graph elements &quot;push&quot; local private updates into a shared state) or a <em>pull</em> abstraction (graph elements &quot;pull&quot; updates into their local private state) (<a href="https://htor.inf.ethz.ch/publications/index.php?pub=281">Besta et al. publication on push-vs.-pull, HPDC &#39;17</a>). Gunrock&#39;s programming model supports both of these abstractions. (For instance, Gunrock&#39;s direction-optimized breadth-first-search supports both push and pull BFS phases. <a href="https://github.com/gunrock/mini">Mini-Gunrock</a> supports pull-based BFS and PR.) Push-based approaches may or may not require synchronization (such as atomics) for correct operation; this depends on the primitive. Gunrock&#39;s idempotence optimization (within its BFS implementation) is an example of a push-based primitive that does not require atomics.</p>
 <h2 id='operators'>Operators</h2>
-<p>In the current Gunrock release, we support <strong>five</strong> operators.</p>
+<p>In the current Gunrock release, we support four operators.</p>
 
 <ul>
-<li><strong>Advance</strong>: An <em>advance</em> operator generates a new frontier from the current frontier by visiting the neighbors of the current frontier. A frontier can consist of either vertices or edges, and an advance step can input and output either kind of frontier. Advance is an irregularly-parallel operation for  two reasons: 1)~different vertices in a graph have different numbers of neighbors and 2)~vertices share neighbors. Thus a vertex in an input frontier map to multiple output items. An efficient advance is the most significant challenge of a GPU implementation.</li>
+<li><p>Advance: An <em>advance</em> operator generates a new frontier from the current frontier by visiting the neighbors of the current frontier. A frontier can consist of either vertices or edges, and an advance step can input and output either kind of frontier. Advance is an irregularly-parallel operation for  two reasons: 1)~different vertices in a graph have different numbers of neighbors and 2)~vertices share neighbors. Thus a vertex in an input frontier map to multiple output items. An efficient advance is the most significant challenge of a GPU implementation.</p></li>
+<li><p>Filter:  A <em>filter</em> operator generates a new frontier from the current frontier by choosing a subset of the current frontier based on programmer-specified criteria. Each input item maps to zero or one output items.</p></li>
+<li><p>Compute: A <em>compute</em> operator defines an operation on all elements (vertices or edges) in its input frontier. A programmer-specified compute operator can be used together with all three traversal operators. Gunrock performs that operation in parallel across all elements without regard to order.</p></li>
+<li><p>Segmented intersection: A <em>segmented intersection</em> operator takes two input node frontiers with the same length, or an input edge frontier, and generates both the number of total intersections and the intersected node IDs as the
+new frontier.</p></li>
 </ul>
 
-<p><img src="/images/advance.png" alt="Advance" /></p>
+<p>We note that compute operators can often be fused with a neighboring operator into a single kernel. This increases producer-consumer locality and improves performance. Thus within Gunrock, we express compute operators as &quot;functors&quot;, which are automatically merged into their neighboring operators. Within Gunrock, we express functors in one of two flavors:</p>
 
 <ul>
-<li><strong>Filter</strong>:  A <em>filter</em> operator generates a new frontier from the current frontier by choosing a subset of the current frontier based on programmer-specified criteria. Each input item maps to zero or one output items.</li>
+<li><p>Cond Functor:
+Cond functors input either a vertex id (as in <code>VertexCond</code>) or the source id
+and the dest id of an edge (as in <code>EdgeCond</code>). They also input data specific to
+the problem being solved to decide whether the vertex or the edge is valid in
+the outgoing frontier.</p></li>
+<li><p>Apply Functor:
+Apply functors take the same set of arguments as Cond functors, but perform
+user-specified computation on the problem-specific data.</p></li>
 </ul>
-
-<p><img src="/images/filter.png" alt="Filter" />  </p>
-
-<ul>
-<li><strong>Compute</strong>: A <em>compute</em> operator defines an operation on all elements (vertices or edges) in its input frontier. Gunrock implements a compute operator using <code>ForAll()</code> and <code>ForEach()</code> parallel loops. However, a programmer-specified operation can also be implemented using C++ lambda functions within the traversal operators such as advance or filter. Gunrock performs these operation in parallel across all elements without regard to order.</li>
-</ul>
-
-<p><img src="/images/compute.png" alt="Compute" /></p>
-
-<ul>
-<li><p><strong>Segmented intersection</strong>: A <em>segmented intersection</em> operator takes two input node frontiers with the same length, or an input edge frontier, and generates both the number of total intersections and the intersected node IDs as the new frontier.</p></li>
-<li><p><strong>Neighbor-Reduce</strong>: A <em>neighbor-reduce</em> operator uses the advance operator to visit the neighbor list of each item in the input frontier and performs a segmented reduction over the neighborhood (neighbor list) generated via the advance.</p></li>
-</ul>
+<h2 id='creating-a-new-graph-primitive'>Creating a New Graph Primitive</h2>
+<p>To create a new graph primitive, we first put all the problem-specific data
+into a data structure. For BFS, we need a per-node label value and a per-node
+predecessor value; for CC, we need a per-edge mark value, a per-node component
+id value, etc. Then we map the algorithm into the combination of the above
+three operators. Next, we need to write different functors for these operators.
+Some graph algorithms require only one functor (BFS), but some graph algorithms
+need more (CC needs seven). Finally, we write an enactor to load the proper
+operator with the proper functor. We provide a graph primitive template. The
+problem, functor, and enactor files are under gunrock/app/sample, and the
+driver code is under tests/sample.</p>

@@ -198,13 +198,13 @@
   color: #f92672;
 }
     </style>
-    <link href="../stylesheets/screen.css" rel="stylesheet" media="screen" />
-    <link href="../stylesheets/print.css" rel="stylesheet" media="print" />
-      <script src="../javascripts/all.js"></script>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/vega@3"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@4"></script>
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
@@ -227,17 +227,15 @@
     </style>
   </head>
 
-  <body class="hive hive_hive_graphsearch" data-languages="[]">
+  <body class="hive_graphsearch" data-languages="[]">
     <a href="#" id="nav-button">
       <span>
         NAV
-        <img src="../images/navbar.png" alt="Navbar" />
+        <img src="images/navbar.png" alt="Navbar" />
       </span>
     </a>
     <div class="toc-wrapper">
-      <a href="https://gunrock.github.io/">
-        <img src="../images/logo.png" class="logo" alt="Logo" />
-      </a>
+      <img src="images/logo.png" class="logo" alt="Logo" />
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
@@ -482,7 +480,7 @@ Run 0 elapsed: 0.695944, #iterations = 10
 
 <p>At a high level, the results show:</p>
 
-<table style="font-size: 12px;"><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>Variant</th>
 <th>OpenMP w/ 64 threads</th>
@@ -536,7 +534,7 @@ Run 0 elapsed: 0.695944, #iterations = 10
 
 <p>We omit the <code>greedy</code> undirected case because the algorithm gets stuck jumping between a local maximum and its highest-scoring neighbor.</p>
 
-<table style="font-size: 12px;"><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>threads</th>
 <th>method</th>
@@ -784,7 +782,7 @@ threads | method | num_nodes | num_edges | num_seeds | seconds | num_steps | ste
 
 <p>After these fixes, runtimes were as follows:</p>
 
-<table style="font-size: 12px;"><thead>
+<table style="font-size: 12px;font-size: 12px;"><thead>
 <tr>
 <th>threads</th>
 <th>method</th>

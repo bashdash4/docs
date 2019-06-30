@@ -1,0 +1,1520 @@
+\documentclass[10pt,oneside]{memoir}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+    \usepackage{xltxtra,xunicode}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\ifxetex
+  \usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={},
+            pdftitle={Sandbox for playing with pandoc/slate},
+            colorlinks=true,
+            citecolor=blue,
+            urlcolor=blue,
+            linkcolor=magenta,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\pagenumbering{arabic}
+\lhead{\itshape Sandbox}
+\chead{}
+\rhead{\itshape{\nouppercase{\leftmark}}}
+% \lfoot{v }
+% \lfoot{}
+\cfoot{\thepage}
+% \rfoot{\thepage}
+\usepackage{longtable,booktabs}
+\usepackage{etoolbox}
+\AtBeginEnvironment{longtable}{\begin{center}\small}
+\AtEndEnvironment{longtable}{\end{center}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+
+\title{Sandbox}
+\author{Ben Johnson \and Weitang Liu \and Agnieszka Łupińska \and Muhammad Osama \and John D. Owens \and Yuechao Pan \and Leyuan Wang \and Xiaoyun Wang \and Carl Yang}
+\postauthor{\end{tabular}\par UC Davis\end{center}}
+\date{}
+
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+\begin{document}
+\maketitle
+
+{
+\hypersetup{linkcolor=black}
+\setcounter{tocdepth}{0}
+\tableofcontents*
+}
+\hypertarget{sandbox-for-playing-with-pandocslate}{%
+\chapter{Sandbox for playing with
+pandoc/slate}\label{sandbox-for-playing-with-pandocslate}}
+
+Normal table
+
+\begin{longtable}[]{@{}lrrrr@{}}
+\toprule
+Operation & Self & Peer & Host & All\tabularnewline
+\midrule
+\endhead
+Regular read & 448.59 & 14.01 & 444.74 & 12.17\tabularnewline
+Regular write & 442.98 & 16.21 & 16.18 & 12.17\tabularnewline
+Regular update & 248.80 & 11.71 & 0.0028 & 6.00\tabularnewline
+Random read & 6.78 & 1.43 & 2.39 & 4.04\tabularnewline
+Random write & 6.63 & 1.14 & 3.47E-5 & 3.82\tabularnewline
+Random update & 3.44 & 0.83 & 1.92E-5 & 2.08\tabularnewline
+\bottomrule
+\end{longtable}
+
+Pretty wide table
+
+\begin{longtable}[]{@{}llllll@{}}
+\toprule
+\begin{minipage}[b]{0.20\columnwidth}\raggedright
+Parts\strut
+\end{minipage} & \begin{minipage}[b]{0.15\columnwidth}\raggedright
+Comp. cost\strut
+\end{minipage} & \begin{minipage}[b]{0.09\columnwidth}\raggedright
+Comm. cost\strut
+\end{minipage} & \begin{minipage}[b]{0.14\columnwidth}\raggedright
+Comp. to comm. ratio\strut
+\end{minipage} & \begin{minipage}[b]{0.05\columnwidth}\raggedright
+Scalability\strut
+\end{minipage} & \begin{minipage}[b]{0.21\columnwidth}\raggedright
+Memory usage\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.20\columnwidth}\raggedright
+Modularity optimization\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+10(E + V) /p\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
+20V bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\raggedright
+E/p : 2V\strut
+\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
+Okay\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+88E/p + 12V bytes\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.20\columnwidth}\raggedright
+Graph contraction\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+5E / p + E'\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
+8E' bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\raggedright
+5E/p + E' : 8E'\strut
+\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
+Hard\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+16E' bytes\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.20\columnwidth}\raggedright
+Louvain\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+10(E + V) / p\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
+20V bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\raggedright
+E/p : 2V\strut
+\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
+Okay\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+88E/p + 12V + 16E' bytes\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+Pretty wide table, with math
+
+\begin{longtable}[]{@{}llllll@{}}
+\toprule
+\begin{minipage}[b]{0.20\columnwidth}\raggedright
+Parts\strut
+\end{minipage} & \begin{minipage}[b]{0.15\columnwidth}\raggedright
+Comp. cost\strut
+\end{minipage} & \begin{minipage}[b]{0.09\columnwidth}\raggedright
+Comm. cost\strut
+\end{minipage} & \begin{minipage}[b]{0.14\columnwidth}\raggedright
+Comp. to comm. ratio\strut
+\end{minipage} & \begin{minipage}[b]{0.05\columnwidth}\raggedright
+Scalability\strut
+\end{minipage} & \begin{minipage}[b]{0.21\columnwidth}\raggedright
+Memory usage\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.20\columnwidth}\raggedright
+Modularity optimization\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+\(10(E + V) /p\)\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
+\(20V\) bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\raggedright
+\(E/p : 2V\)\strut
+\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
+Okay\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+\(88E/p + 12V\) bytes\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.20\columnwidth}\raggedright
+Graph contraction\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+\(5E / p + E'\)\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
+\(8E'\) bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\raggedright
+\(5E/p + E' : 8E'\)\strut
+\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
+Hard\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+\(16E'\) bytes\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.20\columnwidth}\raggedright
+Louvain\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+\(10(E + V) / p\)\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
+\(20V\) bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\raggedright
+E/p : 2V\strut
+\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
+Okay\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+\(88E/p + 12V + 16E'\) bytes\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+JDO hacked version of above
+
+\begin{longtable}[]{@{}llllll@{}}
+\toprule
+Parts & Comp cost & Comm cost & Comp/comm ratio & Scalability & Memory
+usage (B)\tabularnewline
+\midrule
+\endhead
+Modularity optim. & 10(E + V) /p & 20V bytes & E/p : 2V & Okay & 88E/p +
+12V\tabularnewline
+Graph contraction & 5E / p + E' & 8E' bytes & 5E/p + E' : 8E' & Hard &
+16E'\tabularnewline
+Louvain & 10(E + V) / p & 20V bytes & E/p : 2V & Okay & 88E/p + 12V +
+16E'\tabularnewline
+\bottomrule
+\end{longtable}
+
+and with math!
+
+\begin{longtable}[]{@{}llllll@{}}
+\toprule
+Parts & Comp cost & Comm cost & Comp/comm ratio & Scalability & Memory
+usage (B)\tabularnewline
+\midrule
+\endhead
+Modularity optim. & \(10(E + V) /p\) & \(20V\) bytes & \(E/p : 2V\) &
+Okay & \(88E/p + 12V\)\tabularnewline
+Graph contraction & \(5E / p + E'\) & \(8E'\) bytes &
+\(5E/p + E' : 8E'\) & Hard & \(16E'\)\tabularnewline
+Louvain & \(10(E + V) / p\) & \(20V\) bytes & \(E/p : 2V\) & Okay &
+\(88E/p + 12V + 16E'\)\tabularnewline
+\bottomrule
+\end{longtable}
+
+Even wider table
+
+\begin{longtable}[]{@{}llllll@{}}
+\toprule
+\begin{minipage}[b]{0.19\columnwidth}\raggedright
+Parts\strut
+\end{minipage} & \begin{minipage}[b]{0.10\columnwidth}\raggedright
+Comp. cost\strut
+\end{minipage} & \begin{minipage}[b]{0.13\columnwidth}\raggedright
+Comm. cost\strut
+\end{minipage} & \begin{minipage}[b]{0.19\columnwidth}\raggedright
+Comp. to comm. ratio\strut
+\end{minipage} & \begin{minipage}[b]{0.11\columnwidth}\raggedright
+Scalability\strut
+\end{minipage} & \begin{minipage}[b]{0.12\columnwidth}\raggedright
+Memory usage\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Wedge generation\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+dE/p\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Wedge communication\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+0\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+aE/p x 12 bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Wedge checking\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+aE/p x log(d)\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+AllReduce\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+2V\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+2V x 4 bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Triangle Counting\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+(d + a x log(d))E/p + 2V\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+aE/p x 12 + 8V bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\textasciitilde{}(d + a x log(d)) : 12a\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+Okay\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Scan Statistics (wedge checks)\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+(d + a x log(d))E/p + 2V + V/p\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+12aE/p + 8V bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\textasciitilde{} (d + a x log(d)) : 12a\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+Okay\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Scan Statistics (intersection)\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+Vdd + V/p\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+8V bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+dd : 8\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+Perfect\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+Even wider table, with math!
+
+\begin{longtable}[]{@{}llllll@{}}
+\toprule
+\begin{minipage}[b]{0.19\columnwidth}\raggedright
+Parts\strut
+\end{minipage} & \begin{minipage}[b]{0.10\columnwidth}\raggedright
+Comp. cost\strut
+\end{minipage} & \begin{minipage}[b]{0.13\columnwidth}\raggedright
+Comm. cost\strut
+\end{minipage} & \begin{minipage}[b]{0.19\columnwidth}\raggedright
+Comp. to comm. ratio\strut
+\end{minipage} & \begin{minipage}[b]{0.11\columnwidth}\raggedright
+Scalability\strut
+\end{minipage} & \begin{minipage}[b]{0.12\columnwidth}\raggedright
+Memory usage\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Wedge generation\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+\(dE/p\)\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Wedge communication\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+0\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\(aE/p \times 12\) bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Wedge checking\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+\(aE/p x \log(d)\)\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+AllReduce\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+\(2V\)\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\(2V \times 4\) bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Triangle Counting\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+\((d + a x \log(d))E/p + 2V\)\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\(aE/p x 12 + 8V\) bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\(~(d + a \cdot \log(d))\) : \(12a\)\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+Okay\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Scan Statistics (wedge checks)\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+\((d + a x \log(d))E/p + 2V + V/p\)\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\(12aE/p + 8V\) bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\(~(d + a \cdot \log(d)) : 12a\)\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+Okay\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Scan Statistics (intersection)\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+\(Vdd + V/p\)\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\(8V\) bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\(dd : 8\)\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+Perfect\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+JDO hacked version of above
+
+\begin{longtable}[]{@{}lllll@{}}
+\toprule
+\begin{minipage}[b]{0.23\columnwidth}\raggedright
+Parts\strut
+\end{minipage} & \begin{minipage}[b]{0.12\columnwidth}\raggedright
+Comp. cost\strut
+\end{minipage} & \begin{minipage}[b]{0.15\columnwidth}\raggedright
+Comm. cost (B)\strut
+\end{minipage} & \begin{minipage}[b]{0.22\columnwidth}\raggedright
+Comp/comm ratio\strut
+\end{minipage} & \begin{minipage}[b]{0.13\columnwidth}\raggedright
+Scalability\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.23\columnwidth}\raggedright
+Wedge generation\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+dE/p\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright
+Wedge communication\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+0\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+aE/p x 12\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright
+Wedge checking\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+aE/p x log(d)\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright
+AllReduce\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+2V\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+2V x 4\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright
+Triangle Counting\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+(d + a x log(d))E/p + 2V\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+aE/p x 12 + 8V\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\raggedright
+\textasciitilde{}(d + a x log(d)) : 12a\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Okay\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright
+Scan Statistics\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+(d + a x log(d))E/p\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+12aE/p + 8V\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\raggedright
+\textasciitilde{}(d + a x log(d)) : 12a\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Okay\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright
+(with wedge checks)\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
++ 2V + V/p\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright
+Scan Statistics\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+Vdd + V/p\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+8V\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\raggedright
+dd : 8\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Perfect\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright
+(with intersection)\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+Table with line breaks
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule
+\begin{minipage}[b]{0.28\columnwidth}\raggedright
+Application\strut
+\end{minipage} & \begin{minipage}[b]{0.35\columnwidth}\raggedright
+Computation to communication ratio\strut
+\end{minipage} & \begin{minipage}[b]{0.13\columnwidth}\raggedright
+Scalability\strut
+\end{minipage} & \begin{minipage}[b]{0.13\columnwidth}\raggedright
+Implementation difficulty\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Louvain\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+E/p : 2V\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Okay\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Hard\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Graph SAGE\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+\textasciitilde{} CF : min(C, 2p)x4\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Good\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Easy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Random walk\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+Duplicated graph: infinity Distributed graph: 1 : 24\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Perfect Very poor\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Trivial Easy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Graph search: Uniform\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+1 : 24\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+very poor\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Easy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Graph search: Greedy\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+Straight forward: d : 24 Pre-visit: 1:24\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Poor very poor\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Easy Easy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Graph search: Stochastic greedy\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+Straight forward: d : 24 Pre-visit: log(d) : 24\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Poor very poor\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Easy Easy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Geo location\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+Explicit movement: 25E/p : 4V UVM or peer access: 25 : 1\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Okay Good\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Easy Easy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Vertex nomination\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+E : 8V x min(d, p)\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Okay\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Easy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Scan statistics\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+Duplicated graph: infinity Distributed graph: \textasciitilde{} (d + a *
+log(d)) : 12\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Perfect Okay\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Trivial Easy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Sparse fused lasso\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+\textasciitilde{} a:8\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Less than okay\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Hard\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Graph projection\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+Duplicated graph : infinity Distributed graph : dE/p + E' : 6E'\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Perfect Okay\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Easy Easy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Local graph clustering\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+(6 + d)/p : 4\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Good\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Easy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Seeded graph matching\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Application classification\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+JDO hacked version of above
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule
+\begin{minipage}[b]{0.28\columnwidth}\raggedright
+Application\strut
+\end{minipage} & \begin{minipage}[b]{0.35\columnwidth}\raggedright
+Computation to communication ratio\strut
+\end{minipage} & \begin{minipage}[b]{0.13\columnwidth}\raggedright
+Scalability\strut
+\end{minipage} & \begin{minipage}[b]{0.13\columnwidth}\raggedright
+Implementation diff.\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Louvain\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+E/p : 2V\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Okay\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Hard\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Graph SAGE\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+\textasciitilde{} CF : min(C, 2p)x4\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Good\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Easy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Random walk\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+Duplicated graph: infinity\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Perfect\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Trivial\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Random walk\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+Distrib. graph: 1 : 24\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Very poor\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Easy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Graph search: Uniform\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+1 : 24\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Very poor\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Easy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Graph search: Greedy\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+Straightforward: d : 24\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Poor\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Easy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Graph search: Greedy\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+Pre-visit: 1:24\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Very poor\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Easy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+G.S.: Stochastic greedy\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+Straightforward: d : 24\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Poor\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Easy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+G.S.: Stochastic greedy\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+Pre-visit: log(d) : 24\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Very poor\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Easy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Geolocation\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+Explicit movement: 25E/p : 4V\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Okay\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Easy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Geolocation\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+UVM or peer access: 25 : 1\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Good\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Easy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Vertex nomination\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+E : 8V x min(d, p)\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Okay\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Easy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Scan statistics\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+Duplicated graph: infinity\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Perfect\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Trivial\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Scan statistics\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+Distrib. graph: \textasciitilde{} (d + a * log(d)) : 12\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Okay\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Easy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Sparse fused lasso\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+\textasciitilde{} a:8\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Less than okay\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Hard\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Graph projection\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+Duplicated graph : infinity\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Perfect\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Easy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Graph projection\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+Distrib. graph : dE/p + E' : 6E'\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Okay\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Easy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\raggedright
+Local graph clustering\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+(6 + d)/p : 4\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Good\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Easy\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+Really wide table
+
+\begin{longtable}[]{@{}llllll@{}}
+\toprule
+\begin{minipage}[b]{0.19\columnwidth}\raggedright
+Parts\strut
+\end{minipage} & \begin{minipage}[b]{0.10\columnwidth}\raggedright
+Comp. cost\strut
+\end{minipage} & \begin{minipage}[b]{0.13\columnwidth}\raggedright
+Comm. cost\strut
+\end{minipage} & \begin{minipage}[b]{0.19\columnwidth}\raggedright
+Comp. to comm. ratio\strut
+\end{minipage} & \begin{minipage}[b]{0.11\columnwidth}\raggedright
+Scalability\strut
+\end{minipage} & \begin{minipage}[b]{0.12\columnwidth}\raggedright
+Memory usage\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+\emph{Feature duplication}\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Children selection\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+BC\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+8BC bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+1 : 8\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+Poor\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Child-centric comp.\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+BCF x (2 + L + Wf1.y + Wa1.y)\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+4B x (F + Wf1.y + Wa1.y) x min(C, 2p) bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\textasciitilde{} CF : min(C, 2p) x 4\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+Good\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Source-centric comp.\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+B x (CF + (Wf1.y + Wa1.y) x (C + F + Wf2.y + Wa2.y)\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+0 bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+N.A.\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+N.A.\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Graph SAGE\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+B x (C + 3CF + 3LCF + (Wf1.y + Wa1.y) x (CF + C + F + Wf2.y +
+Wa2.y))\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+8BC + 4B x (F + Wf1.y + Wa1.y) x min(C, 2p) bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+at least \textasciitilde{} CF : min(C, 2p) x 4\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+Good\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+\emph{Direct feature access}\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Child-centric comp.\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+BCF x (2 + L + Wf1.y + Wa1.y)\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+4B x ((F + Wf1.y + Wa1.y) x min(C, 2p) + CLF) bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\textasciitilde{} (2 + L + Wf1.y + Wa1.y) : 4L\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+poor\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Graph SAGE\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+B x (C + 3CF + 3LCF + (Wf1.y + Wa1.y) x (CF + C + F + Wf2.y +
+Wa2.y))\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+8BC + 4B x (F + Wf1.y + Wa1.y) x min(C, 2p) + 4BCFL bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\textasciitilde{} (2 + L + Wf1.y + Wa1.y) : 4L\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+poor\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+\emph{Feature in UVM}\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Child-centric comp.\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+BCF x (2 + L + Wf1.y + Wa1.y)\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+4B x (F + Wf1.y + Wa1.y) x min(C, 2p) bytes over GPU-GPU + 4BCLF bytes
+over GPU-CPU\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\textasciitilde{} (2 + L + Wf1.y + Wa1.y) : 4L over GPU-CPU\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+very poor\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Graph SAGE\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+B x (C + 3CF + 3LCF + (Wf1.y + Wa1.y) x (CF + C + F + Wf2.y +
+Wa2.y))\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+8BC + 4B x (F + Wf1.y + Wa1.y) x min(C, 2p) bytes over GPU-GPU + 4BCFL
+bytes over GPU-CPU\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\textasciitilde{} (2 + L + Wf1.y + Wa1.y) : 4L over GPU-CPU\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+very poor\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+Really wide table, with math
+
+\begin{longtable}[]{@{}llllll@{}}
+\toprule
+\begin{minipage}[b]{0.19\columnwidth}\raggedright
+Parts\strut
+\end{minipage} & \begin{minipage}[b]{0.10\columnwidth}\raggedright
+Comp. cost\strut
+\end{minipage} & \begin{minipage}[b]{0.13\columnwidth}\raggedright
+Comm. cost\strut
+\end{minipage} & \begin{minipage}[b]{0.19\columnwidth}\raggedright
+Comp. to comm. ratio\strut
+\end{minipage} & \begin{minipage}[b]{0.11\columnwidth}\raggedright
+Scalability\strut
+\end{minipage} & \begin{minipage}[b]{0.12\columnwidth}\raggedright
+Memory usage\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+\emph{Feature duplication}\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Children selection\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+\(BC\)\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\(8BC\) bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+1 : 8\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+Poor\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Child-centric comp.\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+\(BCF \cdot (2 + L + Wf1.y + Wa1.y) | 4B \cdot (F + Wf1.y + Wa1.y) \cdot \min(C, 2p)\)
+bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\(~ CF : \min(C, 2p) \cdot 4\)\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+Good\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Source-centric comp.\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+\(B \cdot (CF + (Wf1.y + Wa1.y) \cdot (C + F + Wf2.y + Wa2.y)\)\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+0 bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+N.A.\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+N.A.\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Graph SAGE\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+\(B \cdot (C + 3CF + 3LCF + (Wf1.y + Wa1.y) \cdot (CF + C + F + Wf2.y + Wa2.y))\)\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\(8BC + 4B \cdot (F + Wf1.y + Wa1.y) \cdot \min(C, 2p)\) bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+at least \(~ CF : \min(C, 2p) \cdot 4\)\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+Good\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+\emph{Direct feature access}\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Child-centric comp.\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+\(BCF \cdot (2 + L + Wf1.y + Wa1.y)\)\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\(4B \cdot ((F + Wf1.y + Wa1.y) \cdot \min(C, 2p) + CLF)\) bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\(~ (2 + L + Wf1.y + Wa1.y) : 4L\)\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+poor\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Graph SAGE\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+\(B \cdot (C + 3CF + 3LCF + (Wf1.y + Wa1.y) \cdot (CF + C + F + Wf2.y + Wa2.y))\)\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\(8BC + 4B \cdot (F + Wf1.y + Wa1.y) \cdot \min(C, 2p) + 4BCFL\)
+bytes\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\(~ (2 + L + Wf1.y + Wa1.y) : 4L\)\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+poor\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+\emph{Feature in UVM}\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Child-centric comp.\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+\(BCF \cdot (2 + L + Wf1.y + Wa1.y)\)\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\(4B \cdot (F + Wf1.y + Wa1.y) \cdot min(C, 2p)\) bytes over GPU-GPU +
+\(4BCLF\) bytes over GPU-CPU\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\(~ (2 + L + Wf1.y + Wa1.y) : 4L\) over GPU-CPU\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+very poor\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.19\columnwidth}\raggedright
+Graph SAGE\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+\(B \cdot (C + 3CF + 3LCF + (Wf1.y + Wa1.y) \cdot (CF + C + F + Wf2.y + Wa2.y))\)\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+\(8BC + 4B \cdot (F + Wf1.y + Wa1.y) \cdot \min(C, 2p)\) bytes over
+GPU-GPU + \(4BCFL\) bytes over GPU-CPU\strut
+\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright
+\(~ (2 + L + Wf1.y + Wa1.y) : 4L\) over GPU-CPU\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+very poor\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+JDO hacked version of above
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+\begin{minipage}[b]{0.62\columnwidth}\raggedright
+Parts\strut
+\end{minipage} & \begin{minipage}[b]{0.32\columnwidth}\raggedright
+Comp. cost\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.62\columnwidth}\raggedright
+\emph{Feature duplication}\strut
+\end{minipage} & \begin{minipage}[t]{0.32\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.62\columnwidth}\raggedright
+Children selection\strut
+\end{minipage} & \begin{minipage}[t]{0.32\columnwidth}\raggedright
+BC\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.62\columnwidth}\raggedright
+Child-centric comp.\strut
+\end{minipage} & \begin{minipage}[t]{0.32\columnwidth}\raggedright
+BCF x (2 + L + Wf1.y + Wa1.y)\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.62\columnwidth}\raggedright
+Source-centric comp.\strut
+\end{minipage} & \begin{minipage}[t]{0.32\columnwidth}\raggedright
+B x (CF + (Wf1.y + Wa1.y) x (C + F + Wf2.y + Wa2.y)\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.62\columnwidth}\raggedright
+Graph SAGE\strut
+\end{minipage} & \begin{minipage}[t]{0.32\columnwidth}\raggedright
+B x (C + 3CF + 3LCF + (Wf1.y + Wa1.y) x (CF + C + F + Wf2.y +
+Wa2.y))\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.62\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.32\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.62\columnwidth}\raggedright
+\emph{Direct feature access}\strut
+\end{minipage} & \begin{minipage}[t]{0.32\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.62\columnwidth}\raggedright
+Child-centric comp.\strut
+\end{minipage} & \begin{minipage}[t]{0.32\columnwidth}\raggedright
+BCF x (2 + L + Wf1.y + Wa1.y)\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.62\columnwidth}\raggedright
+Graph SAGE\strut
+\end{minipage} & \begin{minipage}[t]{0.32\columnwidth}\raggedright
+B x (C + 3CF + 3LCF + (Wf1.y + Wa1.y) x (CF + C + F + Wf2.y +
+Wa2.y))\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.62\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.32\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.62\columnwidth}\raggedright
+\emph{Feature in UVM}\strut
+\end{minipage} & \begin{minipage}[t]{0.32\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.62\columnwidth}\raggedright
+Child-centric comp.\strut
+\end{minipage} & \begin{minipage}[t]{0.32\columnwidth}\raggedright
+BCF x (2 + L + Wf1.y + Wa1.y)\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.62\columnwidth}\raggedright
+Graph SAGE\strut
+\end{minipage} & \begin{minipage}[t]{0.32\columnwidth}\raggedright
+B x (C + 3CF + 3LCF + (Wf1.y + Wa1.y) x (CF + C + F + Wf2.y +
+Wa2.y))\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+\begin{minipage}[b]{0.57\columnwidth}\raggedright
+Parts\strut
+\end{minipage} & \begin{minipage}[b]{0.37\columnwidth}\raggedright
+Comm. cost\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.57\columnwidth}\raggedright
+\emph{Feature duplication}\strut
+\end{minipage} & \begin{minipage}[t]{0.37\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.57\columnwidth}\raggedright
+Children selection\strut
+\end{minipage} & \begin{minipage}[t]{0.37\columnwidth}\raggedright
+8BC bytes\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.57\columnwidth}\raggedright
+Child-centric comp.\strut
+\end{minipage} & \begin{minipage}[t]{0.37\columnwidth}\raggedright
+4B x (F + Wf1.y + Wa1.y) x min(C, 2p) bytes\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.57\columnwidth}\raggedright
+Source-centric comp.\strut
+\end{minipage} & \begin{minipage}[t]{0.37\columnwidth}\raggedright
+0 bytes\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.57\columnwidth}\raggedright
+Graph SAGE\strut
+\end{minipage} & \begin{minipage}[t]{0.37\columnwidth}\raggedright
+8BC + 4B x (F + Wf1.y + Wa1.y) x min(C, 2p) bytes\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.57\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.37\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.57\columnwidth}\raggedright
+\emph{Direct feature access}\strut
+\end{minipage} & \begin{minipage}[t]{0.37\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.57\columnwidth}\raggedright
+Child-centric comp.\strut
+\end{minipage} & \begin{minipage}[t]{0.37\columnwidth}\raggedright
+4B x ((F + Wf1.y + Wa1.y) x min(C, 2p) + CLF) bytes\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.57\columnwidth}\raggedright
+Graph SAGE\strut
+\end{minipage} & \begin{minipage}[t]{0.37\columnwidth}\raggedright
+8BC + 4B x (F + Wf1.y + Wa1.y) x min(C, 2p) + 4BCFL bytes\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.57\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.37\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.57\columnwidth}\raggedright
+\emph{Feature in UVM}\strut
+\end{minipage} & \begin{minipage}[t]{0.37\columnwidth}\raggedright
+\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.57\columnwidth}\raggedright
+Child-centric comp.\strut
+\end{minipage} & \begin{minipage}[t]{0.37\columnwidth}\raggedright
+4B x (F + Wf1.y + Wa1.y) x min(C, 2p) bytes over GPU-GPU\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.57\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.37\columnwidth}\raggedright
++ 4BCLF bytes over GPU-CPU\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.57\columnwidth}\raggedright
+Graph SAGE\strut
+\end{minipage} & \begin{minipage}[t]{0.37\columnwidth}\raggedright
+8BC + 4B x (F + Wf1.y + Wa1.y) x min(C, 2p) bytes over GPU-GPU\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.57\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[t]{0.37\columnwidth}\raggedright
++ 4BCFL bytes over GPU-CPU\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule
+Parts & Comp/comm ratio & Scalability\tabularnewline
+\midrule
+\endhead
+\emph{Feature duplication} & &\tabularnewline
+Children selection & 1 : 8 & Poor\tabularnewline
+Child-centric comp. & \textasciitilde{} CF : min(C, 2p) x 4 &
+Good\tabularnewline
+Source-centric comp. & N.A. & N.A.\tabularnewline
+Graph SAGE & at least \textasciitilde{} CF : min(C, 2p) x 4 &
+Good\tabularnewline
+& &\tabularnewline
+\emph{Direct feature access} & &\tabularnewline
+Child-centric comp. & \textasciitilde{} (2 + L + Wf1.y + Wa1.y) : 4L &
+poor\tabularnewline
+Graph SAGE & \textasciitilde{} (2 + L + Wf1.y + Wa1.y) : 4L &
+poor\tabularnewline
+& &\tabularnewline
+\emph{Feature in UVM} & &\tabularnewline
+Child-centric comp. & \textasciitilde{} (2 + L + Wf1.y + Wa1.y) : 4L
+over GPU-CPU & very poor\tabularnewline
+Graph SAGE & \textasciitilde{} (2 + L + Wf1.y + Wa1.y) : 4L over GPU-CPU
+& very poor\tabularnewline
+\bottomrule
+\end{longtable}
+
+\end{document}
