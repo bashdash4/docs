@@ -198,9 +198,9 @@
   color: #f92672;
 }
     </style>
-    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
-    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
-      <script src="javascripts/all.js"></script>
+    <link href="../stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="../stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="../javascripts/all.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@3"></script>
@@ -227,15 +227,17 @@
     </style>
   </head>
 
-  <body class="hive_graphSage" data-languages="[]">
+  <body class="hive hive_hive_graphSage" data-languages="[]">
     <a href="#" id="nav-button">
       <span>
         NAV
-        <img src="images/navbar.png" alt="Navbar" />
+        <img src="../images/navbar.png" alt="Navbar" />
       </span>
     </a>
     <div class="toc-wrapper">
-      <img src="images/logo.png" class="logo" alt="Logo" />
+      <a href="https://gunrock.github.io/">
+        <img src="../images/logo.png" class="logo" alt="Logo" />
+      </a>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
@@ -544,7 +546,7 @@ additionally useful to validate the successful rate of the whole pipeline with t
 
 <p>The datasets used for experiments are:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Dataset</th>
 <th style="text-align: right">V</th>
@@ -591,7 +593,7 @@ produces the shortest running time on GPU among {512, 1024, 2048, 4096, 8192,
 
 <p>The running time on DGX-1 with Tesla P100 GPU:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Dataset</th>
 <th style="text-align: right">F</th>
@@ -903,7 +905,7 @@ produces the shortest running time on GPU among {512, 1024, 2048, 4096, 8192,
 
 <p>The running time on Bowser with a Tesla V100 GPU</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Dataset</th>
 <th style="text-align: right">F</th>
@@ -1309,7 +1311,7 @@ and Kernel3 takes 5.52 ms, or 31.1%.</p>
 <p>Further detail on the profile of Kernel2 on the Titan Xp shows the
 utilization of the memory system:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Type</th>
 <th style="text-align: right">Transactions</th>
@@ -1409,7 +1411,7 @@ utilization of the memory system:</p>
 </tr>
 </tbody></table>
 
-<p><img src="attachments/sage/pokec_TitanXp.png" title="Memory statics" alt="Sage_Pokec_TianXp" /></p>
+<p><img src="../attachments/sage/pokec_TitanXp.png" title="Memory statics" alt="Sage_Pokec_TianXp" /></p>
 
 <p>It's clear that the unified cache is almost fully utilized, at 4 TBps out of
 the 5 TBps theoretical upper bound, and is the bottleneck.
@@ -1418,7 +1420,7 @@ This is because the <code>W</code> arrays and the intermediate arrays are highly
 <p>Running the same experiment on the V100 shows a different picture within the memory
 system:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Type</th>
 <th style="text-align: right">Transactions</th>
@@ -1518,7 +1520,7 @@ system:</p>
 </tr>
 </tbody></table>
 
-<p><img src="attachments/sage/pokec_V100.png" title="Memory statics" alt="Sage_Pokec_V100" /></p>
+<p><img src="../attachments/sage/pokec_V100.png" title="Memory statics" alt="Sage_Pokec_V100" /></p>
 
 <p>On the V100, kernel2 only takes 3.982 ms (about 60% of 6.67 ms per batch), and the
 unified-cache throughput increases to 9.8 TBps, more than double than on the

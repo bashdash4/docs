@@ -1,0 +1,22 @@
+<h1 id='overview'>Overview</h1>
+<p>Given a sparse vector as the frontier, and the graph as the sparse matrix (edge weight as nnz values in the matrix), Gunrock can perform a sparse vector sparse matrix multiplication using an advance with reduce operation.</p>
+<h1 id='per-vertex-and-per-edge-data'>Per-Vertex and Per-Edge Data</h1>
+<p><code>// per-vertex</code></p>
+
+<p><code>v_value[vid] // values on sparse vector</code></p>
+
+<p><code>reduced_value[vid] //multiplication result</code></p>
+
+<p><code>// per-edge</code></p>
+
+<p><code>weight[eid] // nnz values in the dense matrix</code></p>
+<h1 id='functor-and-operator'>Functor and Operator</h1>
+<p>The algorithm only needs an advance with reduce_by_key.</p>
+
+<p>Advance: reduce_op is add, key is vertex ID.
+Apply:
+value_to_reduce = v_value[d_id] * weight[e_id]</p>
+<h1 id='enactor'>Enactor</h1>
+<p>f = Frontier.Init(sparse_vector)</p>
+
+<p>Advance_with_Reduce(f, nullptr) // no output frontier</p>

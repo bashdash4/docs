@@ -1,6 +1,6 @@
-<h1 id='gunrock-v0-4-gt-v0-5-porting-guide'>Gunrock v0.4 -&gt; v0.5 Porting Guide</h1>
+<h1 id='gunrock-v0-5-gt-v1-0-porting-guide'>Gunrock v0.5 -&gt; v1.0 Porting Guide</h1>
 <p>This document hopes to help app programer to port a graph
-primitive implemented using v0.4 API to v0.5 API.</p>
+primitive implemented using v0.5 API to v1.0 API.</p>
 
 <p>There are examples with side-by-side comparison and comments, using SSSP:</p>
 

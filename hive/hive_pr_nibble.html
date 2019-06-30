@@ -198,9 +198,9 @@
   color: #f92672;
 }
     </style>
-    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
-    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
-      <script src="javascripts/all.js"></script>
+    <link href="../stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="../stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="../javascripts/all.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@3"></script>
@@ -227,15 +227,17 @@
     </style>
   </head>
 
-  <body class="hive_pr_nibble" data-languages="[]">
+  <body class="hive hive_hive_pr_nibble" data-languages="[]">
     <a href="#" id="nav-button">
       <span>
         NAV
-        <img src="images/navbar.png" alt="Navbar" />
+        <img src="../images/navbar.png" alt="Navbar" />
       </span>
     </a>
     <div class="toc-wrapper">
-      <img src="images/logo.png" class="logo" alt="Logo" />
+      <a href="https://gunrock.github.io/">
+        <img src="../images/logo.png" class="logo" alt="Logo" />
+      </a>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
@@ -416,7 +418,7 @@ Run 0 elapsed: 1.738071, #iterations = 10
 
 <p>All runtimes are in milliseconds (ms):</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Dataset</th>
 <th>HIVE Ref. C++</th>
@@ -534,7 +536,7 @@ Run 0 elapsed: 1.738071, #iterations = 10
 <h3 id='performance-limitations'>Performance limitations</h3>
 <p>We profiled the Gunrock GPU primitives on the <code>kron_g500-logn21</code> graph. The profiler adds approx. 100 ms of overhead (728.48 ms with profiler vs. 627.55 ms without profiler). The breakdown of runtime by kernel looks like:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Gunrock Kernel</th>
 <th>Runtime (ms)</th>

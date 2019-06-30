@@ -198,9 +198,9 @@
   color: #f92672;
 }
     </style>
-    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
-    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
-      <script src="javascripts/all.js"></script>
+    <link href="../stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="../stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="../javascripts/all.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@3"></script>
@@ -227,15 +227,17 @@
     </style>
   </head>
 
-  <body class="hive_geolocation" data-languages="[]">
+  <body class="hive hive_hive_geolocation" data-languages="[]">
     <a href="#" id="nav-button">
       <span>
         NAV
-        <img src="images/navbar.png" alt="Navbar" />
+        <img src="../images/navbar.png" alt="Navbar" />
       </span>
     </a>
     <div class="toc-wrapper">
-      <img src="images/logo.png" class="logo" alt="Logo" />
+      <a href="https://gunrock.github.io/">
+        <img src="../images/logo.png" class="logo" alt="Logo" />
+      </a>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
@@ -313,7 +315,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">v</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">spatial_median</span><span class="p">(</span><span class="n">neighbors_list</span><span class="p">[</span><span class="n">v</span><span class="p">])</span>
 </code></pre><h3 id='comparing-global-gather-vs-repeated-compute'>Comparing Global Gather vs. Repeated Compute</h3>
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Approach</th>
 <th>Memory Usage</th>
@@ -473,7 +475,7 @@ Node [ 38 ]: Predicted = < 9.427616 , -110.640709 > Reference = < 9.427616 , -11
 
 <p>One way to implement this will use the <code>ForAll()</code> operator for the parallel compute across the nodes, a simple while loop for the serial compute per node, and finally multiple <code>neighbor_reduce()</code> operators for the parallel work within the serial while loop. Currently, we do not have a way to support this within Gunrock, but moving forward we can potentially leverage kernel launch within a kernel ("dynamic parallelism") to address this limitation.</p>
 <h3 id='comparison-against-existing-implementations'>Comparison against existing implementations</h3>
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>GPU</th>
 <th>Dataset</th>

@@ -198,9 +198,9 @@
   color: #f92672;
 }
     </style>
-    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
-    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
-      <script src="javascripts/all.js"></script>
+    <link href="../stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="../stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="../javascripts/all.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@3"></script>
@@ -227,15 +227,17 @@
     </style>
   </head>
 
-  <body class="hive_louvain" data-languages="[]">
+  <body class="hive hive_hive_louvain" data-languages="[]">
     <a href="#" id="nav-button">
       <span>
         NAV
-        <img src="images/navbar.png" alt="Navbar" />
+        <img src="../images/navbar.png" alt="Navbar" />
       </span>
     </a>
     <div class="toc-wrapper">
-      <img src="images/logo.png" class="logo" alt="Logo" />
+      <a href="https://gunrock.github.io/">
+        <img src="../images/logo.png" class="logo" alt="Logo" />
+      </a>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
@@ -412,7 +414,7 @@ make
 --jsondir=eval/DGX1-P100x1 > eval/DGX1-P100x1/akamai.txt 2>&amp;1
 </code></p>
 <h3 id='output'>Output</h3>
-<p>The outputs are in the <a href="attachments/louvain" title="louvain">louvain</a> directory. Look for the <code>.txt</code> files: running time is after <code>Run x elapsed:</code>, and the number of communities and the resulting modularity is in the line that starts with <code>Computed:</code>. There are 12 runs in each <code>.txt</code> file: 1 single thread CPU run for reference, 1 OpenMP multiple-thread (32 threads in the example, may not be optimal) run, and 10 GPU runs.</p>
+<p>The outputs are in the <a href="../attachments/louvain" title="louvain">louvain</a> directory. Look for the <code>.txt</code> files: running time is after <code>Run x elapsed:</code>, and the number of communities and the resulting modularity is in the line that starts with <code>Computed:</code>. There are 12 runs in each <code>.txt</code> file: 1 single thread CPU run for reference, 1 OpenMP multiple-thread (32 threads in the example, may not be optimal) run, and 10 GPU runs.</p>
 
 <p>The output was compared against PNNL's results on the number of communities and
 modularity for the amazon and ca datasets. Note that PNNL's code does not count
@@ -422,7 +424,7 @@ the next section.</p>
 
 <p>The modularity of resulting communities:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>DataSet</th>
 <th>Gunrock GPU</th>
@@ -456,7 +458,7 @@ the next section.</p>
 
 <p>The number of resulting communities:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>DataSet</th>
 <th>Gunrock GPU</th>
@@ -490,7 +492,7 @@ the next section.</p>
 
 <p>Details of the datasets:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>DataSet</th>
 <th style="text-align: right">#V</th>
@@ -616,7 +618,7 @@ the next section.</p>
 
 <p>Running time in seconds:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>GPU</th>
 <th>Dataset</th>
@@ -814,7 +816,7 @@ the next section.</p>
 
 <p>Resulting modularity:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>GPU</th>
 <th>DataSet</th>
@@ -1036,7 +1038,7 @@ the next section.</p>
 
 <p>The number of resulting communities:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>GPU</th>
 <th>DataSet</th>
@@ -1238,14 +1240,14 @@ well on this kind of graph.</p></li>
 </ul>
 
 <p>Published results (timing and modularity) from previous work are summarized in
-the <a href="attachments/louvain/louvain_results.xlsx" title="Louvain
+the <a href="../attachments/louvain/louvain_results.xlsx" title="Louvain
 results">louvain_results.xlsx</a> file in the <code>louvain</code> directory.</p>
 <h3 id='performance-limitations'>Performance limitations</h3>
 <p>The GPU performance bottleneck is the sort function, especially in the first pass. It's true that sort on GPU is much faster than CPU; but the CPU implementations use hash tables, which may not be suitable for the GPU; the alternative approaches section has more details on this.</p>
 
 <p>Using the <code>akamai</code> dataset to profile the GPU Louvain implementation on a V100, an iteration in the first pass takes 64.08 ms, and the sort takes 42.05 ms, which is two-thirds of the iteration time. The Louvain implementation uses CUB's radix-sort-pair function. CUB is considered to be one of the GPU primitive libraries that provide the best performance. Further profiling shows during the sort kernel, the device memory controller is ~75% utilized; in other words, the sort is memory bound. This is as expected, as in each iteration of radix sort, the whole <code>edge_pairs</code> and <code>pair_weights</code> arrays are shuffled, with cost on the order of $O(|E|)$, although the memory accesses are mostly coalesced. The memory system utilizations are as below (from NVIDIA profiler):</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>Type</th>
 <th style="text-align: right">Transactions</th>
@@ -1357,7 +1359,7 @@ results">louvain_results.xlsx</a> file in the <code>louvain</code> directory.</p
 </tr>
 </tbody></table>
 
-<p><img src="attachments/louvain/Louvain_akamai.png" title="Memory statistics" alt="Louvain_akamai" /></p>
+<p><img src="../attachments/louvain/Louvain_akamai.png" title="Memory statistics" alt="Louvain_akamai" /></p>
 
 <p>It's clear that the bottleneck is at the device memory: most data are read-once and write-once,  with little possibility to reuse the data. The kernel achieved 691 GB/s bandwidth utilization, ~77% of the 32GB HBM2's 900 GB/s capability. This high-bandwidth utilization fits the memory access pattern: mostly regular and coalesced.</p>
 

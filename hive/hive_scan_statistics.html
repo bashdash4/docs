@@ -198,9 +198,9 @@
   color: #f92672;
 }
     </style>
-    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
-    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
-      <script src="javascripts/all.js"></script>
+    <link href="../stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="../stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="../javascripts/all.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@3"></script>
@@ -227,15 +227,17 @@
     </style>
   </head>
 
-  <body class="hive_scan_statistics" data-languages="[]">
+  <body class="hive hive_hive_scan_statistics" data-languages="[]">
     <a href="#" id="nav-button">
       <span>
         NAV
-        <img src="images/navbar.png" alt="Navbar" />
+        <img src="../images/navbar.png" alt="Navbar" />
       </span>
     </a>
     <div class="toc-wrapper">
-      <img src="images/logo.png" class="logo" alt="Logo" />
+      <a href="https://gunrock.github.io/">
+        <img src="../images/logo.png" class="logo" alt="Logo" />
+      </a>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
@@ -322,7 +324,7 @@ make clean <span class="o">&amp;&amp;</span> make
 
 <p>Details of the datasets:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>DataSet</th>
 <th style="text-align: right">$&vert;V&vert;$</th>
@@ -418,7 +420,7 @@ make clean <span class="o">&amp;&amp;</span> make
 
 <p>Running time in milliseconds:</p>
 
-<table style="font-size: 12px;font-size: 12px;"><thead>
+<table style="font-size: 12px;"><thead>
 <tr>
 <th>GPU</th>
 <th>Dataset</th>

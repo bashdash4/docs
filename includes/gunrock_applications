@@ -1,0 +1,182 @@
+<h1 id='gunrock-39-s-application-cases'>Gunrock&#39;s Application Cases</h1>
+<p>The following is are a wide variety of graph primitives, including traversal-based (breadth-first search, single-source shortest path); node-ranking (HITS, SALSA, PageRank); and global (connected component, minimum spanning tree) implemented within Gunrock.</p>
+
+<p>The &quot;Directory&quot; column in the table below shows, which subdirectory within <code>gunrock/app</code> and <code>examples</code> these applications&#39; implementations are. The version number in the &quot;Single GPU&quot; and &quot;Multi-GPU&quot; columns show which API abstraction of gunrock supports the respective application. If you are interested in helping us port an application in the older abstraction (<code>v0.5.x</code>) to a newer, much cleaner abstraction (<code>v1.x.x</code>), please see our <a href="https://gunrock.github.io/docs/developers.html#porting_guide">Porting Guide</a>.</p>
+
+<table><thead>
+<tr>
+<th>Application</th>
+<th>Directory</th>
+<th>Single GPU</th>
+<th>Multi-GPU</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>A* Search</td>
+<td>astar</td>
+<td>v0.5.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Betweenness Centrality</td>
+<td>bc</td>
+<td>v1.x.x</td>
+<td>v0.5.x</td>
+</tr>
+<tr>
+<td>Breadth-First Search</td>
+<td>bfs</td>
+<td>v1.x.x</td>
+<td>v1.x.x</td>
+</tr>
+<tr>
+<td>Connected Components</td>
+<td>cc</td>
+<td>v1.x.x</td>
+<td>v0.5.x</td>
+</tr>
+<tr>
+<td>Graph Coloring</td>
+<td>color</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Geolocation</td>
+<td>geo</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>RMAT Graph Generator</td>
+<td>grmat</td>
+<td>v0.5.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Graph Trend Filtering</td>
+<td>gtf</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Hyperlink-Induced Topic Search</td>
+<td>hits</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>K-Nearest Neighbors</td>
+<td>knn</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Louvain Modularity</td>
+<td>louvain</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Label Propagation</td>
+<td>lp</td>
+<td>v0.5.x</td>
+<td></td>
+</tr>
+<tr>
+<td>MaxFlow</td>
+<td>mf</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Minimum Spanning Tree</td>
+<td>mst</td>
+<td>v0.5.x</td>
+<td></td>
+</tr>
+<tr>
+<td>PageRank</td>
+<td>pr</td>
+<td>v1.x.x</td>
+<td>v0.5.x</td>
+</tr>
+<tr>
+<td>Local Graph Clustering</td>
+<td>pr_nibble</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Graph Projections</td>
+<td>proj</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Random Walk</td>
+<td>rw</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>GraphSAGE</td>
+<td>sage</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Stochastic Approach for Link-Structure Analysis</td>
+<td>salsa</td>
+<td>v0.5.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Subgraph Matching</td>
+<td>sm</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Shared Nearest Neighbors</td>
+<td>snn</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Scan Statistics</td>
+<td>ss</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Single Source Shortest Path</td>
+<td>sssp</td>
+<td>v1.x.x</td>
+<td>v0.5.x</td>
+</tr>
+<tr>
+<td>Triangle Counting</td>
+<td>tc</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Top K</td>
+<td>topk</td>
+<td>v0.5.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Vertex Nomination</td>
+<td>vn</td>
+<td>v1.x.x</td>
+<td></td>
+</tr>
+<tr>
+<td>Who To Follow</td>
+<td>wtf</td>
+<td>v0.5.x</td>
+<td></td>
+</tr>
+</tbody></table>

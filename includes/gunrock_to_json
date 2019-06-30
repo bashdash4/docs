@@ -1,4 +1,4 @@
-<h1 id='from-gunrock-to-json-gunrock_to_json'>From Gunrock to JSON {#gunrock_to_json}</h1><h2 id='how-do-we-export-information-from-gunrock'>How do we export information from Gunrock?</h2>
+<h1 id='from-gunrock-to-json'>From Gunrock to JSON</h1><h2 id='how-do-we-export-information-from-gunrock'>How do we export information from Gunrock?</h2>
 <p>Typical programs use &quot;printf&quot; to emit a bunch of unstructured information. As the program gets more sophisticated, &quot;printf&quot; is augmented with command-line switches, perhaps a configuration file, but it&#39;s hard to easily parse random printf output.</p>
 
 <p>More structured is JSON format. JSON is a nested dict (hash) data structure with arbitrary keys (and arbitrary nesting). It can be used to hold scalar, vector, and key-value data. Many tools can input and output JSON. It is a good choice for exporting information from a Gunrock program.</p>
@@ -95,7 +95,7 @@ Actual code:</p>
 <li><em>undirected</em>. Is the graph is undirected (true) or directed (false)? Command-line option.</li>
 <li><em>vertex_id</em>. Starting vertex ID. Integer.</li>
 </ul>
-<h1 id='thread-safety-quot-using-json-spirit-with-multiple-threads-quot'>Thread safety: &quot;Using JSON Spirit with Multiple Threads&quot;</h1>
+<h2 id='thread-safety-quot-using-json-spirit-with-multiple-threads-quot'>Thread safety: &quot;Using JSON Spirit with Multiple Threads&quot;</h2>
 <p>&quot;If you intend to use JSON Spirit in more than one thread, you will need to uncomment the following line near the top of json_spirit_reader.cpp.</p>
 
 <p>&quot;//#define BOOST_SPIRIT_THREADSAFE&quot;</p>
@@ -103,5 +103,5 @@ Actual code:</p>
 <p>&quot;In this case, Boost Spirit will require you to link against Boost Threads.&quot;</p>
 
 <p><a href="http://www.codeproject.com/KB/recipes/JSON_Spirit.aspx#threads">link</a></p>
-<h1 id='if-compilation-is-too-slow'>If compilation is too slow</h1>
+<h2 id='if-compilation-is-too-slow'>If compilation is too slow</h2>
 <p>Currently we&#39;re using the header-only version of JSON Spirit, which is easier to integrate but requires more compilation. The (docs)[http://www.codeproject.com/KB/recipes/JSON_Spirit.aspx#reduc] have ways to increase compilation speed.</p>

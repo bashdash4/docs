@@ -1,0 +1,67 @@
+<h1 id='overview'>Overview</h1>
+<p>A* search is a variation of Dijkstra&#39;s algorithm. It selects the path using the following equation:</p>
+
+<p>f(node)=g(node)+h(node)</p>
+
+<p>Where g(node) is the actual cost from source node to the current node, h(node) is the estimated cost from the current node to the destination node. When h(node) is 0, A* search degenerates to a normal Dijkstra&#39;s algorithm.</p>
+
+<p>The heuristic cost estimation function is the most difficult part in A* search. For different applications, users should develop proper heuristic function.</p>
+<h1 id='per-vertex-and-per-edge-data'>Per-Vertex and Per-Edge Data</h1>
+<p><code>// per-vertex</code></p>
+
+<p><code>g_cost[vid] = infinity // actual cost from source to node vid (initialized as infinity, for source node, 0 for source node)</code></p>
+
+<p><code>f[vid] = infinity // final cost value used for priority queue split (initialized as infinity, 0 for source node)</code></p>
+
+<p><code>pred[vid] = GR_INVALID_NODE_VAL // predecessor node id, initialized as invalid.</code></p>
+
+<p><code>// per-edge</code></p>
+
+<p><code>weight[eid] = weights // distance between u,v where e(u,v) is the edge</code></p>
+<h1 id='functor-and-operator'>Functor and Operator</h1>
+<p>The algorithm uses an advance, a filter, and a bisect (for 2-level priority queue) or a multi-split (for multi-level priority queue) operators:</p>
+
+<p>Advance:</p>
+
+<p>CondEdge:</p>
+
+<p><code>new_g_cost = g_cost[s_id] + weight[e_id];</code></p>
+
+<p><code>old_g_cost = atomicMin(g_cost[d_id], new_g_cost); // this will assign the min cost to g_cost</code></p>
+
+<p><code>return (new_g_cost &lt; old_g_cost);</code></p>
+
+<p>ApplyEdge:</p>
+
+<p><code>pred[d_id] = s_id</code></p>
+
+<p>Filter:</p>
+
+<p>h = ComputeHeuristicFunc()</p>
+
+<p>f[nid] = g_cost[nid] + h</p>
+
+<p>Bisect:</p>
+
+<p>Split the output frontier of filter into iteration_near_pile and iteration_far_pile by whether f[nid] &gt; delta[level]. 
+Append the iteration_far_pile at the end of global_far_pile queue.
+If the iteration_near_pile is empty, bisect the global_far_pile queue according to delta[level+1].</p>
+<h1 id='stop-condition'>Stop Condition</h1>
+<p>Both current frontier and global_far_pile are empty (source node does not connect to destination node).
+Reached destination node in the generated frontier.</p>
+<h1 id='enactor'>Enactor</h1>
+<p><code>f = Frontier.Init(source_node)</code></p>
+
+<p><code>far_pile = Frontier.Init()</code></p>
+
+<p><code>while (!f.Contains(destination_node) &amp;&amp; !f.IsEmpty() &amp;&amp; !far_pile.IsEmpty())</code></p>
+
+<p><code>{</code></p>
+
+<p><code>Advance(f,f_out)</code></p>
+
+<p><code>Filter(f_out,f)</code></p>
+
+<p><code>Bisect(f,far_pile,delta)</code></p>
+
+<p><code>}</code></p>
