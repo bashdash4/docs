@@ -1,14 +1,14 @@
 <h1 id='results-and-analysis'>Results and Analysis</h1>
-<p>We are gradually adding summaries of our results to these web pages (please let us know if you would like other comparisons). These summaries also include a table of results along with links to the configuration and results of each individual run. We detail our <a href="#methodology">methodology for our measurements here</a>.</p>
+<p>We are gradually adding summaries of our results to these web pages (please let us know if you would like other comparisons). These summaries also include a table of results along with links to the configuration and results of each individual run. We detail our <a href="https://gunrock.github.io/docs/#methodology">methodology for our measurements here</a>.</p>
 
 <ul>
-<li><a href="engines_topc.html">Gunrock performance compared with other engines for graph analytics</a></li>
-<li><a href="md_stats_do_ab_random.html">Setting parameters for direction-optimized BFS</a></li>
-<li><a href="gunrock_gpus.html">Gunrock results on different GPUs</a></li>
-<li><a href="docs/frontier.html">Gunrock BFS throughput as a function of frontier size</a></li>
-<li><a href="mgpu_speedup.html">Multi-GPU Gunrock Speedups</a> and <a href="mgpu_scalability.html">Multi-GPU Gunrock Scalability</a></li>
-<li><a href="mgpu_partition.html">Multi-GPU Gunrock Partition Performance</a></li>
-<li><a href="groute.html">Comparison to Groute</a></li>
+<li><a href="https://gunrock.github.io/docs/engines_topc.html">Gunrock performance compared with other engines for graph analytics</a></li>
+<li><a href="http://gunrock.github.io/gunrock/doc/latest/md_stats_do_ab_random.html">Setting parameters for direction-optimized BFS</a></li>
+<li><a href="https://gunrock.github.io/docs/gunrock_gpus.html">Gunrock results on different GPUs</a></li>
+<li><a href="https://gunrock.github.io/docs/frontier.html">Gunrock BFS throughput as a function of frontier size</a></li>
+<li><a href="https://gunrock.github.io/docs/mgpu_speedup.html">Multi-GPU Gunrock Speedups</a> and <a href="https://gunrock.github.io/docs/mgpu_scalability.html">Multi-GPU Gunrock Scalability</a></li>
+<li><a href="https://gunrock.github.io/docs/mgpu_partition.html">Multi-GPU Gunrock Partition Performance</a></li>
+<li><a href="http://gunrock.github.io/docs/groute.html">Comparison to Groute</a></li>
 </ul>
 
 <p>For reproducibility, we maintain Gunrock configurations and results in our github <a href="https://github.com/gunrock/io/tree/master/gunrock-output">gunrock/io</a> repository.</p>
@@ -25,7 +25,7 @@ the developers of Gunrock.</p>
 <h3 id='general-remarks'>General remarks</h3>
 <ul>
 <li>All timings are shown in Millisecond (ms).</li>
-<li><p>Abvreviation:</p>
+<li><p>Abbreviation:</p>
 
 <ul>
 <li>CSR   = compressed sparse row</li>
