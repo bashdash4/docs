@@ -1,0 +1,326 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="icon" type="image/ico" href="images/favicon.ico">
+    <title>Interesting Graph Research Projects with Possible Gunrock Applicability</title>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight .gh {
+  color: #999999;
+}
+.highlight .sr {
+  color: #f6aa11;
+}
+.highlight .go {
+  color: #888888;
+}
+.highlight .gp {
+  color: #555555;
+}
+.highlight .gs {
+}
+.highlight .gu {
+  color: #aaaaaa;
+}
+.highlight .nb {
+  color: #f6aa11;
+}
+.highlight .cm {
+  color: #75715e;
+}
+.highlight .cp {
+  color: #75715e;
+}
+.highlight .c1 {
+  color: #75715e;
+}
+.highlight .cs {
+  color: #75715e;
+}
+.highlight .c, .highlight .cd {
+  color: #75715e;
+}
+.highlight .err {
+  color: #960050;
+}
+.highlight .gr {
+  color: #960050;
+}
+.highlight .gt {
+  color: #960050;
+}
+.highlight .gd {
+  color: #49483e;
+}
+.highlight .gi {
+  color: #49483e;
+}
+.highlight .ge {
+  color: #49483e;
+}
+.highlight .kc {
+  color: #66d9ef;
+}
+.highlight .kd {
+  color: #66d9ef;
+}
+.highlight .kr {
+  color: #66d9ef;
+}
+.highlight .no {
+  color: #66d9ef;
+}
+.highlight .kt {
+  color: #66d9ef;
+}
+.highlight .mf {
+  color: #ae81ff;
+}
+.highlight .mh {
+  color: #ae81ff;
+}
+.highlight .il {
+  color: #ae81ff;
+}
+.highlight .mi {
+  color: #ae81ff;
+}
+.highlight .mo {
+  color: #ae81ff;
+}
+.highlight .m, .highlight .mb, .highlight .mx {
+  color: #ae81ff;
+}
+.highlight .sc {
+  color: #ae81ff;
+}
+.highlight .se {
+  color: #ae81ff;
+}
+.highlight .ss {
+  color: #ae81ff;
+}
+.highlight .sd {
+  color: #e6db74;
+}
+.highlight .s2 {
+  color: #e6db74;
+}
+.highlight .sb {
+  color: #e6db74;
+}
+.highlight .sh {
+  color: #e6db74;
+}
+.highlight .si {
+  color: #e6db74;
+}
+.highlight .sx {
+  color: #e6db74;
+}
+.highlight .s1 {
+  color: #e6db74;
+}
+.highlight .s {
+  color: #e6db74;
+}
+.highlight .na {
+  color: #a6e22e;
+}
+.highlight .nc {
+  color: #a6e22e;
+}
+.highlight .nd {
+  color: #a6e22e;
+}
+.highlight .ne {
+  color: #a6e22e;
+}
+.highlight .nf {
+  color: #a6e22e;
+}
+.highlight .vc {
+  color: #ffffff;
+}
+.highlight .nn {
+  color: #ffffff;
+}
+.highlight .nl {
+  color: #ffffff;
+}
+.highlight .ni {
+  color: #ffffff;
+}
+.highlight .bp {
+  color: #ffffff;
+}
+.highlight .vg {
+  color: #ffffff;
+}
+.highlight .vi {
+  color: #ffffff;
+}
+.highlight .nv {
+  color: #ffffff;
+}
+.highlight .w {
+  color: #ffffff;
+}
+.highlight {
+  color: #ffffff;
+}
+.highlight .n, .highlight .py, .highlight .nx {
+  color: #ffffff;
+}
+.highlight .ow {
+  color: #f92672;
+}
+.highlight .nt {
+  color: #f92672;
+}
+.highlight .k, .highlight .kv {
+  color: #f92672;
+}
+.highlight .kn {
+  color: #f92672;
+}
+.highlight .kp {
+  color: #f92672;
+}
+.highlight .o {
+  color: #f92672;
+}
+    </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@4"></script>
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+    });
+    </script>
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <style media="screen">
+      /* Add space between vega-embed links */
+      /* http://vega.github.io/vega-tutorials/airports/ */
+      .vega-embed .vega-actions a {
+        margin-left: 1em;
+        visibility: hidden;
+      }
+      .vega-embed:hover .vega-actions a {
+        visibility: visible;
+      }
+    </style>
+  </head>
+
+  <body class="interesting_research" data-languages="[]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" alt="Navbar" />
+      </span>
+    </a>
+    <div class="toc-wrapper">
+      <a href="https://gunrock.github.io/">
+        <img src="images/logo.png" class="logo" alt="Logo" />
+      </a>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <div id="toc" class="toc-list-h1">
+          <li>
+            <a href="#interesting-graph-research-projects-with-possible-gunrock-applicability" class="toc-h1 toc-link" data-title="Interesting Graph Research Projects with Possible Gunrock Applicability">INTERESTING GRAPH RESEARCH PROJECTS WITH POSSIBLE GUNROCK APPLICABILITY</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#the-broker-queue-a-fast-linearizable-fifo-queue-for-fine-granular-work-distribution-on-the-gpu" class="toc-h2 toc-link" data-title="The broker queue: A fast, linearizable FIFO queue for fine-granular work distribution on the GPU">The broker queue: A fast, linearizable FIFO queue for fine-granular work distribution on the GPU</a>
+                  </li>
+                  <li>
+                    <a href="#xbfs-exploring-runtime-optimizations-for-breadth-first-search-on-gpus" class="toc-h2 toc-link" data-title="XBFS: eXploring Runtime Optimizations for Breadth-First Search on GPUs">XBFS: eXploring Runtime Optimizations for Breadth-First Search on GPUs</a>
+                  </li>
+                  <li>
+                    <a href="#graphcage-cache-aware-graph-processing-on-gpus" class="toc-h2 toc-link" data-title="GraphCage: Cache Aware Graph Processing on GPUs">GraphCage: Cache Aware Graph Processing on GPUs</a>
+                  </li>
+                  <li>
+                    <a href="#combining-data-duplication-and-graph-reordering-to-accelerate-parallel-graph-processing" class="toc-h2 toc-link" data-title="Combining Data Duplication and Graph Reordering to Accelerate Parallel Graph Processing">Combining Data Duplication and Graph Reordering to Accelerate Parallel Graph Processing</a>
+                  </li>
+                  <li>
+                    <a href="#improving-efficiency-of-parallel-vertex-centric-algorithms-for-irregular-graphs" class="toc-h2 toc-link" data-title="Improving Efficiency of Parallel Vertex-Centric Algorithms for Irregular Graphs">Improving Efficiency of Parallel Vertex-Centric Algorithms for Irregular Graphs</a>
+                  </li>
+                  <li>
+                    <a href="#optimal-algebraic-breadth-first-search-for-sparse-graphs" class="toc-h2 toc-link" data-title="Optimal algebraic Breadth-First Search for sparse graphs">Optimal algebraic Breadth-First Search for sparse graphs</a>
+                  </li>
+                  <li>
+                    <a href="#kaskade-graph-views-for-efficient-graph-analytics" class="toc-h2 toc-link" data-title="Kaskade: Graph Views for Efficient Graph Analytics">Kaskade: Graph Views for Efficient Graph Analytics</a>
+                  </li>
+                  <li>
+                    <a href="#synchronization-avoiding-graph-algorithms" class="toc-h2 toc-link" data-title="Synchronization-Avoiding Graph Algorithms">Synchronization-Avoiding Graph Algorithms</a>
+                  </li>
+                  <li>
+                    <a href="#a-pattern-based-algorithmic-autotuner-for-graph-processing-on-gpus" class="toc-h2 toc-link" data-title="A pattern based algorithmic autotuner for graph processing on GPUs">A pattern based algorithmic autotuner for graph processing on GPUs</a>
+                  </li>
+                  <li>
+                    <a href="#when-is-graph-reordering-an-optimization-studying-the-effect-of-lightweight-graph-reordering-across-applications-and-input-graphs" class="toc-h2 toc-link" data-title="When is Graph Reordering an Optimization?: Studying the Effect of Lightweight Graph Reordering Across Applications and Input Graphs">When is Graph Reordering an Optimization?: Studying the Effect of Lightweight Graph Reordering Across Applications and Input Graphs</a>
+                  </li>
+              </ul>
+          </li>
+      </div>
+        <ul class="toc-footer">
+            <li><a href='https://github.com/gunrock/gunrock'>Gunrock&colon; GPU Graph Analytics</a></li>
+            <li>Gunrock &copy; 2019 The Regents of the University of California.</li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+
+        <!-- <div class="dark-box"></div> -->
+
+      <div class="content">
+        <h1 id='interesting-graph-research-projects-with-possible-gunrock-applicability'>Interesting Graph Research Projects with Possible Gunrock Applicability</h1>
+<p>We may see papers during the course of our work lives that have possible applicability to Gunrock. There's three steps to making use of those:</p>
+
+<ol>
+<li>Add these papers here.</li>
+<li>Summarize what those papers do.</li>
+<li>Ascertain with the aid of Gunrock-internals experts if these are worth pursuing (as core-Gunrock projects, as projects for new students, and/or as possible external projects). If we know they're good, we can add them to the main docs <a href="https://gunrock.github.io/docs/#possible-gunrock-projects">here</a>.</li>
+</ol>
+<h2 id='the-broker-queue-a-fast-linearizable-fifo-queue-for-fine-granular-work-distribution-on-the-gpu'>The broker queue: A fast, linearizable FIFO queue for fine-granular work distribution on the GPU</h2>
+<p>B. Kerbl, M. Kenzel, J. H. Mueller, D. Schmalstieg, and M. Steinberger, “The broker queue: A fast, linearizable FIFO queue for fine-granular work distribution on the GPU,” presented at the Proceedings of the International Conference on Supercomputing, 2018, pp. 76–85. [<a href="https://doi.org/10.1145/3205289.3205291">doi</a></p>
+<h2 id='xbfs-exploring-runtime-optimizations-for-breadth-first-search-on-gpus'>XBFS: eXploring Runtime Optimizations for Breadth-First Search on GPUs</h2>
+<p>A. Gaihre, Z. Wu, F. Yao, and H. Liu, XBFS: eXploring Runtime Optimizations for Breadth-First Search on GPUs. New York, New York, USA: ACM, 2019, pp. 121–131. <a href="https://doi.org/10.1145/3183713.3183735">[doi]</a></p>
+<h2 id='graphcage-cache-aware-graph-processing-on-gpus'>GraphCage: Cache Aware Graph Processing on GPUs</h2>
+<p>X. Chen, “GraphCage: Cache Aware Graph Processing on GPUs,” arXiv.org, vol. cs.DC. 03-Apr-2019. <a href="https://arxiv.org/abs/1904.02241v1">[arXiv]</a></p>
+<h2 id='combining-data-duplication-and-graph-reordering-to-accelerate-parallel-graph-processing'>Combining Data Duplication and Graph Reordering to Accelerate Parallel Graph Processing</h2>
+<p>V. Balaji and B. Lucia, “Combining Data Duplication and Graph Reordering to Accelerate Parallel Graph Processing,” presented at the the 28th International Symposium, New York, New York, USA, 2019, pp. 133–144. <a href="10.1145/3307681.3326609">[doi]</a></p>
+<h2 id='improving-efficiency-of-parallel-vertex-centric-algorithms-for-irregular-graphs'>Improving Efficiency of Parallel Vertex-Centric Algorithms for Irregular Graphs</h2>
+<p>M. M. Ozdal, “Improving Efficiency of Parallel Vertex-Centric Algorithms for Irregular Graphs,” IEEE TPDS, 2019. <a href="https://doi.org/10.1109/TPDS.2019.2906166">[doi]</a></p>
+<h2 id='optimal-algebraic-breadth-first-search-for-sparse-graphs'>Optimal algebraic Breadth-First Search for sparse graphs</h2>
+<p>P. Burkhardt, “Optimal algebraic Breadth-First Search for sparse graphs.” [<a href="https://arxiv.org/abs/1906.03113">arXiv</a></p>
+<h2 id='kaskade-graph-views-for-efficient-graph-analytics'>Kaskade: Graph Views for Efficient Graph Analytics</h2>
+<p>J. M. F. da Trindade, K. Karanasos, C. Curino, S. Madden, and J. Shun, “Kaskade: Graph Views for Efficient Graph Analytics,” arXiv.org, vol. cs.DB. 12-Jun-2019. [<a href="https://arxiv.org/abs/1906.05162v1">arXiv</a></p>
+<h2 id='synchronization-avoiding-graph-algorithms'>Synchronization-Avoiding Graph Algorithms</h2>
+<p>J. S. Firoz, M. Zalewski, T. Kanewala, and A. Lumsdaine, “Synchronization-Avoiding Graph Algorithms,” presented at the Proceedings - 25th IEEE International Conference on High Performance Computing, HiPC 2018, 2019, pp. 52–61. <a href="https://doi.org/10.1109/HiPC.2018.00015">[doi]</a></p>
+<h2 id='a-pattern-based-algorithmic-autotuner-for-graph-processing-on-gpus'>A pattern based algorithmic autotuner for graph processing on GPUs</h2>
+<p>K. Meng, J. Li, G. Tan, and N. Sun, A pattern based algorithmic autotuner for graph processing on GPUs. PPoPP '19. New York, New York, USA: ACM, 2019, pp. 201–213. <a href="https://dx.doi.org/10.1145/3293883.3295716">[doi]</a></p>
+<h2 id='when-is-graph-reordering-an-optimization-studying-the-effect-of-lightweight-graph-reordering-across-applications-and-input-graphs'>When is Graph Reordering an Optimization?: Studying the Effect of Lightweight Graph Reordering Across Applications and Input Graphs</h2>
+<p>[1] V. Balaji and B. Lucia, “When is Graph Reordering an Optimization?: Studying the Effect of Lightweight Graph Reordering Across Applications and Input Graphs,” presented at the 2018 IEEE International Symposium on Workload Characterization, IISWC 2018, 2018, pp. 203–214. <a href="https://dx.doi.org/10.1109/IISWC.2018.8573478">[doi]</a></p>
+
+      </div>
+
+        <!-- <div class="dark-box"></div> -->
+    </div>
+  </body>
+</html>
