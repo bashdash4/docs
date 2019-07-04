@@ -1,0 +1,28 @@
+<h1 id='interesting-graph-research-projects-with-possible-gunrock-applicability'>Interesting Graph Research Projects with Possible Gunrock Applicability</h1>
+<p>We may see papers during the course of our work lives that have possible applicability to Gunrock. There&#39;s three steps to making use of those:</p>
+
+<ol>
+<li>Add these papers here.</li>
+<li>Summarize what those papers do.</li>
+<li>Ascertain with the aid of Gunrock-internals experts if these are worth pursuing (as core-Gunrock projects, as projects for new students, and/or as possible external projects). If we know they&#39;re good, we can add them to the main docs <a href="https://gunrock.github.io/docs/#possible-gunrock-projects">here</a>.</li>
+</ol>
+<h2 id='the-broker-queue-a-fast-linearizable-fifo-queue-for-fine-granular-work-distribution-on-the-gpu'>The broker queue: A fast, linearizable FIFO queue for fine-granular work distribution on the GPU</h2>
+<p>B. Kerbl, M. Kenzel, J. H. Mueller, D. Schmalstieg, and M. Steinberger, “The broker queue: A fast, linearizable FIFO queue for fine-granular work distribution on the GPU,” presented at the Proceedings of the International Conference on Supercomputing, 2018, pp. 76–85. [<a href="https://doi.org/10.1145/3205289.3205291">doi</a></p>
+<h2 id='xbfs-exploring-runtime-optimizations-for-breadth-first-search-on-gpus'>XBFS: eXploring Runtime Optimizations for Breadth-First Search on GPUs</h2>
+<p>A. Gaihre, Z. Wu, F. Yao, and H. Liu, XBFS: eXploring Runtime Optimizations for Breadth-First Search on GPUs. New York, New York, USA: ACM, 2019, pp. 121–131. <a href="https://doi.org/10.1145/3183713.3183735">[doi]</a></p>
+<h2 id='graphcage-cache-aware-graph-processing-on-gpus'>GraphCage: Cache Aware Graph Processing on GPUs</h2>
+<p>X. Chen, “GraphCage: Cache Aware Graph Processing on GPUs,” arXiv.org, vol. cs.DC. 03-Apr-2019. <a href="https://arxiv.org/abs/1904.02241v1">[arXiv]</a></p>
+<h2 id='combining-data-duplication-and-graph-reordering-to-accelerate-parallel-graph-processing'>Combining Data Duplication and Graph Reordering to Accelerate Parallel Graph Processing</h2>
+<p>V. Balaji and B. Lucia, “Combining Data Duplication and Graph Reordering to Accelerate Parallel Graph Processing,” presented at the the 28th International Symposium, New York, New York, USA, 2019, pp. 133–144. <a href="10.1145/3307681.3326609">[doi]</a></p>
+<h2 id='improving-efficiency-of-parallel-vertex-centric-algorithms-for-irregular-graphs'>Improving Efficiency of Parallel Vertex-Centric Algorithms for Irregular Graphs</h2>
+<p>M. M. Ozdal, “Improving Efficiency of Parallel Vertex-Centric Algorithms for Irregular Graphs,” IEEE TPDS, 2019. <a href="https://doi.org/10.1109/TPDS.2019.2906166">[doi]</a></p>
+<h2 id='optimal-algebraic-breadth-first-search-for-sparse-graphs'>Optimal algebraic Breadth-First Search for sparse graphs</h2>
+<p>P. Burkhardt, “Optimal algebraic Breadth-First Search for sparse graphs.” [<a href="https://arxiv.org/abs/1906.03113">arXiv</a></p>
+<h2 id='kaskade-graph-views-for-efficient-graph-analytics'>Kaskade: Graph Views for Efficient Graph Analytics</h2>
+<p>J. M. F. da Trindade, K. Karanasos, C. Curino, S. Madden, and J. Shun, “Kaskade: Graph Views for Efficient Graph Analytics,” arXiv.org, vol. cs.DB. 12-Jun-2019. [<a href="https://arxiv.org/abs/1906.05162v1">arXiv</a></p>
+<h2 id='synchronization-avoiding-graph-algorithms'>Synchronization-Avoiding Graph Algorithms</h2>
+<p>J. S. Firoz, M. Zalewski, T. Kanewala, and A. Lumsdaine, “Synchronization-Avoiding Graph Algorithms,” presented at the Proceedings - 25th IEEE International Conference on High Performance Computing, HiPC 2018, 2019, pp. 52–61. <a href="https://doi.org/10.1109/HiPC.2018.00015">[doi]</a></p>
+<h2 id='a-pattern-based-algorithmic-autotuner-for-graph-processing-on-gpus'>A pattern based algorithmic autotuner for graph processing on GPUs</h2>
+<p>K. Meng, J. Li, G. Tan, and N. Sun, A pattern based algorithmic autotuner for graph processing on GPUs. PPoPP &#39;19. New York, New York, USA: ACM, 2019, pp. 201–213. <a href="https://dx.doi.org/10.1145/3293883.3295716">[doi]</a></p>
+<h2 id='when-is-graph-reordering-an-optimization-studying-the-effect-of-lightweight-graph-reordering-across-applications-and-input-graphs'>When is Graph Reordering an Optimization?: Studying the Effect of Lightweight Graph Reordering Across Applications and Input Graphs</h2>
+<p>[1] V. Balaji and B. Lucia, “When is Graph Reordering an Optimization?: Studying the Effect of Lightweight Graph Reordering Across Applications and Input Graphs,” presented at the 2018 IEEE International Symposium on Workload Characterization, IISWC 2018, 2018, pp. 203–214. <a href="https://dx.doi.org/10.1109/IISWC.2018.8573478">[doi]</a></p>
