@@ -329,7 +329,7 @@ First 40 distances of the reference CPU result.
 ```
 
 ### Output
-Output is text that explains steps taken, shows passes through graph, displays distances, and displays runtime statistics and other diagnostic information such as number of iterations and vertices/edges visited. Comparisons to proven implementations of BFS (such as that provided by [the back40computing project](https://code.google.com/archive/p/back40computing/)) can be used for correctness checking.
+Output is text that explains steps taken, shows passes through graph, displays distances, and displays runtime statistics and other diagnostic information such as number of iterations and vertices/edges visited. Comparisons to proven implementations of BFS can be used for correctness checking.
 
 ## Performance and Analysis
 [IN PROGRESS]
