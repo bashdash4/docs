@@ -1,16 +1,16 @@
 # Breadth-First Search (BFS)
-The textbook algorithm for finding (single source) shortest paths in an unweighted graph or a graph with edges exclusively of unit length. Given a graph and a specified source vertex as inputs, it provides as output an array of the shortest path (least number of edges) between the source vertex and every other vertex. It does this by using adjacency lists to discover new vertices, starting with the source vertex and going by order of discovery, and assigning distances based on number of edges from the source vertex. Perhaps the fastest shortest path algorithm and a building block with which other graph algorithms are built.
+A fundamental graph search algorithm that, as the name suggests, searches through the vertices of an unweighted graph in the order of shortest to longest distance from a given source vertex and typically also returns an array of the edge distances (least number of edges) from the source vertex to every other vertex. It does this by using adjacency lists to discover new vertices, starting with the source vertex and going by order of discovery, and assigning distances based on number of edges from the source vertex. One of the fastest search algorithms and a building block with which other graph algorithms and applications are built.
 
 
 ## Summary of Results
 [IN PROGRESS]
 
 ## Summary of Gunrock Implementation
-Conceptually, this implementation isn’t extremely different from a standard serial implementation, but running searches and checking vertices concurrently through parallelism improves the potential for efficiency. With Gunrock, BFS (and, by extension, SSSP, as a BFS can be seen as an SSSP operation with unit length edges) can be completed with a series of “Advance” and “Filter” steps. Recently discovered vertices are searched, with distances from the source vertex updated. From these vertices, a new frontier is formed and placed into a temp queue with all the adjacent edges, which is then filtered to remove already discovered nodes. The vertices that remain are then placed in the search queue.
+[CURRENTLY BEING REVISED]
+Conceptually, this implementation isn’t extremely different from a standard serial implementation, but running searches and checking vertices concurrently through parallelism improves the potential for efficiency. With Gunrock, BFS can be completed with a series of “Advance” and “Filter” steps. Recently discovered vertices are searched, with distances from the source vertex updated. From these vertices, a new frontier is formed and placed into a temp queue with all the adjacent edges, which is then filtered to remove already discovered nodes. The vertices that remain are then placed in the search queue.
 
 Pseudocode:
 ```
-//Adapted from SSSP Pseudocode from "Writing Graph Primitives" (S8586)
 function BFS (Graph, source):
 	//RESET
 	for each vertex v in Graph:
