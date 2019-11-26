@@ -6,24 +6,30 @@ A fundamental graph search algorithm that, as the name suggests, searches throug
 [IN PROGRESS]
 
 ## Summary of Gunrock Implementation
-[CURRENTLY BEING REVISED]
-Conceptually, this implementation isn’t extremely different from a standard serial implementation, but running searches and checking vertices concurrently through parallelism improves the potential for efficiency. With Gunrock, BFS can be completed with a series of “Advance” and “Filter” steps. Recently discovered vertices are searched, with distances from the source vertex updated. From these vertices, a new frontier is formed and placed into a temp queue with all the adjacent edges, which is then filtered to remove already discovered nodes. The vertices that remain are then placed in the search queue.
+[REVISION IN PROGRESS]
+Conceptually, this implementation isn’t extremely different from a standard serial implementation, but running searches and checking vertices concurrently through parallelism improves the potential for efficiency. Gunrock completes BFS with a series of “Advance” and “Filter” steps.
+
+In the Advance step, we search the vertices in our search frontier in parallel and create a new frontier from vertices adjacent to those searched. At this point, we classify newly discovered vertices as such and classify already discovered vertices as "invalid" in the new frontier.
+
+In the Filter step, we check this new frontier's vertices in parallel and filter out the invalid vertices (those that would be redundant to search). We then use the frontier remaining from this operation for the next search iteration.
+
+(Talk about direction optimization (push/pull), top-down/bottom-up from bfs_kernel?)
 
 Pseudocode:
 ```
 function BFS (Graph, source):
 	//RESET
 	for each vertex v in Graph:
-		distance[v] = inf
-	distance[source] = 0 	//Distance of source is zero
+		discovered[v] = 0
+	discovered[source] = 1 	//Source vertex is discovered by default
 	Q0 = {source}		//Search queue, starts with only source vertex in it
 	//ADVANCE
 	while Q0 is not empty:
 		Q1 = {}		//Temp queue
 		for each v in Q0, do in parallel:
 			for each edge e<u,v> of v, do in parallel:
- 				if (distance[u] == inf)
-					distance[u] = distance[v] + 1
+ 				if (discovered[u] == 0)
+					discovered[u] = 1
 					put u in Q1
 				else
 					put invalid in Q1
