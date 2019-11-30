@@ -6,14 +6,15 @@ A fundamental graph search algorithm that, as the name suggests, searches throug
 [IN PROGRESS]
 
 ## Summary of Gunrock Implementation
-[REVISION IN PROGRESS]
 Conceptually, this implementation isn’t extremely different from a standard serial implementation, but running searches and checking vertices concurrently through parallelism improves the potential for efficiency. Gunrock completes BFS with a series of “Advance” and “Filter” steps.
 
 In the Advance step, we search the vertices in our search frontier in parallel and create a new frontier from vertices adjacent to those searched. At this point, we classify newly discovered vertices as such and classify already discovered vertices as "invalid" in the new frontier.
 
 In the Filter step, we check this new frontier's vertices in parallel and filter out the invalid vertices (those that would be redundant to search). We then use the frontier remaining from this operation for the next search iteration.
 
-(Talk about direction optimization (push/pull), top-down/bottom-up from bfs_kernel?)
+Gunrock BFS features a setting for idempotence optimization, which typically improves performance despite the chance that we may visit vertices (and hence edges) more than once. It also supports direction-optimization, able to choose between both push/pull (top-down/bottom-up) operations at each step, improving performance further.
+
+Whereas push is textbook BFS, where discovered vertices look for their undiscovered children for the next search iteration, pull is the opposite; undiscovered children look for their parents to search next. Both yield valid results at each step, but each has scenarios in which they are more optimal than the other.
 
 Pseudocode:
 ```
@@ -338,7 +339,24 @@ First 40 distances of the reference CPU result.
 Output is text that explains steps taken, shows passes through graph, displays distances, and displays runtime statistics and other diagnostic information such as number of iterations and vertices/edges visited. Comparisons to proven implementations of BFS can be used for correctness checking.
 
 ## Performance and Analysis
-[IN PROGRESS]
+Performance is measured in total runtime, given:
+- An input graph ```G = (V, E)```
+- A specified source vertex
+- Whether or not idempotence is enabled
+- Whether or not direction-optimization is enabled
+
+GPU used: NVIDIA Tesla V100
+Runtimes are in milliseconds unless stated otherwise
+Results are the average of ten iterations
+I = idempotence? D = direction-optimized?
+
+| Dataset        | Vertices | Directed Edges | Iterations | GPU, D = 0, I = 0 | CPU, D = 0, I = 0 | GPU, D = 0, I = 1 | CPU, D = 0, I = 1 | GPU, D = 1, I = 0 | CPU, D = 1, I = 0 | GPU, D = 1, I = 1 | CPU, D = 1, I = 1 |
+|----------------|----------|----------------|------------|-------------------|-------------------|-------------------|-------------------|-------------------|-------------------|-------------------|-------------------|
+| hollywood-2009 | 1139905  | 112751422      | 11         |                   |                   |                   |                   |                   |                   |                   |                   |
+|                |          |                |            |                   |                   |                   |                   |                   |                   |                   |                   |
+
+[TABLE TO BE UPDATED, PROFILER FIGURES TO BE ADDED.]
+[Will compare Gunrock GPU, Gunrock CPU, maybe other proven implementation(s)]
 
 ## Next Steps
 [IN PROGRESS]
