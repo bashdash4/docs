@@ -346,9 +346,13 @@ Performance is measured in total runtime, given:
 - Whether or not direction-optimization is enabled
 
 GPU used: NVIDIA Tesla V100
+
 Runtimes are in milliseconds unless stated otherwise
+
 Results are the average of ten iterations
+
 Source vertex is always 0
+
 I = idempotence? D = direction-optimized?
 
 | Dataset        | Vertices | Directed Edges | Iterations | GPU, D = 0, I = 0 | CPU, D = 0, I = 0 | GPU, D = 0, I = 1 | CPU, D = 0, I = 1 | GPU, D = 1, I = 0 | CPU, D = 1, I = 0 | GPU, D = 1, I = 1 | CPU, D = 1, I = 1 |
