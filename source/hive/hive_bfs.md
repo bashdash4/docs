@@ -348,14 +348,16 @@ Performance is measured in total runtime, given:
 GPU used: NVIDIA Tesla V100
 Runtimes are in milliseconds unless stated otherwise
 Results are the average of ten iterations
+Source vertex is always 0
 I = idempotence? D = direction-optimized?
 
 | Dataset        | Vertices | Directed Edges | Iterations | GPU, D = 0, I = 0 | CPU, D = 0, I = 0 | GPU, D = 0, I = 1 | CPU, D = 0, I = 1 | GPU, D = 1, I = 0 | CPU, D = 1, I = 0 | GPU, D = 1, I = 1 | CPU, D = 1, I = 1 |
 |----------------|----------|----------------|------------|-------------------|-------------------|-------------------|-------------------|-------------------|-------------------|-------------------|-------------------|
-| hollywood-2009 | 1139905  | 112751422      | 11         |                   |                   |                   |                   |                   |                   |                   |                   |
+| hollywood-2009 | 1139905  | 112751422      | 11         | 8.922029          | 286.689710        | 8.956361          | 287.712173        | 1.598024          | 286.896106        | 1.583290          | 291.364148        |
+| indochina-2004 | 7414866  | 191606827      | 4          | 0.375938          | 0.004077          | 0.370169          | 0.004339          | 0.368214          | 0.004506          | 0.368095          | 0.004482          |
 |                |          |                |            |                   |                   |                   |                   |                   |                   |                   |                   |
 
-[TABLE TO BE UPDATED, PROFILER FIGURES TO BE ADDED.]
+[TABLE IN PROGRESS, PROFILER FIGURES TO BE ADDED.]
 [Will compare Gunrock GPU, Gunrock CPU, maybe other proven implementation(s)]
 
 ## Next Steps
