@@ -365,8 +365,52 @@ I = idempotence? D = direction-optimized?
 | soc-LiveJournal1 | 4847571 | 68475391      | 15         | 15.608096         | 609.409778        | 15.4284953        | 603.812500        | 6.281614          | 606.473828        | 6.152344          | 613.763886        |
 |                |          |                |            |                   |                   |                   |                   |                   |                   |                   |                   |
 
-[TABLE IN PROGRESS, PROFILER FIGURES TO BE ADDED.]
-[Will compare Gunrock GPU, Gunrock CPU, maybe other proven implementation(s)]
+### Performance Limitations/Profiler Data
+
+Profiler has been run on processes with idempotence and direction-optimization enabled.
+
+#### From hollywood-2009:
+
+![image](https://drive.google.com/uc?export=view&id=1wPamErpWPs4wjqjVvJjNWgRlIO2_7rRT)
+![image](https://drive.google.com/uc?export=view&id=1FBOpy2yI3SK6lkhJiFDRx_Vr3O9rzrDV)
+Concerns:
+- Low Kernel Concurrency [0 ns / 5.32472 ms = 0%]
+- Low Compute Utilization [5.33744 ms / 99.54917 s = 0%]
+- Low Global Memory Load Efficiency [kernels accounting for 7.8% of compute have low efficiency (30.1% avg)]
+- Low Global Memory Store Efficiency [kernels accounting for 18.2% of compute have low efficiency (25.5% avg)]
+- Low Shared Memory Efficiency [kernels accounting for 93.6% of compute have low efficiency (37.1% avg)]
+- Low Warp Execution Efficiency [kernels accounting for 3.4% of compute have low efficiency (55.2% avg)]
+
+Rank 100 Kernel analyzed:
+```c++
+void gunrock::oprtr::LB::RelaxPartitionedEdges2<1u, gunrock::graph::Csr<unsigned int, unsigned int, unsigned int, 256u, 0u, true>, unsigned int, unsigned int, gunrock::app::bfs::BFSIterationLoop<gunrock::app::bfs::Enactor<gunrock::app::bfs::Problem<gunrock::app::TestGraph<unsigned int, unsigned int, unsigned int, 768u, 0u>, unsigned int, unsigned int, 0u>, 0u, 0u> >::Core(int)::{lambda(unsigned int const&, unsigned int&, unsigned int const&, unsigned int const&, unsigned int const&, unsigned int&)#1}>(bool, gunrock::graph::Csr<unsigned int, unsigned int, unsigned int, 256u, 0u, true>::VertexT, gunrock::app::bfs::BFSIterationLoop<gunrock::app::bfs::Enactor<gunrock::app::bfs::Problem<gunrock::app::TestGraph<unsigned int, unsigned int, unsigned int, 768u, 0u>, unsigned int, unsigned int, 0u>, 0u, 0u> >::Core(int)::{lambda(unsigned int const&, unsigned int&, unsigned int const&, unsigned int const&, unsigned int const&, unsigned int&)#1}, unsigned int const*, gunrock::app::bfs::BFSIterationLoop<gunrock::app::bfs::Enactor<gunrock::app::bfs::Problem<gunrock::app::TestGraph<unsigned int, unsigned int, unsigned int, 768u, 0u>, unsigned int, unsigned int, 0u>, 0u, 0u> >::Core(int)::{lambda(unsigned int const&, unsigned int&, unsigned int const&, unsigned int const&, unsigned int const&, unsigned int&)#1}::SizeT, unsigned int const* const*, unsigned int const* const, unsigned int*, gunrock::app::bfs::BFSIterationLoop<gunrock::app::bfs::Enactor<gunrock::app::bfs::Problem<gunrock::app::TestGraph<unsigned int, unsigned int, unsigned int, 768u, 0u>, unsigned int, unsigned int, 0u>, 0u, 0u> >::Core(int)::{lambda(unsigned int const&, unsigned int&, unsigned int const&, unsigned int const&, unsigned int const&, unsigned int&)#1}::ValueT*, unsigned int const**, gunrock::util::CtaWorkProgress<unsigned int const*>, gunrock::app::bfs::BFSIterationLoop<gunrock::app::bfs::Enactor<gunrock::app::bfs::Problem<gunrock::app::TestGraph<unsigned int, unsigned int, unsigned int, 768u, 0u>, unsigned int, unsigned int, 0u>, 0u, 0u> >::Core(int)::{lambda(unsigned int const&, unsigned int&, unsigned int const&, unsigned int const&, unsigned int const&, unsigned int&)#1})
+```
+[Kernel Analysis](https://drive.google.com/open?id=10jB5iJegVfTulTGSQvqF4KcbKX7AsCxm)
+
+![image](https://drive.google.com/uc?export=view&id=1t0BZbOxnYvgL6M1odzM-qffKtFE7OIL6)
+![image](https://drive.google.com/uc?export=view&id=1V5nqDqcKD8nIkEEHS38CodpfyS5G_wbZ)
+
+#### From soc-LiveJournal1:
+![image](https://drive.google.com/uc?export=view&id=1qv42mDONbJrhr1PeX6Iefxsj-vI46feZ)
+![image](https://drive.google.com/uc?export=view&id=1HC_iyYaOTZXjit57yOnAmP1L58gAjLHD)
+
+Concerns:
+- Low Compute Utilization [5.20939 ms / 111.53615 s = 0%]
+- Low Multiprocessor Occupancy [21.5% avg, for kernels accounting or 96.8% of compute]
+- Low Global Memory Load Efficiency [kernels accounting for 95% of compute have low efficiency (29.5% avg)]
+- Low Global Memory Store Efficiency [kernels accounting for 92.5% of compute have low efficiency (31.8% avg)]
+- Low Shared Memory Efficiency [kernels accounting for 95.5% of compute have low efficiency (19.3% avg)]
+- Low Warp Execution Efficiency [kernels accounting for 93% of compute have low efficiency (53.1% avg)]
+
+Rank 100 Kernel analyzed:
+```c++
+void gunrock::app::bfs::Inverse_Expand<gunrock::app::bfs::Problem<gunrock::app::TestGraph<unsigned int, unsigned int, unsigned int, unsigned int=768, unsigned int=0>, unsigned int, unsigned int, unsigned int=0>, int=9>(unsigned intGraphT, gunrock::app::bfs::Inverse_Expand<gunrock::app::bfs::Problem<gunrock::app::TestGraph<unsigned int, unsigned int, unsigned int, unsigned int=768, unsigned int=0>::SizeT, unsigned int, unsigned int, unsigned int=0>, int=9>, gunrock::app::bfs::Inverse_Expand<gunrock::app::bfs::Problem<gunrock::app::TestGraph<unsigned int, unsigned int, unsigned int, unsigned int=768, unsigned int=0>::VertexT, unsigned int, unsigned int, unsigned int=0>, int=9>
+```
+[Kernel Analysis](https://drive.google.com/open?id=1z82TxWZBYeJufQ22Y6NltSFqOZwxYPBT)
+
+![image](https://drive.google.com/uc?export=view&id=10XhMcFy_Im0fFu-BatWQcbqOtcZ6_1_9)
+![image](https://drive.google.com/uc?export=view&id=106DKg9XKo010jGUgIvWv2x9VVd30DNRF)
+![image](https://drive.google.com/uc?export=view&id=1mjphtz1WrhySnsKe1-X2qklx_hEfulAe)
 
 ## Next Steps
 [IN PROGRESS]
